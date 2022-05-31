@@ -12,6 +12,7 @@ router.route(`/:user_phone`).get(auth, userAdminEKT._getOne);
 // router.route(`/delete`).delete(auth, userAdminEKT._delete);
 router.route(`/checkverifylink`).post(userAdminEKT._checkVerifyLink)
 router.route(`/refreshtoken`).post(userAdminEKT._refreshToken)
+router.route(`/getotp-login`).post(userAdminEKT._getOTPLogin)
 router.route(`/getotp`).post(userAdminEKT._getOTP)
 router.route(`/verifyotp`).post(userAdminEKT._verifyOTP)
 router.route(`/recoverypassword`).post(userAdminEKT._recoveryPassword)

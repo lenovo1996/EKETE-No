@@ -354,6 +354,13 @@ const BaseLayout = (props) => {
           >
             <Link to={ROUTES_ADMIN.MENU_USER}>Quản lý menu user</Link>
           </Menu.Item>
+          <Menu.Item
+            key={ROUTES.LOGOUT}
+            onClick={onSignOut}
+            icon={<DashboardOutlined />}
+          >
+            <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
+          </Menu.Item>
 
 
 

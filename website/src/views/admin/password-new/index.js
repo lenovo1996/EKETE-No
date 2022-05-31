@@ -13,7 +13,7 @@ import { LockOutlined } from '@ant-design/icons'
 import background from 'assets/img/bg1.jpg'
 
 //apis
-import { resetPassword } from 'apis/user-ekt'
+import { resetPassword } from 'apis/admin'
 import delay from 'delay'
 
 export default function PasswordNew() {
@@ -43,7 +43,7 @@ export default function PasswordNew() {
           notification.success({ message: 'Thay đổi mật khẩu thành công' })
           const dataUser = jwt_decode(res.data.data.accessToken)
           await delay(300)
-          window.location.href = `http://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}/login`
+          window.location.href = `http://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}/loginadmin`
         } else
           notification.error({
             message: res.data.message || 'Thay đổi mật khẩu không thành công, vui lòng thử lại',

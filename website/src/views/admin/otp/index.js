@@ -7,7 +7,7 @@ import jwt_decode from 'jwt-decode'
 import delay from 'delay'
 
 //apis
-import { verify, getOtp } from 'apis/admin'
+import { verify, getOtpLogin } from 'apis/admin'
 
 //antd
 import { Form, Input, Button, notification, Row, Col } from 'antd'
@@ -35,27 +35,26 @@ export default function OTP() {
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Xác thực otp thành công' })
-          dispatch({ type: ACTION.LOGIN, data: res.data.data })
+          dispatch({ type: ACTION.LOGINADMIN, data: res.data.data,  })
 
 
-          if (location.state.action && location.state.action === 'FORGOT_PASSWORD') {
+          if (location.state.action && location.state.action === 'LOGINADMIN') {
             history.push({ pathname: ROUTES_ADMIN.OVERVIEWADMIN, state: { phone } })
             return
           }
 
-          // dispatch({ type: ACTION.LOGIN, data: res.data.data })
-
-          //luu branch id len redux
-          // const dataUser = jwt_decode(res.data.data.accessToken)
-          // localStorage.setItem('accessToken', res.data.data.accessToken)
-          // dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
-
-          // await delay(300)
+            if (location.state.action && location.state.action === 'FORGOT_PASSWORD') {
+              history.push({ pathname: ROUTES_ADMIN.PASSWORD_NEWADMIN, state: { phone } })
+              return
+            }
+          
+    
+   
           const dataUser = jwt_decode(res.data.data.accessToken)
 
           window.location.href = `http://${dataUser.data._user.prefix}.${
             process.env.REACT_APP_HOST
-          }${ROUTES_ADMIN.LOGINADMIN}?token=${JSON.stringify(res.data.data)}`
+          }${ROUTES_ADMIN.OVERVIEWADMIN}?token=${JSON.stringify(res.data.data)}`
 
           // window.location.href = `https://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`
         } else
@@ -78,7 +77,7 @@ export default function OTP() {
   const _resendOtp = async () => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
-      const res = await getOtp(phone)
+      const res = await getOtpLogin(phone)
       if (res.status === 200) {
         if (res.data.success)
           notification.success({ message: 'Gửi lại otp thành công, vui lòng kiểm tra lại' })

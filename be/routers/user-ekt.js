@@ -6,7 +6,7 @@ const { auth } = require(`../middleware/jwt`);
 
 router.route(`/register`).post(user._register);
 router.route('/login').post(user._login)
-router.route('/getOTPAdmin').post(user._getOTPAdmin)
+// router.route('/getOTPAdmin').post(user._getOTPAdmin)
 router.route(`/update/:user_id`).patch(auth, user._update);
 router.route(`/`).get(user._getUser);
 router.route(`/:user_phone`).get(auth, user._getOne);

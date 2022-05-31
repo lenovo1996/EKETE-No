@@ -263,11 +263,58 @@ module.exports._getOne = async(req,res,next)=>{
     }
 
 }
-
-
-
-
 module.exports._getOTP = async (req, res, next) => {
+    try {
+        ['phone'].map((e) => {
+            if (!req.body[e]) {
+                throw new Error(`400: Thiếu thuộc tính ${e}`);
+            }
+        });
+
+        const prefix = (req.headers && req.headers.shop) || false;
+        let business = await (async () => {
+            if (!prefix) {
+                let result = client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
+                return result;
+            }
+            let result = client.db(SDB).collection('UsersAdminEKT').findOne({ prefix: prefix });
+            return result;
+        })();
+        // const DB =
+        //     (business && business.database_name) ||
+        //     (() => {
+        //         throw new Error('400: Doanh nghiệp chưa được đăng ký!');
+        //     })();
+
+        let user = await client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
+        if (!user) {
+            throw new Error('400: Tài khoản người dùng không tồn tại!');
+        }
+        let otpCode = String(Math.random()).substr(2, 6);
+        let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
+        sendSMS([req.body.phone], verifyMessage, 2, 'VIESOFTWARE');
+        await client
+            .db(SDB)
+            .collection(`UsersAdminEKT`)
+            .updateOne(
+                { phone: req.body.phone },
+                {
+                    $set: {
+                        otp_code: otpCode,
+                        otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
+                    },
+                }
+            );
+        res.send({ success: true, data: `Gửi OTP đến số điện thoại thành công!` });
+    } catch (err) {
+        next(err);
+    }
+    console.log(2);
+};
+
+
+
+module.exports._getOTPLogin = async (req, res, next) => {
     try {
         ['phone', 'password'].map((e) => {
             if (!req.body[e]) {

@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode'
 import { Row, Col, Form, Input, Button, notification, Tabs } from 'antd'
 
 //apis
-import { login, getOtp } from 'apis/admin'
+import { login, getOtpLogin } from 'apis/admin'
 
 
 
@@ -27,13 +27,13 @@ export default function Login() {
       await formLogin.validateFields()
       const dataForm = formLogin.getFieldsValue()
       dispatch({ type: ACTION.LOADING, data: true })
-      const res = await getOtp(dataForm)
+      const res = await getOtpLogin(dataForm)
 
       if (res.status === 200) {
         if (res.data.success)
           history.push({
             pathname: ROUTES_ADMIN.OTPADMIN,
-            state: { phone: dataForm.phone, action: 'FORGOT_PASSWORD' },
+            state: { phone: dataForm.phone, action: 'LOGINADMIN' },
           })
         else notification.error({ message: res.data.message || 'Không tìm thấy doanh nghiệp này' })
       } else notification.error({ message: res.data.message || 'Không tìm thấy doanh nghiệp này' })
@@ -57,14 +57,14 @@ export default function Login() {
 
       // Khi code comment lại, code xong để lại như cũ
       // const res = await login({ ...body, username: body.username }, { shop: 'vanhoang' })
-      const res = await getOtp({ ...body, phone: body.phone }, { shop: subDomain[1] })
+      const res = await getOtpLogin({ ...body, phone: body.phone }, { shop: subDomain[1] })
 
       dispatch({ type: ACTION.LOADING, data: false })
       console.log(res)
 
       //check account have verify
       if (res.status === 403) {
-        await getOtp(body.phone)
+        await getOtpLogin(body.phone)
         notification.error({
           message: res.data.message || 'Đăng nhập thất bại, vui lòng thử lại',
         })
