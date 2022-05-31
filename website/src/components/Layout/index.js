@@ -45,7 +45,9 @@ import ModalUpdateUser from './modal-user'
 import DropdownLanguage from 'components/dropdown-language'
 
 //apis
-import { getuserEKT } from 'apis/userEKT'
+import { getuserEKT } from 'apis/user-ekt'
+import { getMenu } from 'apis/menu-user'
+
 
 const { Search } = Input;
 const { Sider } = Layout
@@ -60,6 +62,8 @@ const BaseLayout = (props) => {
 
   const [branches, setBranches] = useState([])
   const [user, setUser] = useState({})
+  const [loading, setLoading] = useState(false)
+  const [menu, setMenu] = useState([])
 
   const login = useSelector((state) => state.login)
   const branchIdApp = useSelector((state) => state.branch.branchId)
@@ -114,118 +118,90 @@ const BaseLayout = (props) => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
+  const _getMenu = async () => {
+    try {
+      setLoading(true)
+      const res = await getMenu()
+      console.log(res)
+      if (res.status === 200) {
+        setMenu(res.data.data)
+        console.log('res.data.data', res.data.data)
+      }
+      setLoading(false)
+    } catch (e) {
+      setLoading(false)
+      console.log(e)
+    }
+  }
 
-  const MENUS = [
-    {
-      pathsChild: [],
-      path: ROUTES.OVERVIEW,
-      title: 'Tổng quan',
-      permissions: [PERMISSIONS.tong_quan],
-      icon: <DashboardOutlined />,
-    },
-    // {
-    //   pathsChild: [],
-    //   path: ROUTES.OVERVIEW,
-    //   title: 'Tổng quan',
-    //   permissions: [PERMISSIONS.tong_quan],
-    //   icon: <DashboardOutlined />,
-    // },
-    {
-      pathsChild: [],
-      path: ROUTES.SELL,
-      title: 'Bán hàng',
-      permissions: [PERMISSIONS.ban_hang],
-      icon: <ShoppingCartOutlined />,
-    },
-    // {
-    //   pathsChild: [ROUTES.ORDER_CREATE],
-    //   path: ROUTES.ORDER_LIST,
-    //   title: 'Đơn hàng',
-    //   permissions: [PERMISSIONS.danh_sach_don_hang],
-    //   icon: <ShoppingOutlined />,
-    // },
-  ]
+  useEffect(() => {
+    _getMenu()
+  }, [])
 
   const renderMenuItem = (_menu) => (
-    <Permission permissions={_menu.permissions} key={_menu.path}>
-      {_menu.menuItems ? (
+    <>
+      {_menu.menuCon ? (
         <Menu.SubMenu
-          // className={`${styles['edit-submenu-arrow']} edit-submenu-arrow`}
           style={{
-            // height: 40,
-            backgroundColor:
-              (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
-              '#e7e9fb',
             width: '100%',
-            // height: collapsed ? 40 : '',
+            height: collapsed ? 40 : '',
+
             display: 'block',
           }}
-          key={_menu.path}
-          // onTitleClick={() => history.push(_menu.path)}
-          onClick={_menu.path === ROUTES.OVERVIEW && toggle}
           title={
             <Link
               style={{
-                fontSize: '0.8rem',
-
-                color:
-                  location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
-                    ? '#5F73E2'
-                    : 'rgba(0, 0, 0, 0.85)',
+                fontSize: '0.9rem',
+                
               }}
-              to={_menu.path}
+              to={_menu.url}
             >
-              {_menu.title}
+              {_menu.name}
             </Link>
           }
           icon={
-            <Link
-              style={{
-                fontSize: '0.8rem',
-                color:
-                  location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
-                    ? '#5F73E2'
-                    : 'rgba(0, 0, 0, 0.85)',
-              }}
-              to={_menu.path}
-            >
-              {_menu.icon}
-            </Link>
+            <svg marginRight={20} width="1rem" height="1rem" fill="currentColor" viewBox="0 0 1024 1024">
+              
+              <path d={_menu.icon} />
+
+            </svg>
           }
         >
-          {_menu.menuItems.map((e) => (
-            <Permission permissions={e.permissions}>
+          {_menu.menuCon.map((e) => (
+            <>
               <Menu.Item
-                key={e.path}
+                key={e.url}
                 style={{
-                  fontSize: '0.8rem',
-                  backgroundColor:
-                    (location.pathname === e.path || e.pathsChild.includes(location.pathname)) &&
-                    '#e7e9fb',
+                  fontSize: '0.9rem',
                 }}
               >
-                <Link to={e.path}>{e.title}</Link>
+                <Link  to={e.url}>{e.name}</Link>
               </Menu.Item>
-            </Permission>
+            </>
           ))}
         </Menu.SubMenu>
       ) : (
         <Menu.Item
-          key={_menu.path}
+          key={_menu.url}
           style={{
-            fontSize: '0.8rem',
-            backgroundColor:
-              (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
-              '#e7e9fb',
+            fontSize: '0.9rem',
           }}
-          icon={_menu.icon}
-          onClick={_menu.path === ROUTES.SELL && toggle}
+        
+        // onClick={_menu.url === ROUTES.SELL && toggle}
         >
-          <Link to={_menu.path}>{_menu.title}</Link>
+          <svg style={{marginRight : 10}} width="1.1rem" height="1.1rem" fill="currentColor" viewBox="0 0 1024 1024" >
+              
+              <path d={_menu.icon}/>
+
+            </svg>
+          <Link  to={_menu.url}>{_menu.name}</Link>
         </Menu.Item>
       )}
-    </Permission>
+    </>
+
+
   )
+
 
   const onSearch = (value) => console.log(value)
 
@@ -350,7 +326,7 @@ const BaseLayout = (props) => {
           selectedKeys={routeMatch.path}
           mode="inline"
         >
-          {MENUS.map(renderMenuItem)}
+          {menu.map(renderMenuItem)}
           <Menu.Item
             key={ROUTES.OVERVIEW}
             // onClick={onSignOut}
@@ -359,11 +335,11 @@ const BaseLayout = (props) => {
             <Link to={ROUTES.OVERVIEW}>Tổng quan</Link>
           </Menu.Item>
           <Menu.Item
-            key={ROUTES.BRAND}
+            key={ROUTES.BUSINESS}
             // onClick={onSignOut}
             icon={<DashboardOutlined />}
           >
-            <Link to={ROUTES.BRAND}>Cửa hàng</Link>
+            <Link to={ROUTES.BUSINESS}>Cửa hàng</Link>
           </Menu.Item>
           {/* <Menu.Item key={ROUTES.CUSTOMER} 
             // onClick={onSignOut} 
@@ -491,3 +467,5 @@ const BaseLayout = (props) => {
 }
 
 export default React.memo(BaseLayout)
+
+

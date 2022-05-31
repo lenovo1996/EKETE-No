@@ -1,9 +1,9 @@
 import React, { cloneElement, useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import { ROUTES } from 'consts'
+import { ROUTES_ADMIN } from 'consts'
 import jwt_decode from 'jwt-decode'
 //api
-import {getuserEKT} from '../../apis/userEKT'
+import {getuserEKT} from '../../apis/user-ekt'
 
 /**
  *
@@ -27,7 +27,7 @@ const Authentication = ({ permissions, title, children, ...props }) => {
   
 
   //check login ?
-  if (!payload) return <Redirect to={ROUTES.LOGIN} />
+  if (!payload) return <Redirect to={ROUTES_ADMIN.LOGIN} />
 
   return <div />
 }

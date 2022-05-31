@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { ROUTES } from 'consts'
 import jwt_decode from 'jwt-decode'
 //api
-import {getuserEKT} from '../../apis/userEKT'
+import {getuserEKT} from '../../apis/user-ekt'
 
 /**
  *

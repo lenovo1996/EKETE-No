@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import styles from './otp.module.scss'
 import { useDispatch } from 'react-redux'
-import { ACTION, ROUTES, ROUTES_ADMIN } from 'consts/index'
+import { ACTION, ROUTES } from 'consts/index'
 import { useHistory, useLocation } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 import delay from 'delay'
 
 //apis
-import { verify, getOtp } from 'apis/admin'
+import { verify, getOtp } from 'apis/user-ekt'
 
 //antd
 import { Form, Input, Button, notification, Row, Col } from 'antd'
@@ -31,7 +31,7 @@ export default function OTP() {
       var body = { phone: phone, otp_code: dataForm.otp }
       const res = await verify(body)
       dispatch({ type: ACTION.LOADING, data: false })
-      console.log("login",res)
+      console.log(res)
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Xác thực otp thành công' })
@@ -39,7 +39,7 @@ export default function OTP() {
 
 
           if (location.state.action && location.state.action === 'FORGOT_PASSWORD') {
-            history.push({ pathname: ROUTES_ADMIN.OVERVIEWADMIN, state: { phone } })
+            history.push({ pathname: ROUTES.PASSWORD_NEW, state: { phone } })
             return
           }
 
@@ -55,7 +55,7 @@ export default function OTP() {
 
           window.location.href = `http://${dataUser.data._user.prefix}.${
             process.env.REACT_APP_HOST
-          }${ROUTES_ADMIN.LOGINADMIN}?token=${JSON.stringify(res.data.data)}`
+          }${ROUTES.LOGIN}?token=${JSON.stringify(res.data.data)}`
 
           // window.location.href = `https://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`
         } else
@@ -92,7 +92,7 @@ export default function OTP() {
   }
 
   useEffect(() => {
-    if (!location.state) history.push(ROUTES_ADMIN.LOGINADMIN)
+    if (!location.state) history.push(ROUTES.LOGIN)
   }, [])
 
   return (

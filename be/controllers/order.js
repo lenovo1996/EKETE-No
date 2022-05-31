@@ -7,7 +7,7 @@ var CryptoJS = require('crypto-js');
 const { validateEmail } = require('../utils/regex');
 const { sendMailThanksOrder } = require('../libs/nodemailer');
 const { _changePoint } = require('./customer');
-const shippingService = require(`../services/shopping_dairy`)
+const shippingService = require(`../services/shopping-dairy`)
 
 module.exports.enumStatusOrder = async (req, res, next) => {
     try {

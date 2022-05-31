@@ -419,7 +419,8 @@ module.exports._create = async (req, res, next) => {
 
 module.exports._update = async (req, res, next) => {
     try {
-        await client.db(SDB).collection(`Business`).updateOne(req.params, { $set: req.body });
+        await client.db(SDB).collection(`Business`).updateOne(req.params, 
+            { $set: req.body });
         // try {
         //     let _action = {
         //         business_id: req.user.business_id,
@@ -438,6 +439,26 @@ module.exports._update = async (req, res, next) => {
         //     console.log(err);
         // }
         res.send({ success: true, data: req.body });
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports._deleteBusiness = async (req, res, next) => {
+    try {
+       
+        await client.db(DB).collection(`Business`).updateOne(req.params, { $set: req.body });
+        delete req.body.password;
+        let [user] = await client
+            .db(DB)
+            .collection(`Business`)
+            .aggregate([
+                { $match: { user_id: req.params.user_id } },
+            ])
+            .toArray();
+        delete user.password;
+        let [accessToken] = await Promise.all([jwt.createToken(user, 24 * 60 * 60)]);
+        res.send({ success: true, data: req.body, accessToken });
     } catch (err) {
         next(err);
     }

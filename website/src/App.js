@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom'
 //components
 import Views from 'views'
 import Loading from 'components/loading/Loading'
-import LoadingCheckDomain from 'views/loading'
+import LoadingCheckDomain from 'views/user/loading'
 
 //apis
 // import { checkDomain } from 'apis/app'

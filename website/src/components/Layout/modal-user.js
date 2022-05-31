@@ -7,7 +7,7 @@ import { Modal, Form, Row, Col, Input, Button, Upload, notification } from 'antd
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 
 //apis
-import { updateuserEKT, getuserEKT } from 'apis/userEKT'
+import { updateuserEKT, getuserEKT } from 'apis/user-ekt'
 import { uploadFile } from 'apis/upload'
 
 export default function ModalUpdateUser({ user, children, reload }) {

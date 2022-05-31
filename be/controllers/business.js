@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const businessService = require(`../services/business`);
 const { sendSMS } = require('../libs/sendSMS');
 const bcrypt = require(`../libs/bcrypt`);
+const { log } = require('console');
 
 let removeUnicode = (text, removeSpace) => {
     /*
@@ -176,12 +177,13 @@ module.exports._create = async (req, res, next) => {
             })(),
             otp_code: otpCode,
             otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
-            CMND_CCCD: req.body.CMND,
-            CMNDimage: req.body.avatar1 || '',
+            // CMND_CCCD: req.body.CMND,
+            // CMNDimage: req.body.avatar1 || '',
             business_registration_number: req.body.business_registration_number || '',
             business_registration_image: req.body.avarta2 || '',
             profile_status: 1,
             status: 1  ,
+            is_delete: false,
             create_date: moment().tz(TIMEZONE).format(),
             creator_id: user_id,
             last_update: moment().tz(TIMEZONE).format(),
@@ -458,20 +460,29 @@ module.exports._delete = async (req, res, next) => {
         let business = await client
             .db(SDB)
             .collection('Business')
-            .find({ business_id: { $in: req.body.business_id } })
+            .find({ business_id:  req.body.business_id  })
             .toArray();
         const DBs = business.map((eBusiness) => {
             return eBusiness.database_name;
         });
         await client
             .db(SDB)
-            .collection(`Business`)
-            .deleteMany({ business_id: { $in: req.body.business_id } });
-        await Promise.all(
-            DBs.map((DB) => {
-                return client.db(DB).dropDatabase();
-            })
-        );
+            .collection('Business')
+            // .deleteMany({ business_id: { $in: req.body.business_id } });
+            .updateOne(
+                {business_id: req.body.business_id },
+                {
+                    $set: {
+                        is_delete: true
+                        // status: 4
+                    }
+                }
+            )
+        // await Promise.all(
+        //     DBs.map((DB) => {
+        //         return client.db(DB).dropDatabase();
+        //     })
+        // );
         res.send({
             success: true,
             message: 'Xóa doanh nghiệp thành công!',

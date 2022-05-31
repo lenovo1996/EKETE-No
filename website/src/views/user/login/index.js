@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react'
 import styles from './login.module.scss'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import { ACTION, ROUTES, ROUTES_ADMIN } from 'consts'
+import { ACTION, ROUTES } from 'consts'
 import jwt_decode from 'jwt-decode'
 
 //antd
 import { Row, Col, Form, Input, Button, notification, Tabs } from 'antd'
 
 //apis
-import { login, getOtp } from 'apis/admin'
+import { login, getOtp } from 'apis/user-ekt'
 
 
 
@@ -19,32 +19,6 @@ export default function Login() {
   const [formLogin] = Form.useForm()
   let history = useHistory()
   const location = useLocation()
-  const [form] = Form.useForm()
-
-
-  const sendOtp = async () => {
-    try {
-      await formLogin.validateFields()
-      const dataForm = formLogin.getFieldsValue()
-      dispatch({ type: ACTION.LOADING, data: true })
-      const res = await getOtp(dataForm)
-
-      if (res.status === 200) {
-        if (res.data.success)
-          history.push({
-            pathname: ROUTES_ADMIN.OTPADMIN,
-            state: { phone: dataForm.phone, action: 'FORGOT_PASSWORD' },
-          })
-        else notification.error({ message: res.data.message || 'Không tìm thấy doanh nghiệp này' })
-      } else notification.error({ message: res.data.message || 'Không tìm thấy doanh nghiệp này' })
-
-      dispatch({ type: ACTION.LOADING, data: false })
-    } catch (error) {
-      console.log(error)
-      dispatch({ type: ACTION.LOADING, data: false })
-    }
-  }
-
 
 
   const _login = async (body) => {
@@ -57,10 +31,10 @@ export default function Login() {
 
       // Khi code comment lại, code xong để lại như cũ
       // const res = await login({ ...body, username: body.username }, { shop: 'vanhoang' })
-      const res = await getOtp({ ...body, phone: body.phone }, { shop: subDomain[1] })
+      const res = await login({ ...body, phone: body.phone }, { shop: subDomain[1] })
 
       dispatch({ type: ACTION.LOADING, data: false })
-      console.log(res)
+      console.log("login usser",res)
 
       //check account have verify
       if (res.status === 403) {
@@ -68,7 +42,7 @@ export default function Login() {
         notification.error({
           message: res.data.message || 'Đăng nhập thất bại, vui lòng thử lại',
         })
-        history.push({ pathname: ROUTES_ADMIN.OTPADMIN, state: { phone: body.phone } })
+        history.push({ pathname: ROUTES.OTP, state: { phone: body.phone } })
         return
       }
 
@@ -81,7 +55,7 @@ export default function Login() {
 
           dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
 
-          history.push(ROUTES_ADMIN.OTPADMIN)
+          history.push(ROUTES.OVERVIEW)
         } else
           notification.error({
             message: res.data.message || 'Đăng nhập thất bại, vui lòng thử lại',
@@ -129,7 +103,7 @@ export default function Login() {
             key="login"
           >
             <Row justify="center" align="middle" style={{ padding: '0px 80px' }}>
-              <Form form={formLogin} onFinish={sendOtp} layout="vertical" style={{ width: '100%' }}>
+              <Form form={formLogin} onFinish={_login} layout="vertical" style={{ width: '100%' }}>
                 <Form.Item
                   label={<div style={{ color: 'white' }}>Số điện thoại</div>}
                   name="phone"
@@ -145,12 +119,12 @@ export default function Login() {
                   <Input.Password size="large" type="password" placeholder="Mật khẩu" />
                 </Form.Item>
                 <Row justify="space-between">
-                  <Link to={ROUTES_ADMIN.FORGET_PASSWORDADMIN} style={{ margin: '20px 0px', color: 'white' }}>
+                  <Link to={ROUTES.FORGET_PASSWORD} style={{ margin: '20px 0px', color: 'white' }}>
                     Quên mật khẩu?
                   </Link>
                   <a
                     onClick={() =>
-                      (window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_ADMIN.REGISTERADMIN}`)
+                      (window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`)
                     }
                     style={{ margin: '20px 0px', color: 'white' }}
                   >

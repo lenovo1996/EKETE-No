@@ -101,7 +101,7 @@ export const ROUTES = {
   OFFER_LIST_CREATE: '/offer-list/create',
   BLOG: '/blog',
   BLOG_CREATE: '/blog/create',
-  BRAND: '/brand',
+  BUSINESS: '/business',
   BRAND_CREATE: '/brand/create',
   CHANNEL: '/channel',
   // CHANNEL_CREATE:'/channel/create',
@@ -110,6 +110,18 @@ export const ROUTES = {
   IMPORT_INVENTORY: '/import-inventory',
 
   //admin
+  // OVERVIEWADMIN: '/overviewadmin',
+  // OTPADMIN: '/otpadmin',
+  // VERIFY_ACCOUNTADMIN: '/verify-accountadmin',
+  // PASSWORD_NEWADMIN: '/password-newadmin',
+  // FORGET_PASSWORDADMIN: '/forget-passwordadmin',
+  // CHECK_SUBDOMAINADMIN: '/business-loginadmin',
+  // LOGINADMIN: '/loginadmin',
+  // REGISTERADMIN: '/registeradmin',
+  // EMPLOYEEADMIN: '/employeedmin'
+}
+
+export const ROUTES_ADMIN = {
   OVERVIEWADMIN: '/overviewadmin',
   OTPADMIN: '/otpadmin',
   VERIFY_ACCOUNTADMIN: '/verify-accountadmin',
@@ -118,8 +130,12 @@ export const ROUTES = {
   CHECK_SUBDOMAINADMIN: '/business-loginadmin',
   LOGINADMIN: '/loginadmin',
   REGISTERADMIN: '/registeradmin',
-  EMPLOYEEADMIN: '/employeedmin'
+  BUSINESSADMIN: '/businessadmin',
+  MENU_USER: '/menu-user',
 }
+
+
+
 export const PERMISSIONS_ADMIN = {
   tong_quan_admin: 'tong_quan_admin',
 }

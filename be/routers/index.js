@@ -44,11 +44,11 @@ router.use(`/upload`, require(`./upload`));
 router.use(`/payment`, require(`./payment`));
 router.use('/report', require('./report'));
 
-router.use(`/userEKT`, require(`./userEKT`));
+router.use(`/userEKT`, require(`./user-ekt`));
 
 router.use(`/work`, require(`./work`));
 router.use(`/admin`, require(`./admin`))
-router.use(`/shoppingdairy`,require(`./shopping_diary`));
-router.use(`/menuUserEKT`, require(`./menuUserEKT`))
+router.use(`/shoppingdairy`,require(`./shopping-diary`));
+router.use(`/menuUserEKT`, require(`./menu-user`))
 
 module.exports = router;

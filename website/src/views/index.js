@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
-import { PERMISSIONS_ADMIN, ROUTES } from 'consts'
+import { PERMISSIONS_ADMIN, ROUTES, ROUTES_ADMIN } from 'consts'
 
 //base layout
 import BaseLayout from 'components/Layout'
@@ -20,20 +20,21 @@ import PasswordNewAdmin from './admin/password-new'
 import ForgetPasswordAdmin from './admin/forget-password'
 import VerifyAccountAdmin from './admin/verify-account'
 import OverviewAdmin from './admin/overviewadmin'
-import EmployeeAdmin from './admin/employee'
+import Business from './admin/business'
+import MenuUser from './admin/menuEKT'
 
 
 //user
-import LoginBusiness from './login-business'
-import Login from './login'
-import Register from './register'
-import OTP from './otp'
-import PasswordNew from './password-new'
-import ForgetPassword from './forget-password'
-import VerifyAccount from './verify-account'
-import NotFound from './not-found/404'
-import Brand from './brand'
-import Overview from './overview'
+import LoginBusiness from './user/login-business'
+import Login from './user/login'
+import Register from './user/register'
+import OTP from './user/otp'
+import PasswordNew from './user/password-new'
+import ForgetPassword from './user/forget-password'
+import VerifyAccount from './user/verify-account'
+import NotFound from './user/not-found/404'
+import BusinessUser from './user/business_user'
+import Overview from './user/overview'
 
 //apis
 
@@ -48,44 +49,38 @@ const DEFINE_ROUTER = [
     exact: true,
   },
   {
-    path: ROUTES.BRAND,
-    Component: () => <Brand />,
+    path: ROUTES.BUSINESS,
+    Component: () => <BusinessUser />,
     title: 'Danh sách thương hiệu',
     permissions: [],
     exact: true,
   },
-  //admin
-  // {
-  //   path: ROUTES.OVERVIEWADMIN,
-  //   Component: () => <OverviewAdmin />,
-  //   title: 'Tổng quan',
-  //   permissions: [],
-  //   exact: true,
-  // },
-  // {
-  //   path: ROUTES.EMPLOYEEADMIN,
-  //   Component: () => <EmployeeAdmin />,
-  //   title: 'Quản lý nhân viên',
-  //   permissions: [],
-  //   exact: true,
-  // },
+
 ]
 
 const DEFINE_ROUTER_ADMIN = [
   {
-    path: ROUTES.OVERVIEWADMIN,
+    path: ROUTES_ADMIN.OVERVIEWADMIN,
     Component: () => <OverviewAdmin/>,
     title: 'Tổng quan',
     permissions: 'admin',
     exact: true,
   },
   {
-    path: ROUTES.EMPLOYEEADMIN,
-    Component: () => <EmployeeAdmin/>,
+    path: ROUTES_ADMIN.BUSINESSADMIN,
+    Component: () => <Business/>,
     title: 'Tổng quan',
     permissions: 'admin',
     exact: true,
   },
+  {
+    path: ROUTES_ADMIN.MENU_USER,
+    Component: () => <MenuUser/>,
+    title: 'Menu user',
+    permissions: 'admin',
+    exact: true,
+  },
+
 ]
 
 const AUTH_ROUTER = [
@@ -139,52 +134,46 @@ const AUTH_ROUTER = [
     permissions: [],
   },
 
-  //admin
 
-  // {
-  //   path: ROUTES.CHECK_SUBDOMAINADMIN,
-  //   Component: () => <LoginBusinessAdmin />,
-  //   exact: true,
-  //   title: 'Login business',
-  //   permissions: [],
-  // },
+
+  //admin
   {
-    path: ROUTES.LOGINADMIN,
+    path: ROUTES_ADMIN.LOGINADMIN,
     Component: () => <LoginAdmin />,
     exact: true,
     title: 'Login',
     permissions: [],
   },
   {
-    path: ROUTES.REGISTERADMIN,
+    path: ROUTES_ADMIN.REGISTERADMIN,
     Component: () => <RegisterAdmin />,
     exact: true,
     title: 'Register',
     permissions: [],
   },
   {
-    path: ROUTES.OTPADMIN,
+    path: ROUTES_ADMIN.OTPADMIN,
     Component: () => <OTPAdmin />,
     exact: true,
     title: 'OTP',
     permissions: [],
   },
   {
-    path: ROUTES.VERIFY_ACCOUNTADMIN,
+    path: ROUTES_ADMIN.VERIFY_ACCOUNTADMIN,
     Component: () => <VerifyAccountAdmin />,
     title: 'Xác thực tài khoản',
     permissions: [],
     exact: true,
   },
   {
-    path: ROUTES.PASSWORD_NEWADMIN,
+    path: ROUTES_ADMIN.PASSWORD_NEWADMIN,
     Component: () => <PasswordNewAdmin />,
     exact: true,
     title: 'New password',
     permissions: [],
   },
   {
-    path: ROUTES.FORGET_PASSWORDADMIN,
+    path: ROUTES_ADMIN.FORGET_PASSWORDADMIN,
     Component: () => <ForgetPasswordAdmin />,
     exact: true,
     title: 'Forget password',
