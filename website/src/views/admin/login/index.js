@@ -1,16 +1,17 @@
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
 import styles from './login.module.scss'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import { ACTION, ROUTES, ROUTES_ADMIN } from 'consts'
+import { ACTION, ROUTES_ADMIN } from 'consts'
 import jwt_decode from 'jwt-decode'
 
 //antd
 import { Row, Col, Form, Input, Button, notification, Tabs } from 'antd'
 
 //apis
-import { login, getOtpLogin } from 'apis/admin'
+import { loginAdmin, getOtp } from 'apis/admin'
 
 
 
@@ -27,7 +28,7 @@ export default function Login() {
       await formLogin.validateFields()
       const dataForm = formLogin.getFieldsValue()
       dispatch({ type: ACTION.LOADING, data: true })
-      const res = await getOtpLogin(dataForm)
+      const res = await loginAdmin(dataForm)
 
       if (res.status === 200) {
         if (res.data.success)
@@ -57,18 +58,18 @@ export default function Login() {
 
       // Khi code comment lại, code xong để lại như cũ
       // const res = await login({ ...body, username: body.username }, { shop: 'vanhoang' })
-      const res = await getOtpLogin({ ...body, phone: body.phone }, { shop: subDomain[1] })
+      const res = await getOtp({ ...body, phone: body.phone }, { shop: subDomain[1] })
 
       dispatch({ type: ACTION.LOADING, data: false })
       console.log(res)
 
       //check account have verify
       if (res.status === 403) {
-        await getOtpLogin(body.phone)
+        await getOtp(body.phone)
         notification.error({
           message: res.data.message || 'Đăng nhập thất bại, vui lòng thử lại',
         })
-        history.push({ pathname: ROUTES_ADMIN.OTPADMIN, state: { phone: body.phone } })
+        history.push({ pathname: ROUTES_ADMIN.OTP, state: { phone: body.phone } })
         return
       }
 
@@ -81,7 +82,7 @@ export default function Login() {
 
           dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
 
-          history.push(ROUTES_ADMIN.OTPADMIN)
+          history.push(ROUTES_ADMIN.OTP)
         } else
           notification.error({
             message: res.data.message || 'Đăng nhập thất bại, vui lòng thử lại',

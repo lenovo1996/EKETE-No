@@ -26,28 +26,18 @@ function App() {
         const res = await getuserEKT(params)
         if (res.status === 200) {
           if (res.data.data.length) setUser({ ...res.data.data[0] })
-          console.log("user", user.data.fullname);
+          // console.log("user", user.data.fullname);
         }
       } catch (error) {
         console.log(error)
       }
     }
 
-  // const _getShoppingDari = async (body) => {
-  //   try {
-  //     const resShoppingDari = await getshopping(body, user && user.phone)
-  //     console.log('resShop', resShoppingDari)
-  //     if (resShoppingDari.status === 200) setorderEKT(resShoppingDari.data.data)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
 
     const _getShoppingDari = async (params) => {
     try {
       const resShoppingDari = await getshopping(params)
-      // console.log('resShop', resShoppingDari)
-      console.log(JSON.stringify(resShoppingDari));
+
       if (resShoppingDari.status === 200) setorderEKT(resShoppingDari.data.data)
     } catch (e) {
       console.log(e)

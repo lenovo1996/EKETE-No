@@ -66,6 +66,7 @@ export default function Employee() {
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
     : {}
+    console.log("business", dataUser);
 
 
   const _getBusinesses = async () => {

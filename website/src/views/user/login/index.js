@@ -20,6 +20,19 @@ export default function Login() {
   let history = useHistory()
   const location = useLocation()
 
+  // const _loginWithQuery = async (token) => {
+  //   dispatch({ type: ACTION.LOGIN, data: token })
+
+  //   //luu branch id len redux
+  //   const dataUser = jwt_decode(token.accessToken)
+
+  //   dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
+
+  //   const intervalPushRouter = setInterval(() => {
+  //     if (localStorage.getItem('accessToken')) history.push(ROUTES.OVERVIEW)
+  //     clearInterval(intervalPushRouter)
+  //   }, 500)
+  // }
 
   const _login = async (body) => {
     try {
@@ -52,6 +65,7 @@ export default function Login() {
 
           //luu branch id len redux
           const dataUser = jwt_decode(res.data.data.accessToken)
+          // console.log("token",dataUser);
 
           dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
 
@@ -87,6 +101,16 @@ export default function Login() {
   //     _isHaveSubdomain()
   //   }, [1000])
   // })
+  // useEffect(() => {
+  //   const query = new URLSearchParams(location.search)
+  //   const username = query.get('username')
+  //   const token = query.get('token')
+  //   if (username) formLogin.setFieldsValue({ username: username })
+  //   if (token) {
+  //     const tokenParser = JSON.parse(token)
+  //     _loginWithQuery(tokenParser)
+  //   } 
+  // }, [])
 
   useEffect(() => {
     //get username

@@ -18,6 +18,8 @@ function App() {
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
     : {}
+  console.log(dataUser);
+
 
   const getInfoUser = async (params) => {
     try {
@@ -33,9 +35,10 @@ function App() {
   }
 
 
-  useEffect(() => {
-    getInfoUser({ user_id: dataUser.data.user_id })
-  }, [dataUser.data.user_id])
+
+  // useEffect(() => {
+  //   getInfoUser({ user_id: dataUser.data.user_id })
+  // }, [dataUser.data.user_id])
 
 
 

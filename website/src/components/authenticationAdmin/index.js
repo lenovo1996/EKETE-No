@@ -18,7 +18,7 @@ const Authentication = ({ permissions, title, children, ...props }) => {
   
   const payload =
     localStorage.getItem('accessToken') && jwt_decode(localStorage.getItem('accessToken')) == null ? false : true
-    console.log('111',localStorage);
+    // console.log('111',localStorage);
   //modify title
   document.title = title
 

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import styles from './otp.module.scss'
 import { useDispatch } from 'react-redux'
-import { ACTION, ROUTES, ROUTES_ADMIN } from 'consts/index'
+import { ACTION, ROUTES_ADMIN } from 'consts/index'
 import { useHistory, useLocation } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 import delay from 'delay'
 
 //apis
-import { verify, getOtpLogin } from 'apis/admin'
+import { verify, getOtp } from 'apis/admin'
 
 //antd
 import { Form, Input, Button, notification, Row, Col } from 'antd'
@@ -35,26 +35,32 @@ export default function OTP() {
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Xác thực otp thành công' })
-          dispatch({ type: ACTION.LOGINADMIN, data: res.data.data,  })
-
-
+          dispatch({ type: ACTION.LOGIN, data: res.data.data })
+          if (localStorage.getItem('accessToken')) history.push(ROUTES_ADMIN.OVERVIEWADMIN)
+ 
           if (location.state.action && location.state.action === 'LOGINADMIN') {
             history.push({ pathname: ROUTES_ADMIN.OVERVIEWADMIN, state: { phone } })
             return
           }
 
-            if (location.state.action && location.state.action === 'FORGOT_PASSWORD') {
-              history.push({ pathname: ROUTES_ADMIN.PASSWORD_NEWADMIN, state: { phone } })
-              return
-            }
-          
-    
-   
+          if (location.state.action && location.state.action === 'FORGOT_PASSWORDADMIN') {
+            history.push({ pathname: ROUTES_ADMIN.PASSWORD_NEWADMIN, state: { phone } })
+            return
+          }
+
+          // dispatch({ type: ACTION.LOGIN, data: res.data.data })
+
+          //luu branch id len redux
+          // const dataUser = jwt_decode(res.data.data.accessToken)
+          // localStorage.setItem('accessToken', res.data.data.accessToken)
+          // dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
+
+          // await delay(300)
           const dataUser = jwt_decode(res.data.data.accessToken)
 
-          window.location.href = `http://${dataUser.data._user.prefix}.${
-            process.env.REACT_APP_HOST
-          }${ROUTES_ADMIN.OVERVIEWADMIN}?token=${JSON.stringify(res.data.data)}`
+          // window.location.href = `http://${
+          //   process.env.REACT_APP_HOST
+          // }${ROUTES_ADMIN.LOGINADMIN}`
 
           // window.location.href = `https://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`
         } else
@@ -77,7 +83,7 @@ export default function OTP() {
   const _resendOtp = async () => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
-      const res = await getOtpLogin(phone)
+      const res = await getOtp(phone)
       if (res.status === 200) {
         if (res.data.success)
           notification.success({ message: 'Gửi lại otp thành công, vui lòng kiểm tra lại' })

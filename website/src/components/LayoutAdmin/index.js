@@ -69,10 +69,12 @@ const BaseLayout = (props) => {
   const triggerReloadBranch = useSelector((state) => state.branch.trigger)
   const setting = useSelector((state) => state.setting)
 
-  // const dataUser = localStorage.getItem('accessToken')
-  //   ? jwt_decode(localStorage.getItem('accessToken'))
-  //   : {}
+  const dataUser = localStorage.getItem('accessToken')
+    ? jwt_decode(localStorage.getItem('accessToken'))
+    : {}
+    console.log("layout",dataUser);
   const [loading, setLoading] = useState(false)
+  
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
     : false
@@ -80,27 +82,9 @@ const BaseLayout = (props) => {
   const [isMobile, setIsMobile] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
-  const rootSubmenuKeys = [
-    'store',
-    'warehouse',
-    'offer',
-    'report',
-    'transport',
-    'commerce',
-    ROUTES.PRODUCT,
-  ]
-  const onOpenChange = (keys) => {
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1)
-    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      setOpenKeys(keys)
-    } else {
-      localStorage.setItem('openKey', latestOpenKey)
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
-    }
-  }
-  const dataUser = localStorage.getItem('accessToken')
-    ? jwt_decode(localStorage.getItem('accessToken'))
-    : {}
+
+
+
     const _getMenu = async () => {
       try {
         setLoading(true)
@@ -121,6 +105,7 @@ const BaseLayout = (props) => {
     const _getInfoUser = async (params) => {
       try {
         const res = await getuserAdmin(params)
+        console.log("1");
         if (res.status === 200) {
           if (res.data.data.length) setUser({ ...res.data.data[0] })
           console.log('infoAdmin',res.data.data);
@@ -130,6 +115,10 @@ const BaseLayout = (props) => {
       }
     }
 
+  useEffect(() => {
+    _getInfoUser({ user_id: dataUser.data.user_id })
+  }, [dataUser.data.user_id])
+
   var toggle = () => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
@@ -137,86 +126,7 @@ const BaseLayout = (props) => {
 
 
 
-    // const renderMenuItem = (_menu) => (
-    //   <Permission permissions={_menu.permissions} key={_menu.path}>
-    //     {_menu.menuItems ? (
-    //       <Menu.SubMenu
-    //         // className={`${styles['edit-submenu-arrow']} edit-submenu-arrow`}
-    //         style={{
-    //           // height: 40,
-    //           backgroundColor:
-    //             (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
-    //             '#e7e9fb',
-    //           width: '100%',
-    //           // height: collapsed ? 40 : '',
-    //           display: 'block',
-    //         }}
-    //         key={_menu.path}
-    //         // onTitleClick={() => history.push(_menu.path)}
-    //         onClick={_menu.path === ROUTES.OVERVIEW && toggle}
-    //         title={
-    //           <Link
-    //             style={{
-    //               fontSize: '0.8rem',
-
-    //               color:
-    //                 location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
-    //                   ? '#5F73E2'
-    //                   : 'rgba(0, 0, 0, 0.85)',
-    //             }}
-    //             to={_menu.path}
-    //           >
-    //             {_menu.title}
-    //           </Link>
-    //         }
-    //         icon={
-    //           <Link
-    //             style={{
-    //               fontSize: '0.8rem',
-    //               color:
-    //                 location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
-    //                   ? '#5F73E2'
-    //                   : 'rgba(0, 0, 0, 0.85)',
-    //             }}
-    //             to={_menu.path}
-    //           >
-    //             {_menu.icon}
-    //           </Link>
-    //         }
-    //       >
-    //         {_menu.menuItems.map((e) => (
-    //           <Permission permissions={e.permissions}>
-    //             <Menu.Item
-    //               key={e.path}
-    //               style={{
-    //                 fontSize: '0.8rem',
-    //                 backgroundColor:
-    //                   (location.pathname === e.path || e.pathsChild.includes(location.pathname)) &&
-    //                   '#e7e9fb',
-    //               }}
-    //             >
-    //               <Link to={e.path}>{e.title}</Link>
-    //             </Menu.Item>
-    //           </Permission>
-    //         ))}
-    //       </Menu.SubMenu>
-    //     ) : (
-    //       <Menu.Item
-    //         key={_menu.path}
-    //         style={{
-    //           fontSize: '0.8rem',
-    //           backgroundColor:
-    //             (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
-    //             '#e7e9fb',
-    //         }}
-    //         icon={_menu.icon}
-    //         onClick={_menu.path === ROUTES.SELL && toggle}
-    //       >
-    //         <Link to={_menu.path}>{_menu.title}</Link>
-    //       </Menu.Item>
-    //     )}
-    //   </Permission>
-    // )
+ 
 
   const onSearch = (value) => console.log(value)
 
@@ -224,7 +134,7 @@ const BaseLayout = (props) => {
     dispatch({ type: ACTION.LOGOUT })
     dispatch({ type: 'UPDATE_INVOICE', data: [] })
     // window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
-    history.push(ROUTES_ADMIN.LOGIN)
+    history.push(ROUTES_ADMIN.LOGINADMIN)
   }
 
   useEffect(() => {
@@ -268,11 +178,6 @@ const BaseLayout = (props) => {
   )
 
 
-
-
-  useEffect(() => {
-    _getInfoUser({ user_id: dataUser.data.user_id })
-  }, [dataUser.data.user_id])
 
   //get width device
   useEffect(() => {
@@ -327,7 +232,7 @@ const BaseLayout = (props) => {
           onClick={(e) => {
             if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
           }}
-          onOpenChange={onOpenChange}
+          // onOpenChange={onOpenChange}
           openKeys={openKeys}
           selectedKeys={routeMatch.path}
           mode="inline"

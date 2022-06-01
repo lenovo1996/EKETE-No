@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { ACTION, ROUTES } from './consts'
+import { ACTION, ROUTES, ROUTES_ADMIN } from './consts'
 import { clearBrowserCache } from 'utils'
 import jwt_decode from 'jwt-decode'
 import { socket } from 'socket'
@@ -103,35 +103,35 @@ function App() {
   //   setLoadingCheckDomain(false)
   // }
 
-  // const checkToken = async () => {
-  //   if (token) {
-  //     const res = await refresh({ refreshToken: refreshToken })
-  //     if (res.status === 404) {
-  //       dispatch({ type: ACTION.LOGOUT })
-  //       history.push(ROUTES.LOGIN)
-  //     } else {
-  //       if (res.data.success) {
-  //         dispatch({ type: ACTION.LOGIN, data: res.data })
-  //         const dataUser = jwt_decode(token)
-  //         if (dataUser) dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
-  //       }
-  //     }
-  //   }
-  // }
+  const checkToken = async () => {
+    if (token) {
+      const res = await refresh({ refreshToken: refreshToken })
+      if (res.status === 404) {
+        dispatch({ type: ACTION.LOGOUT })
+        history.push(ROUTES_ADMIN.LOGINADMIN)
+      } else {
+        if (res.data.success) {
+          dispatch({ type: ACTION.LOGIN, data: res.data })
+          const dataUser = jwt_decode(token)
+          if (dataUser) dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
+        }
+      }
+    }
+  }
 
-  // useEffect(() => {
-  //   if (token) socket.on(`delete_staff`, (data) => checkToken())
-  // }, [dataUser])
+  useEffect(() => {
+    if (token) socket.on(`delete_staff`, (data) => checkToken())
+  }, [dataUser])
 
   // useEffect(() => {
   //   getBusiness()
   // }, [dataUser])
 
-  // useEffect(() => {
-  //   checkToken()
-  //   checkSubdomain()
-  //   clearBrowserCache()
-  // }, [])
+  useEffect(() => {
+    checkToken()
+    // checkSubdomain()
+    // clearBrowserCache()
+  }, [])
 
   return loadingCheckDomain 
   ? (

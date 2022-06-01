@@ -32,7 +32,7 @@ export default function ForgetPassword() {
         if (res.data.success)
           history.push({
             pathname: ROUTES_ADMIN.OTPADMIN,
-            state: { phone: dataForm.phone, action: 'FORGOT_PASSWORD' },
+            state: { phone: dataForm.phone, action: 'FORGOT_PASSWORDADMIN' },
           })
         else notification.error({ message: res.data.message || 'Không tìm thấy doanh nghiệp này' })
       } else notification.error({ message: res.data.message || 'Không tìm thấy doanh nghiệp này' })

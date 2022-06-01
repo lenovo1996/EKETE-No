@@ -1,8 +1,9 @@
+
 import React, { useEffect } from 'react'
 import styles from './password-new.module.scss'
 import { Link, useLocation, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { ACTION, ROUTES_ADMIN } from 'consts/index'
+import { ACTION, ROUTES, ROUTES_ADMIN } from 'consts/index'
 import jwt_decode from 'jwt-decode'
 
 //antd
@@ -43,7 +44,7 @@ export default function PasswordNew() {
           notification.success({ message: 'Thay đổi mật khẩu thành công' })
           const dataUser = jwt_decode(res.data.data.accessToken)
           await delay(300)
-          window.location.href = `http://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}/loginadmin`
+          window.location.href = `http://${process.env.REACT_APP_HOST}/loginadmin`
         } else
           notification.error({
             message: res.data.message || 'Thay đổi mật khẩu không thành công, vui lòng thử lại',
@@ -128,11 +129,11 @@ export default function PasswordNew() {
                 </Button>
               </Form.Item>
             </Row>
-            <Row justify="end">
+            {/* <Row justify="end">
               <Link to={ROUTES_ADMIN.LOGINADMIN} style={{ color: 'white' }}>
                 Quay về đăng nhập
               </Link>
-            </Row>
+            </Row> */}
           </Form>
         </div>
       </Col>

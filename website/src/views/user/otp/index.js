@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styles from './otp.module.scss'
 import { useDispatch } from 'react-redux'
-import { ACTION, ROUTES } from 'consts/index'
+import { ACTION, ROUTES, ROUTES_ADMIN } from 'consts/index'
 import { useHistory, useLocation } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 import delay from 'delay'
@@ -35,6 +35,8 @@ export default function OTP() {
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Xác thực otp thành công' })
+      if (localStorage.getItem('accessToken')) history.push(ROUTES.OVERVIEW)
+
           dispatch({ type: ACTION.LOGIN, data: res.data.data })
 
 
@@ -51,11 +53,11 @@ export default function OTP() {
           // dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
 
           // await delay(300)
-          const dataUser = jwt_decode(res.data.data.accessToken)
+          // const dataUser = jwt_decode(res.data.data.accessToken)
 
-          window.location.href = `http://${dataUser.data._user.prefix}.${
-            process.env.REACT_APP_HOST
-          }${ROUTES.LOGIN}?token=${JSON.stringify(res.data.data)}`
+          // window.location.href = `http://${
+          //   process.env.REACT_APP_HOST
+          // }${ROUTES.LOGIN}`
 
           // window.location.href = `https://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`
         } else
@@ -92,7 +94,7 @@ export default function OTP() {
   }
 
   useEffect(() => {
-    if (!location.state) history.push(ROUTES.LOGIN)
+    if (!location.state) history.push(ROUTES_ADMIN.LOGIN)
   }, [])
 
   return (

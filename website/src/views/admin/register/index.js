@@ -13,7 +13,7 @@ import logoRegister from 'assets/img/logoRegister.svg'
 import { Row, Col, Form, Input, Button, notification, Tabs, InputNumber } from 'antd'
 
 //apis
-import { register } from 'apis/user-ekt'
+import { register } from 'apis/admin'
 
 export default function Login() {
   const dispatch = useDispatch()
