@@ -337,11 +337,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from './layout.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-<<<<<<< HEAD
-import { ACTION, PERMISSIONS, LOGO_DEFAULT, ROUTES_ADMIN } from 'consts'
-=======
 import { ACTION, ROUTES, PERMISSIONS, ROUTES_ADMIN, LOGO_DEFAULT, PERMISSIONS_ADMIN } from 'consts'
->>>>>>> main
 import { Link, useLocation, useRouteMatch, useHistory } from 'react-router-dom'
 import { Bell, Plus } from 'utils/icon'
 import jwt_decode from 'jwt-decode'
@@ -380,11 +376,7 @@ import DropdownLanguage from 'components/dropdown-language'
 
 //apis
 import { getuserAdmin } from 'apis/admin'
-<<<<<<< HEAD
-import { getMenu } from 'apis/menu-user'
-=======
 import { getMenu, deleteMenu } from 'apis/menu-admin'
->>>>>>> main
 
 
 const { Search } = Input;
@@ -404,12 +396,6 @@ const BaseLayout = (props) => {
   const [menu, setMenu] = useState([])
 
 
-<<<<<<< HEAD
-  // const dataUser = localStorage.getItem('accessToken')
-  //   ? jwt_decode(localStorage.getItem('accessToken'))
-  //   : {}
-
-=======
 <<<<<<< Updated upstream
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
@@ -511,23 +497,17 @@ const BaseLayout = (props) => {
   }, [])
 
   const _getInfoUser = async (params) => {
->>>>>>> main
     try {
       const res = await getuserAdmin(params)
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
-<<<<<<< HEAD
-=======
         console.log('infoAdmin', res.data.data);
 >>>>>>> Stashed changes
->>>>>>> main
       }
     } catch (error) {
       console.log(error)
     }
   }
-<<<<<<< HEAD
-=======
 
   useEffect(() => {
     _getInfoUser({ user_id: dataUser.data.user_id })
@@ -566,64 +546,6 @@ const BaseLayout = (props) => {
   //           width: '100%',
   //           height: collapsed ? 40 : '',
 
-  //           display: 'block',
-  //         }}
-  //         title={
-  //           <Link
-  //             style={{
-  //               fontSize: '0.9rem',
-                
-  //             }}
-  //             to={_menu.url}
-  //           >
-  //             {_menu.name}
-  //           </Link>
-  //         }
-  //         icon={
-  //           <svg marginRight={20} width="1rem" height="1rem" fill="currentColor" viewBox="0 0 1024 1024">
-              
-  //             <path d={_menu.icon} />
-
-  //           </svg>
-  //         }
-  //       >
-  //         {_menu.menuCon.map((e) => (
-  //           <>
-  //             <Menu.Item
-  //               key={e.url}
-  //               style={{
-  //                 fontSize: '0.9rem',
-  //               }}
-  //             >
-  //               <Link  to={e.url}>{e.name}</Link>
-  //             </Menu.Item>
-  //           </>
-  //         ))}
-  //       </Menu.SubMenu>
-  //     ) : (
-  //       <Menu.Item
-  //         key={_menu.url}
-  //         style={{
-  //           fontSize: '0.9rem',
-  //         }}
-        
-  //       // onClick={_menu.url === ROUTES.SELL && toggle}
-  //       >
-  //         <svg style={{marginRight : 10}} width="1.1rem" height="1.1rem" fill="currentColor" viewBox="0 0 1024 1024" >
-              
-  //             <path d={_menu.icon}/>
-
-  //           </svg>
-  //         <Link  to={_menu.url}>{_menu.name}</Link>
-  //       </Menu.Item>
-  //     )}
-  //   </>
-
-
-  // )
-
-<<<<<<< HEAD
-=======
 <<<<<<< Updated upstream
  
 =======
@@ -708,7 +630,6 @@ const BaseLayout = (props) => {
   //   </Permission>
   // )
 >>>>>>> Stashed changes
->>>>>>> main
 
   const onSearch = (value) => console.log(value)
 
@@ -725,13 +646,8 @@ const BaseLayout = (props) => {
 
   const content = (
     <div className={styles['user_information']}>
-<<<<<<< HEAD
-      <ModalUpdateUser user={user} 
-      reload={getInfoUser}
-=======
       <ModalUpdateUser user={user}
         reload={getuserAdmin}
->>>>>>> main
       >
         <div>
           <div
@@ -771,16 +687,13 @@ const BaseLayout = (props) => {
     </div>
   )
 
-<<<<<<< HEAD
-  // useEffect(() => {
-  //   _getBranches()
-  // }, [triggerReloadBranch])
-
-  useEffect(() => {
-    getInfoUser({ user_id: dataUser.data.user_id })
-  }, [dataUser.data.user_id])
-=======
 <<<<<<< Updated upstream
+
+=======
+  // useEffect(() => {
+  //   _getInfoUser({ user_id: dataUser.data.user_id })
+  // }, [dataUser.data.user_id])
+>>>>>>> Stashed changes
 
 =======
   // useEffect(() => {
@@ -796,11 +709,6 @@ const BaseLayout = (props) => {
       setCollapsed(true)
     } else setIsMobile(false)
   }, [])
-<<<<<<< HEAD
-
-  return (
-    <Layout style={{ backgroundColor: 'white', height: '100%' }}>
-=======
   const renderMenuItem = (_menu) => (
     <>
       {_menu.menuCon ? (
@@ -879,7 +787,6 @@ const BaseLayout = (props) => {
 
     <Layout style={{ backgroundColor: 'white', height: '100%' }}>
       {/* <Permission permissions={['PERMISSIONS_ADMIN.tong_quan_admin']}> */}
->>>>>>> main
       <BackTop style={{ right: 10, bottom: 15 }} />
 
 
@@ -930,14 +837,9 @@ const BaseLayout = (props) => {
           selectedKeys={routeMatch.path}
           mode="inline"
         >
-<<<<<<< HEAD
-          {/* {menu.map(renderMenuItem)} */}
-          <Menu.Item
-=======
           {menu.map(renderMenuItem)}
 
           {/* <Menu.Item
->>>>>>> main
             key={ROUTES_ADMIN.OVERVIEWADMIN}
             // onClick={onSignOut}
             icon={<DashboardOutlined />}
@@ -1018,61 +920,7 @@ const BaseLayout = (props) => {
               }}
               justify={isMobile && 'space-between'}
             >
-<<<<<<< HEAD
-              <MenuOutlined
-                onClick={toggle}
-                style={{ fontSize: 20, marginRight: 18, color: 'white' }}
-              />
-              {/* <Permission permissions={[PERMISSIONS.them_cua_hang]}>
-                <Link
-                  to={{ pathname: ROUTES.BRANCH, state: 'show-modal-create-branch' }}
-                  style={{ marginRight: '1rem', cursor: 'pointer' }}
-                >
-                  <Button
-                    type="primary"
-                    size="large"
-                    style={{
-                      backgroundColor: '#FFAB2D',
-                      borderColor: '#FFAB2D',
-                      fontSize: 18,
-                      marginLeft: 10,
-                      display: login.role === 'EMPLOYEE' && 'none',
-                    }}
-                  >
-                    <Plus />
-                  </Button>
-                </Link>
-              </Permission> */}
-              {/* <Row align="middle">
-                <div style={{ color: 'white', marginRight: 8 }}>Chi nhánh:</div>
-                <Select
-                  // disabled={user && user.role_id === 1 ? false : true}
-                  placeholder="Chi nhánh"
-                  style={{ width: isMobile ? '90%' : 250 }}
-                  onChange={(value) => dispatch({ type: 'SET_BRANCH_ID', data: value })}
-                  value={branchIdApp}
-                >
-                  {branches.map((e, index) => (
-                    <Select.Option value={e.branch_id} key={index}>
-                      {e.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Row> */}
-              {/* <Search
-              // className={'ant-input-group-addon'}
-                placeholder="Tìm kiếm"
-                allowClear
-                enterButton="Search"
-                size="large"
-                style={{ width: 240 }}
-                onSearch={onSearch}
-              /> */}
-              
-               {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
-=======
 
->>>>>>> main
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />
