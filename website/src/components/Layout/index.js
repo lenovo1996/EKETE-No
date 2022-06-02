@@ -20,8 +20,6 @@ import {
   Row,
   Popover,
   Col,
-<<<<<<< HEAD
-=======
   Input,
   Space,
 } from 'antd'
@@ -31,7 +29,6 @@ import {
   GoldOutlined,
   DashboardOutlined,
   LogoutOutlined,
-<<<<<<< HEAD
   RollbackOutlined,
   CarOutlined,
   UserAddOutlined,
@@ -50,10 +47,6 @@ import {
   MedicineBoxOutlined,
   NodeExpandOutlined,
   PrinterOutlined,
-  
-  UserOutlined,
-  ExportOutlined,
-  ShoppingCartOutlined,
 } from '@ant-design/icons'
 
 //components
@@ -491,12 +484,9 @@ const BaseLayout = (props) => {
           <Link to={_menu.url}>{_menu.name}</Link>
         </Menu.Item>
       )}
-    </>
-  )
+    </Permission>
+)
 
-
-
->>>>>>> main
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
     dispatch({ type: 'UPDATE_INVOICE', data: [] })
@@ -530,7 +520,6 @@ const BaseLayout = (props) => {
       <div className={styles['title']}>Thông báo</div>
       <div className={styles['content']}>
         <Empty />
-<<<<<<< HEAD
       </div>
     </div>
   )
@@ -546,10 +535,6 @@ const BaseLayout = (props) => {
       setIsMobile(true)
       setCollapsed(true)
     } else setIsMobile(false)
-  }, [])
-
-  useEffect(() => {
-    saveScrollTop()
   }, [])
 
   return (
@@ -602,10 +587,7 @@ const BaseLayout = (props) => {
           selectedKeys={routeMatch.path}
           mode="inline"
         >
-<<<<<<< HEAD
           {MENUS.map(renderMenuItem)}
-=======
-          {menu.map(renderMenuItem)}
 
           <Menu.Item key={ROUTES.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
             <Link >Đăng xuất</Link>
@@ -651,10 +633,7 @@ const BaseLayout = (props) => {
                     </Select.Option>
                   ))}
                 </Select>
-<<<<<<< HEAD
               </Row>
-=======
-              </Row> */}
               {/* <Search
               // className={'ant-input-group-addon'}
                 placeholder="Tìm kiếm"

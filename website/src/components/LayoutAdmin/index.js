@@ -389,27 +389,14 @@ const BaseLayout = (props) => {
   const WIDTH_MENU_OPEN = 230
   const WIDTH_MENU_CLOSE = 60
 
-
-
   const [user, setUser] = useState({})
-  const [loading, setLoading] = useState(false)
   const [menu, setMenu] = useState([])
 
-
-<<<<<<< Updated upstream
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
     : {}
-    console.log("layout",dataUser);
-=======
-
-  const dataUser = localStorage.getItem('accessToken')
-    ? jwt_decode(localStorage.getItem('accessToken'))
-    : {}
->>>>>>> Stashed changes
   const [loading, setLoading] = useState(false)
   
->>>>>>> main
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
     : false
@@ -419,30 +406,7 @@ const BaseLayout = (props) => {
   const [isMobile, setIsMobile] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
-<<<<<<< Updated upstream
 
-
-  const dataUser = localStorage.getItem('accessToken')
-    ? jwt_decode(localStorage.getItem('accessToken'))
-    : {}
-
-<<<<<<< HEAD
-  const getInfoUser = async (params) => {
-=======
-    const _getMenu = async () => {
-      try {
-        setLoading(true)
-        const res = await getMenu()
-        console.log(res)
-        if (res.status === 200) {
-          setMenu(res.data.data)
-          console.log('meunu', res.data.data)
-        }
-        setLoading(false)
-      } catch (e) {
-        setLoading(false)
-        console.log(e)
-=======
   const rootSubmenuKeys = [
     'store',
     'warehouse',
@@ -462,47 +426,12 @@ const BaseLayout = (props) => {
     }
   }
 
-  const _getMenu = async () => {
-    try {
-      setLoading(true)
-      const res = await getMenu()
-      console.log(res)
-      if (res.status === 200) {
-        setMenu(res.data.data)
-        console.log('meunu', res.data.data)
->>>>>>> Stashed changes
-      }
-      setLoading(false)
-    } catch (e) {
-      setLoading(false)
-      console.log(e)
-    }
-<<<<<<< Updated upstream
- 
-
-    const _getInfoUser = async (params) => {
-      try {
-        const res = await getuserAdmin(params)
-        console.log("1");
-        if (res.status === 200) {
-          if (res.data.data.length) setUser({ ...res.data.data[0] })
-          console.log('infoAdmin',res.data.data);
-        }
-      } catch (error) {
-        console.log(error)
-=======
-  }
-  useEffect(() => {
-    _getMenu()
-  }, [])
-
   const _getInfoUser = async (params) => {
     try {
       const res = await getuserAdmin(params)
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
         console.log('infoAdmin', res.data.data);
->>>>>>> Stashed changes
       }
     } catch (error) {
       console.log(error)
@@ -512,7 +441,6 @@ const BaseLayout = (props) => {
   useEffect(() => {
     _getInfoUser({ user_id: dataUser.data.user_id })
   }, [dataUser.data.user_id])
->>>>>>> main
 
   var toggle = () => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
@@ -546,9 +474,6 @@ const BaseLayout = (props) => {
   //           width: '100%',
   //           height: collapsed ? 40 : '',
 
-<<<<<<< Updated upstream
- 
-=======
   // const renderMenuItem = (_menu) => (
   //   <Permission permissions={_menu.permissions} key={_menu.path}>
   //     {_menu.menuItems ? (
@@ -629,7 +554,6 @@ const BaseLayout = (props) => {
   //     )}
   //   </Permission>
   // )
->>>>>>> Stashed changes
 
   const onSearch = (value) => console.log(value)
 
@@ -687,20 +611,13 @@ const BaseLayout = (props) => {
     </div>
   )
 
-<<<<<<< Updated upstream
-
-=======
   // useEffect(() => {
   //   _getInfoUser({ user_id: dataUser.data.user_id })
   // }, [dataUser.data.user_id])
->>>>>>> Stashed changes
 
-=======
   // useEffect(() => {
   //   _getInfoUser({ user_id: dataUser.data.user_id })
   // }, [dataUser.data.user_id])
->>>>>>> Stashed changes
->>>>>>> main
 
   //get width device
   useEffect(() => {
@@ -853,21 +770,6 @@ const BaseLayout = (props) => {
           >
             <Link to={ROUTES_ADMIN.BUSINESSADMIN}>Q/L cửa hàng</Link>
           </Menu.Item>
-<<<<<<< HEAD
-          <Menu.Item key={ROUTES_ADMIN.MENU_USER} 
-            // onClick={onSignOut} 
-            icon={<LogoutOutlined />}>
-            <Link to={ROUTES_ADMIN.MENU_USER}>Quản lý menu user</Link>
-          </Menu.Item> 
-          {/* <Menu.Item key={ROUTES.BRANCH_MANAGEMENT} 
-            // onClick={onSignOut} 
-            icon={<LogoutOutlined />}>
-            <Link to={ROUTES.BRANCH_MANAGEMENT}>Cửa hàng</Link>
-          </Menu.Item>  */}
-          <Menu.Item key={ROUTES_ADMIN.LOGINADMIN} onClick={onSignOut} icon={<LogoutOutlined />}>
-            <Link to={ROUTES_ADMIN.LOGINADMIN}>Đăng xuất</Link>
-          </Menu.Item>
-=======
           <Menu.Item
             key={ROUTES_ADMIN.MENU_USER}
             // onClick={onSignOut}
@@ -897,7 +799,6 @@ const BaseLayout = (props) => {
 
 
 
->>>>>>> main
         </Menu>
       </Sider>
       <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
