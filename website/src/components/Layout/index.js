@@ -20,6 +20,11 @@ import {
   Row,
   Popover,
   Col,
+<<<<<<< HEAD
+=======
+  Input,
+  Space,
+>>>>>>> main
 } from 'antd'
 
 import {
@@ -27,6 +32,7 @@ import {
   GoldOutlined,
   DashboardOutlined,
   LogoutOutlined,
+<<<<<<< HEAD
   RollbackOutlined,
   CarOutlined,
   UserAddOutlined,
@@ -45,6 +51,11 @@ import {
   MedicineBoxOutlined,
   NodeExpandOutlined,
   PrinterOutlined,
+=======
+  UserOutlined,
+  ExportOutlined,
+  ShoppingCartOutlined,
+>>>>>>> main
 } from '@ant-design/icons'
 
 //components
@@ -53,9 +64,16 @@ import ModalUpdateUser from './modal-user'
 import DropdownLanguage from 'components/dropdown-language'
 
 //apis
+<<<<<<< HEAD
 import { updateEmployee, getEmployees } from 'apis/employee'
 import { getAllBranch } from 'apis/branch'
 
+=======
+import { getuserEKT } from 'apis/user-ekt'
+import { getMenu } from 'apis/menu-user'
+
+const { Search } = Input
+>>>>>>> main
 const { Sider } = Layout
 const BaseLayout = (props) => {
   const history = useHistory()
@@ -64,7 +82,10 @@ const BaseLayout = (props) => {
   const dispatch = useDispatch()
   const WIDTH_MENU_OPEN = 230
   const WIDTH_MENU_CLOSE = 60
+<<<<<<< HEAD
   const HEIGHT_HEADER = 56
+=======
+>>>>>>> main
 
   const [branches, setBranches] = useState([])
   const [user, setUser] = useState({})
@@ -400,8 +421,14 @@ const BaseLayout = (props) => {
               (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
               '#e7e9fb',
             width: '100%',
+<<<<<<< HEAD
             // height: collapsed ? 40 : '',
+=======
+            height: collapsed ? 40 : '',
+>>>>>>> main
             display: 'block',
+
+            // fontSize: '0.9rem',
           }}
           key={_menu.path}
           // onTitleClick={() => history.push(_menu.path)}
@@ -409,12 +436,17 @@ const BaseLayout = (props) => {
           title={
             <Link
               style={{
+<<<<<<< HEAD
                 fontSize: '0.8rem',
 
                 color:
                   location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
                     ? '#5F73E2'
                     : 'rgba(0, 0, 0, 0.85)',
+=======
+                fontSize: '0.9rem',
+                color: 'black',
+>>>>>>> main
               }}
               to={_menu.path}
             >
@@ -422,6 +454,7 @@ const BaseLayout = (props) => {
             </Link>
           }
           icon={
+<<<<<<< HEAD
             <Link
               style={{
                 fontSize: '0.8rem',
@@ -434,6 +467,17 @@ const BaseLayout = (props) => {
             >
               {_menu.icon}
             </Link>
+=======
+            <svg
+              marginRight={20}
+              width="1rem"
+              height="1rem"
+              fill="currentColor"
+              viewBox="0 0 1024 1024"
+            >
+              <path d={_menu.icon} />
+            </svg>
+>>>>>>> main
           }
         >
           {_menu.menuItems.map((e) => (
@@ -447,7 +491,11 @@ const BaseLayout = (props) => {
                     '#e7e9fb',
                 }}
               >
+<<<<<<< HEAD
                 <Link to={e.path}>{e.title}</Link>
+=======
+                <Link to={e.url}>{e.name}</Link>
+>>>>>>> main
               </Menu.Item>
             </Permission>
           ))}
@@ -456,6 +504,7 @@ const BaseLayout = (props) => {
         <Menu.Item
           key={_menu.path}
           style={{
+<<<<<<< HEAD
             fontSize: '0.8rem',
             backgroundColor:
               (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
@@ -470,10 +519,38 @@ const BaseLayout = (props) => {
     </Permission>
   )
 
+=======
+            // fontSize: '0.9rem',
+            width: '100%',
+            height: collapsed ? 40 : '',
+            display: 'block',
+          }}
+
+          // onClick={_menu.url === ROUTES.SELL && toggle}
+        >
+          <svg
+            style={{ marginRight: 10 }}
+            width="1.1rem"
+            height="1.1rem"
+            fill="currentColor"
+            viewBox="0 0 1024 1024"
+          >
+            <path d={_menu.icon} />
+          </svg>
+          <Link to={_menu.url}>{_menu.name}</Link>
+        </Menu.Item>
+      )}
+    </>
+  )
+
+
+
+>>>>>>> main
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
     dispatch({ type: 'UPDATE_INVOICE', data: [] })
     history.push(ROUTES.LOGIN)
+     
   }
 
   const content = (
@@ -502,6 +579,7 @@ const BaseLayout = (props) => {
       <div className={styles['title']}>Thông báo</div>
       <div className={styles['content']}>
         <Empty />
+<<<<<<< HEAD
       </div>
     </div>
   )
@@ -524,6 +602,12 @@ const BaseLayout = (props) => {
   useEffect(() => {
     _getBranches()
   }, [triggerReloadBranch])
+=======
+      </div> */}
+    </div>
+  )
+
+>>>>>>> main
 
   useEffect(() => {
     getInfoUser({ user_id: dataUser.data.user_id })
@@ -591,9 +675,14 @@ const BaseLayout = (props) => {
           selectedKeys={routeMatch.path}
           mode="inline"
         >
+<<<<<<< HEAD
           {MENUS.map(renderMenuItem)}
+=======
+          {menu.map(renderMenuItem)}
+
+>>>>>>> main
           <Menu.Item key={ROUTES.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
-            <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
+            <Link >Đăng xuất</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -636,7 +725,22 @@ const BaseLayout = (props) => {
                     </Select.Option>
                   ))}
                 </Select>
+<<<<<<< HEAD
               </Row>
+=======
+              </Row> */}
+              {/* <Search
+              // className={'ant-input-group-addon'}
+                placeholder="Tìm kiếm"
+                allowClear
+                enterButton="Search"
+                size="large"
+                style={{ width: 240 }}
+                onSearch={onSearch}
+              /> */}
+
+              {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
+>>>>>>> main
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />

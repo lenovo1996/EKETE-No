@@ -337,7 +337,11 @@
 import React, { useState, useEffect } from 'react'
 import styles from './layout.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
+<<<<<<< HEAD
 import { ACTION, PERMISSIONS, LOGO_DEFAULT, ROUTES_ADMIN } from 'consts'
+=======
+import { ACTION, ROUTES, PERMISSIONS, ROUTES_ADMIN, LOGO_DEFAULT, PERMISSIONS_ADMIN } from 'consts'
+>>>>>>> main
 import { Link, useLocation, useRouteMatch, useHistory } from 'react-router-dom'
 import { Bell, Plus } from 'utils/icon'
 import jwt_decode from 'jwt-decode'
@@ -376,7 +380,11 @@ import DropdownLanguage from 'components/dropdown-language'
 
 //apis
 import { getuserAdmin } from 'apis/admin'
+<<<<<<< HEAD
 import { getMenu } from 'apis/menu-user'
+=======
+import { getMenu, deleteMenu } from 'apis/menu-admin'
+>>>>>>> main
 
 
 const { Search } = Input;
@@ -390,43 +398,141 @@ const BaseLayout = (props) => {
   const WIDTH_MENU_CLOSE = 60
 
 
-  const [branches, setBranches] = useState([])
+
   const [user, setUser] = useState({})
   const [loading, setLoading] = useState(false)
   const [menu, setMenu] = useState([])
 
-  const login = useSelector((state) => state.login)
-  const branchIdApp = useSelector((state) => state.branch.branchId)
-  const triggerReloadBranch = useSelector((state) => state.branch.trigger)
-  const setting = useSelector((state) => state.setting)
 
+<<<<<<< HEAD
   // const dataUser = localStorage.getItem('accessToken')
   //   ? jwt_decode(localStorage.getItem('accessToken'))
   //   : {}
 
+=======
+<<<<<<< Updated upstream
+  const dataUser = localStorage.getItem('accessToken')
+    ? jwt_decode(localStorage.getItem('accessToken'))
+    : {}
+    console.log("layout",dataUser);
+=======
+
+  const dataUser = localStorage.getItem('accessToken')
+    ? jwt_decode(localStorage.getItem('accessToken'))
+    : {}
+>>>>>>> Stashed changes
+  const [loading, setLoading] = useState(false)
+  
+>>>>>>> main
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
     : false
+
+
   const [collapsed, setCollapsed] = useState(isCollapsed)
   const [isMobile, setIsMobile] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
+<<<<<<< Updated upstream
 
 
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
     : {}
 
+<<<<<<< HEAD
   const getInfoUser = async (params) => {
+=======
+    const _getMenu = async () => {
+      try {
+        setLoading(true)
+        const res = await getMenu()
+        console.log(res)
+        if (res.status === 200) {
+          setMenu(res.data.data)
+          console.log('meunu', res.data.data)
+        }
+        setLoading(false)
+      } catch (e) {
+        setLoading(false)
+        console.log(e)
+=======
+  const rootSubmenuKeys = [
+    'store',
+    'warehouse',
+    'offer',
+    'report',
+    'transport',
+    'commerce',
+    ROUTES.PRODUCT,
+  ]
+  const onOpenChange = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1)
+    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(keys)
+    } else {
+      localStorage.setItem('openKey', latestOpenKey)
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
+    }
+  }
+
+  const _getMenu = async () => {
+    try {
+      setLoading(true)
+      const res = await getMenu()
+      console.log(res)
+      if (res.status === 200) {
+        setMenu(res.data.data)
+        console.log('meunu', res.data.data)
+>>>>>>> Stashed changes
+      }
+      setLoading(false)
+    } catch (e) {
+      setLoading(false)
+      console.log(e)
+    }
+<<<<<<< Updated upstream
+ 
+
+    const _getInfoUser = async (params) => {
+      try {
+        const res = await getuserAdmin(params)
+        console.log("1");
+        if (res.status === 200) {
+          if (res.data.data.length) setUser({ ...res.data.data[0] })
+          console.log('infoAdmin',res.data.data);
+        }
+      } catch (error) {
+        console.log(error)
+=======
+  }
+  useEffect(() => {
+    _getMenu()
+  }, [])
+
+  const _getInfoUser = async (params) => {
+>>>>>>> main
     try {
       const res = await getuserAdmin(params)
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
+<<<<<<< HEAD
+=======
+        console.log('infoAdmin', res.data.data);
+>>>>>>> Stashed changes
+>>>>>>> main
       }
     } catch (error) {
       console.log(error)
     }
   }
+<<<<<<< HEAD
+=======
+
+  useEffect(() => {
+    _getInfoUser({ user_id: dataUser.data.user_id })
+  }, [dataUser.data.user_id])
+>>>>>>> main
 
   var toggle = () => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
@@ -516,6 +622,93 @@ const BaseLayout = (props) => {
 
   // )
 
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+ 
+=======
+  // const renderMenuItem = (_menu) => (
+  //   <Permission permissions={_menu.permissions} key={_menu.path}>
+  //     {_menu.menuItems ? (
+  //       <Menu.SubMenu
+  //         // className={`${styles['edit-submenu-arrow']} edit-submenu-arrow`}
+  //         style={{
+  //           // height: 40,
+  //           backgroundColor:
+  //             (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
+  //             '#e7e9fb',
+  //           width: '100%',
+  //           // height: collapsed ? 40 : '',
+  //           display: 'block',
+  //         }}
+  //         key={_menu.path}
+  //         // onTitleClick={() => history.push(_menu.path)}
+  //         onClick={_menu.path === ROUTES.OVERVIEW && toggle}
+  //         title={
+  //           <Link
+  //             style={{
+  //               fontSize: '0.8rem',
+
+  //               color:
+  //                 location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
+  //                   ? '#5F73E2'
+  //                   : 'rgba(0, 0, 0, 0.85)',
+  //             }}
+  //             to={_menu.path}
+  //           >
+  //             {_menu.title}
+  //           </Link>
+  //         }
+  //         icon={
+  //           <Link
+  //             style={{
+  //               fontSize: '0.8rem',
+  //               color:
+  //                 location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
+  //                   ? '#5F73E2'
+  //                   : 'rgba(0, 0, 0, 0.85)',
+  //             }}
+  //             to={_menu.path}
+  //           >
+  //             {_menu.icon}
+  //           </Link>
+  //         }
+  //       >
+  //         {_menu.menuItems.map((e) => (
+  //           <Permission permissions={e.permissions}>
+  //             <Menu.Item
+  //               key={e.path}
+  //               style={{
+  //                 fontSize: '0.8rem',
+  //                 backgroundColor:
+  //                   (location.pathname === e.path || e.pathsChild.includes(location.pathname)) &&
+  //                   '#e7e9fb',
+  //               }}
+  //             >
+  //               <Link to={e.path}>{e.title}</Link>
+  //             </Menu.Item>
+  //           </Permission>
+  //         ))}
+  //       </Menu.SubMenu>
+  //     ) : (
+  //       <Menu.Item
+  //         key={_menu.path}
+  //         style={{
+  //           fontSize: '0.8rem',
+  //           backgroundColor:
+  //             (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
+  //             '#e7e9fb',
+  //         }}
+  //         icon={_menu.icon}
+  //         onClick={_menu.path === ROUTES.SELL && toggle}
+  //       >
+  //         <Link to={_menu.path}>{_menu.title}</Link>
+  //       </Menu.Item>
+  //     )}
+  //   </Permission>
+  // )
+>>>>>>> Stashed changes
+>>>>>>> main
 
   const onSearch = (value) => console.log(value)
 
@@ -532,8 +725,13 @@ const BaseLayout = (props) => {
 
   const content = (
     <div className={styles['user_information']}>
+<<<<<<< HEAD
       <ModalUpdateUser user={user} 
       reload={getInfoUser}
+=======
+      <ModalUpdateUser user={user}
+        reload={getuserAdmin}
+>>>>>>> main
       >
         <div>
           <div
@@ -573,6 +771,7 @@ const BaseLayout = (props) => {
     </div>
   )
 
+<<<<<<< HEAD
   // useEffect(() => {
   //   _getBranches()
   // }, [triggerReloadBranch])
@@ -580,6 +779,15 @@ const BaseLayout = (props) => {
   useEffect(() => {
     getInfoUser({ user_id: dataUser.data.user_id })
   }, [dataUser.data.user_id])
+=======
+<<<<<<< Updated upstream
+
+=======
+  // useEffect(() => {
+  //   _getInfoUser({ user_id: dataUser.data.user_id })
+  // }, [dataUser.data.user_id])
+>>>>>>> Stashed changes
+>>>>>>> main
 
   //get width device
   useEffect(() => {
@@ -588,10 +796,92 @@ const BaseLayout = (props) => {
       setCollapsed(true)
     } else setIsMobile(false)
   }, [])
+<<<<<<< HEAD
 
   return (
     <Layout style={{ backgroundColor: 'white', height: '100%' }}>
+=======
+  const renderMenuItem = (_menu) => (
+    <>
+      {_menu.menuCon ? (
+        <Menu.SubMenu
+          style={{
+            width: '100%',
+            height: collapsed ? 40 : '',
+            display: 'block',
+
+            // fontSize: '0.9rem',
+          }}
+          title={
+            <Link
+              style={{
+                fontSize: '0.9rem',
+                color: 'black',
+              }}
+              to={_menu.url}
+            >
+              {_menu.name}
+            </Link>
+          }
+          icon={
+            <svg
+              marginRight={20}
+              width="1rem"
+              height="1rem"
+              fill="currentColor"
+              viewBox="0 0 1024 1024"
+            >
+              <path d={_menu.icon} />
+            </svg>
+          }
+        >
+          {_menu.menuCon.map((e) => (
+            <>
+              <Menu.Item
+                key={e.url}
+                style={{
+                  fontSize: '0.9rem',
+                }}
+              >
+                <Link to={e.url}>{e.name}</Link>
+              </Menu.Item>
+            </>
+          ))}
+        </Menu.SubMenu>
+      ) : (
+        <Menu.Item
+          key={_menu.url}
+          style={{
+            // fontSize: '0.9rem',
+            width: '100%',
+            height: collapsed ? 40 : '',
+            display: 'block',
+          }}
+
+          // onClick={_menu.url === ROUTES.SELL && toggle}
+        >
+          <svg
+            style={{ marginRight: 10 }}
+            width="1.1rem"
+            height="1.1rem"
+            fill="currentColor"
+            viewBox="0 0 1024 1024"
+          >
+            <path d={_menu.icon} />
+          </svg>
+          <Link to={_menu.url}>{_menu.name}</Link>
+        </Menu.Item>
+      )}
+    </>
+  )
+
+  return (
+
+    <Layout style={{ backgroundColor: 'white', height: '100%' }}>
+      {/* <Permission permissions={['PERMISSIONS_ADMIN.tong_quan_admin']}> */}
+>>>>>>> main
       <BackTop style={{ right: 10, bottom: 15 }} />
+
 
       <Sider
         trigger={null}
@@ -640,8 +930,14 @@ const BaseLayout = (props) => {
           selectedKeys={routeMatch.path}
           mode="inline"
         >
+<<<<<<< HEAD
           {/* {menu.map(renderMenuItem)} */}
           <Menu.Item
+=======
+          {menu.map(renderMenuItem)}
+
+          {/* <Menu.Item
+>>>>>>> main
             key={ROUTES_ADMIN.OVERVIEWADMIN}
             // onClick={onSignOut}
             icon={<DashboardOutlined />}
@@ -651,10 +947,11 @@ const BaseLayout = (props) => {
           <Menu.Item
             key={ROUTES_ADMIN.BUSINESSADMIN}
             // onClick={onSignOut}
-            icon={<DashboardOutlined />}
+            icon={<MenuOutlined />}
           >
-            <Link to={ROUTES_ADMIN.BUSINESSADMIN}>Quản lý cửa hàng</Link>
+            <Link to={ROUTES_ADMIN.BUSINESSADMIN}>Q/L cửa hàng</Link>
           </Menu.Item>
+<<<<<<< HEAD
           <Menu.Item key={ROUTES_ADMIN.MENU_USER} 
             // onClick={onSignOut} 
             icon={<LogoutOutlined />}>
@@ -668,8 +965,39 @@ const BaseLayout = (props) => {
           <Menu.Item key={ROUTES_ADMIN.LOGINADMIN} onClick={onSignOut} icon={<LogoutOutlined />}>
             <Link to={ROUTES_ADMIN.LOGINADMIN}>Đăng xuất</Link>
           </Menu.Item>
+=======
+          <Menu.Item
+            key={ROUTES_ADMIN.MENU_USER}
+            // onClick={onSignOut}
+            icon={<DashboardOutlined />}
+          >
+            <Link to={ROUTES_ADMIN.MENU_USER}>Q/L menu chức năng user</Link>
+          </Menu.Item>
+          <Menu.Item
+            key={ROUTES_ADMIN.MENU_BUSINESS}
+            icon={<DashboardOutlined />}
+          >
+            <Link to={ROUTES_ADMIN.MENU_BUSINESS}>Q/L menu chức năng cửa hàng</Link>
+          </Menu.Item>
+          <Menu.Item
+            key={ROUTES_ADMIN.MENU_ADMIN}
+            icon={<DashboardOutlined />}
+          >
+            <Link to={ROUTES_ADMIN.MENU_ADMIN}>Q/L menu chức năng admin</Link>
+          </Menu.Item> */}
+          <Menu.Item
+            key={ROUTES.LOGOUT}
+            onClick={onSignOut}
+            icon={<LogoutOutlined />}
+          >
+            <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
+          </Menu.Item>
+
+
+
+>>>>>>> main
         </Menu>
-      </Sider>  
+      </Sider>
       <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
         <Affix offsetTop={0}>
           <Row
@@ -690,6 +1018,7 @@ const BaseLayout = (props) => {
               }}
               justify={isMobile && 'space-between'}
             >
+<<<<<<< HEAD
               <MenuOutlined
                 onClick={toggle}
                 style={{ fontSize: 20, marginRight: 18, color: 'white' }}
@@ -741,6 +1070,9 @@ const BaseLayout = (props) => {
               /> */}
               
                {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
+=======
+
+>>>>>>> main
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />

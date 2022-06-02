@@ -3,7 +3,7 @@ const TIMEZONE = process.env.TIMEZONE;
 const client = require(`../config/mongodb`);
 const SDB = process.env.DATABASE; // System Database
 
-const menuService = require(`../services/menu`);
+const menuService = require(`../services/menu-admin`);
 
 const bcrypt = require(`../libs/bcrypt`);
 const { io } = require('../config/socket');
@@ -43,7 +43,7 @@ module.exports._create = async (req, res, next) => {
         req.body.prefix = String(req.body.name).trim().toLowerCase();
         let menu = await client
             .db(SDB)
-            .collection('Menu')
+            .collection('MenuAdmin')
             .findOne({
                 $or: [{ prefix : req.body.prefix }],
             });
@@ -53,7 +53,7 @@ module.exports._create = async (req, res, next) => {
         let menu_id = await client
             .db(SDB)
             .collection('AppSetting')
-            .findOne({ name: 'Menu' })
+            .findOne({ name: 'MenuAdmin' })
             .then((doc) => {
                 if (doc) {
                     if (doc.value) {
@@ -83,11 +83,11 @@ module.exports._create = async (req, res, next) => {
         await client
             .db(SDB)
             .collection('AppSetting')
-            .updateOne({ name: 'Menu' }, { $set: { name: 'Menu', value: menu_id } }, { upsert: true });
+            .updateOne({ name: 'MenuAdmin' }, { $set: { name: 'MenuAdmin', value: menu_id } }, { upsert: true });
             req[`body`] = _menu;
-        var meID = await client.db(SDB).collection('Menu').findOne({ menu_id: Number(req.body.parent_menu_id) })
+        var meID = await client.db(SDB).collection('MenuAdmin').findOne({ menu_id: Number(req.body.parent_menu_id) })
         if (meID) {
-            await client.db(SDB).collection('Menu').updateOne({ menu_id: Number(req.body.parent_menu_id) }, { $push: { menuCon: _menu } })
+            await client.db(SDB).collection('MenuAdmin').updateOne({ menu_id: Number(req.body.parent_menu_id) }, { $push: { menuCon: _menu } })
             res.send({ success: true, data: req.body });
         } else if (!meID) {
             await menuService._create(req, res, next);
@@ -100,7 +100,7 @@ module.exports._create = async (req, res, next) => {
 module.exports._update = async (req, res, next) => {
     try {
         req.params.menu_id = Number(req.params.menu_id);
-        let menu = await client.db(SDB).collection('Menu').findOne(req.params);
+        let menu = await client.db(SDB).collection('MenuAdmin').findOne(req.params);
         if (!menu) {
             throw new Error(`400: Chức năng không tồn tại!`);
         }
@@ -134,16 +134,35 @@ module.exports._delete = async (req, res, next) => {
     try {
         // await client
         //     .db(SDB)
-        //     .collection(`Menu`)
+        //     .collection(`MenuAdmin`)
         //     .deleteMany({ menu_id: { $in: req.body.menu_id } });
         await client
-        .db(SDB)
-        .collection(`Menu`)
-        .updateOne({menu_id: Number(req.body.menu_id)},{ $set: {is_delete: true} });
+            .db(SDB)
+            .collection(`MenuAdmin`)
+            .updateOne({menu_id: Number(req.body.menu_id)},{ $set: {is_delete: true} });
         //Resend
         res.send({
             success: true,
-            message: 'Xóa chức năng thành công!',
+            message: 'Xóa người dùng thành công!',
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+module.exports._setstatus = async (req, res, next) => {
+    try {
+        // await client
+        //     .db(SDB)
+        //     .collection(`MenuAdmin`)
+        //     .deleteMany({ menu_id: { $in: req.body.menu_id } });
+        await client
+            .db(SDB)
+            .collection(`MenuAdmin`)
+            .updateOne({menu_id: Number(req.body.menu_id)},{ $set: {status: req.body.status} });
+        //Resend
+        res.send({
+            success: true,
+            message: 'Xóa người dùng thành công!',
         });
     } catch (err) {
         next(err);
