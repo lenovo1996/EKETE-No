@@ -40,12 +40,12 @@ module.exports._get = async (req, res, next) => {
 
 module.exports._create = async (req, res, next) => {
     try {
-        req.body.name = String(req.body.name).trim().toLowerCase();
+        req.body.prefix = String(req.body.name).trim().toLowerCase();
         let menu = await client
             .db(SDB)
-            .collection('Menu')
+            .collection('MenuUser')
             .findOne({
-                $or: [{ name: req.body.name }],
+                $or: [{ prefix: req.body.prefix }],
             });
         if (menu) {
             throw new Error('400: Chức năng đã được sử dụng !');
@@ -53,7 +53,7 @@ module.exports._create = async (req, res, next) => {
         let menu_id = await client
             .db(SDB)
             .collection('AppSetting')
-            .findOne({ name: 'Menu' })
+            .findOne({ name: 'MenuUser' })
             .then((doc) => {
                 if (doc) {
                     if (doc.value) {
@@ -66,6 +66,7 @@ module.exports._create = async (req, res, next) => {
         let _menu = {
             menu_id: menu_id,
             name: req.body.name,
+            prefix: req.body.prefix,
             parent_menu_id: req.body.parent_menu_id,
             description: req.body.description,
             url: req.body.url,
@@ -73,20 +74,26 @@ module.exports._create = async (req, res, next) => {
             status: req.body.status,
             create_date: moment().tz(TIMEZONE).format(),
             creator_id: req.user.user_id,
-            last_update: moment().tz(TIMEZONE).format(),    
+            last_update: moment().tz(TIMEZONE).format(),
             updater_id: req.user.user_id,
             is_delete: false,
             icon: req.body.icon,
-            slug_name: removeUnicode((req.body.name), true).toLowerCase(),
+            slug_name: removeUnicode(req.body.name, true).toLowerCase(),
         };
         await client
             .db(SDB)
             .collection('AppSetting')
-            .updateOne({ name: 'Menu' }, { $set: { name: 'Menu', value: menu_id } }, { upsert: true });
+            .updateOne({ name: 'MenuUser' }, { $set: { name: 'MenuUser', value: menu_id } }, { upsert: true });
         req[`body`] = _menu;
-        var meID = await client.db(SDB).collection('Menu').findOne({ menu_id: Number(req.body.parent_menu_id) })
+        var meID = await client
+            .db(SDB)
+            .collection('MenuUser')
+            .findOne({ menu_id: Number(req.body.parent_menu_id) });
         if (meID) {
-            await client.db(SDB).collection('Menu').updateOne({ menu_id: Number(req.body.parent_menu_id) }, { $push: { menuCon: _menu } })
+            await client
+                .db(SDB)
+                .collection('MenuUser')
+                .updateOne({ menu_id: Number(req.body.parent_menu_id) }, { $push: { menuCon: _menu } });
             res.send({ success: true, data: req.body });
         } else if (!meID) {
             await menuService._create(req, res, next);
@@ -99,7 +106,7 @@ module.exports._create = async (req, res, next) => {
 module.exports._update = async (req, res, next) => {
     try {
         req.params.menu_id = Number(req.params.menu_id);
-        let menu = await client.db(SDB).collection('Menu').findOne(req.params);
+        let menu = await client.db(SDB).collection('MenuUser').findOne(req.params);
         if (!menu) {
             throw new Error(`400: Chức năng không tồn tại!`);
         }
@@ -119,9 +126,10 @@ module.exports._update = async (req, res, next) => {
             creator_id: _menu.creator_id,
             last_update: moment().tz(TIMEZONE).format(),
             updater_id: req.user.user_id,
+            icon: _menu.icon,
             is_delete: _menu.is_delete,
         };
-        req['body'] = _menu;
+        req[`body`] = _menu;
         await menuService._update(req, res, next);
     } catch (err) {
         next(err);
@@ -130,14 +138,18 @@ module.exports._update = async (req, res, next) => {
 
 module.exports._delete = async (req, res, next) => {
     try {
+        // await client
+        //     .db(SDB)
+        //     .collection(`MenuUser`)
+        //     .deleteMany({ menu_id: { $in: req.body.menu_id } });
         await client
-            .db(SDB)
-            .collection(`Menu`)
-            .deleteMany({ menu_id: { $in: req.body.menu_id } });
+        .db(SDB)
+        .collection(`MenuUser`)
+        .updateOne({menu_id: Number(req.body.menu_id)},{ $set: {is_delete: true} });
         //Resend
         res.send({
             success: true,
-            message: 'Xóa người dùng thành công!',
+            message: 'Xóa chức năng thành công!',
         });
     } catch (err) {
         next(err);

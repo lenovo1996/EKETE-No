@@ -49,6 +49,8 @@ router.use(`/userEKT`, require(`./user-ekt`));
 router.use(`/work`, require(`./work`));
 router.use(`/admin`, require(`./admin`))
 router.use(`/shoppingdairy`,require(`./shopping-diary`));
-router.use(`/menuUserEKT`, require(`./menu-user`))
+router.use(`/menuUserEKT`, require(`./menu-user`));
+router.use(`/menu`, require(`./menu`));
+router.use(`/menuAdmin`, require(`./menu-admin`));
 
 module.exports = router;

@@ -17,7 +17,7 @@ import {
 } from 'antd'
 
 //apis
-import { getMenu,updateMenu, addMenu } from 'apis/menu-user'
+import { getMenu,updateMenu, addMenu } from 'apis/menu-admin'
 
 export default function MenuForm({
   children,

@@ -22,8 +22,7 @@ import {
   Popover,
   Col,
   Input,
-  Space
-
+  Space,
 } from 'antd'
 
 import {
@@ -31,12 +30,9 @@ import {
   GoldOutlined,
   DashboardOutlined,
   LogoutOutlined,
-
   UserOutlined,
   ExportOutlined,
-
   ShoppingCartOutlined,
-
 } from '@ant-design/icons'
 
 //components
@@ -48,8 +44,7 @@ import DropdownLanguage from 'components/dropdown-language'
 import { getuserEKT } from 'apis/user-ekt'
 import { getMenu } from 'apis/menu-user'
 
-
-const { Search } = Input;
+const { Search } = Input
 const { Sider } = Layout
 const BaseLayout = (props) => {
   const history = useHistory()
@@ -58,7 +53,6 @@ const BaseLayout = (props) => {
   const dispatch = useDispatch()
   const WIDTH_MENU_OPEN = 230
   const WIDTH_MENU_CLOSE = 60
-
 
   const [branches, setBranches] = useState([])
   const [user, setUser] = useState({})
@@ -145,14 +139,15 @@ const BaseLayout = (props) => {
           style={{
             width: '100%',
             height: collapsed ? 40 : '',
-
             display: 'block',
+
+            // fontSize: '0.9rem',
           }}
           title={
             <Link
               style={{
                 fontSize: '0.9rem',
-                
+                color: 'black',
               }}
               to={_menu.url}
             >
@@ -160,10 +155,14 @@ const BaseLayout = (props) => {
             </Link>
           }
           icon={
-            <svg marginRight={20} width="1rem" height="1rem" fill="currentColor" viewBox="0 0 1024 1024">
-              
+            <svg
+              marginRight={20}
+              width="1rem"
+              height="1rem"
+              fill="currentColor"
+              viewBox="0 0 1024 1024"
+            >
               <path d={_menu.icon} />
-
             </svg>
           }
         >
@@ -175,7 +174,7 @@ const BaseLayout = (props) => {
                   fontSize: '0.9rem',
                 }}
               >
-                <Link  to={e.url}>{e.name}</Link>
+                <Link to={e.url}>{e.name}</Link>
               </Menu.Item>
             </>
           ))}
@@ -184,32 +183,37 @@ const BaseLayout = (props) => {
         <Menu.Item
           key={_menu.url}
           style={{
-            fontSize: '0.9rem',
+            // fontSize: '0.9rem',
+            width: '100%',
+            height: collapsed ? 40 : '',
+            display: 'block',
           }}
-        
-        // onClick={_menu.url === ROUTES.SELL && toggle}
-        >
-          <svg style={{marginRight : 10}} width="1.1rem" height="1.1rem" fill="currentColor" viewBox="0 0 1024 1024" >
-              
-              <path d={_menu.icon}/>
 
-            </svg>
-          <Link  to={_menu.url}>{_menu.name}</Link>
+          // onClick={_menu.url === ROUTES.SELL && toggle}
+        >
+          <svg
+            style={{ marginRight: 10 }}
+            width="1.1rem"
+            height="1.1rem"
+            fill="currentColor"
+            viewBox="0 0 1024 1024"
+          >
+            <path d={_menu.icon} />
+          </svg>
+          <Link to={_menu.url}>{_menu.name}</Link>
         </Menu.Item>
       )}
     </>
-
-
   )
 
 
-  const onSearch = (value) => console.log(value)
 
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
     dispatch({ type: 'UPDATE_INVOICE', data: [] })
     // window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
     history.push(ROUTES.LOGIN)
+     
   }
 
   useEffect(() => {
@@ -218,9 +222,7 @@ const BaseLayout = (props) => {
 
   const content = (
     <div className={styles['user_information']}>
-      <ModalUpdateUser user={user} 
-      reload={getInfoUser}
-      >
+      <ModalUpdateUser user={user} reload={getInfoUser}>
         <div>
           <div
             style={{ color: '#565656', paddingLeft: 10 }}
@@ -250,18 +252,7 @@ const BaseLayout = (props) => {
       </div> */}
     </div>
   )
-  const SettingOutlined = () => (
-    <div className={styles['notificationBox']}>
-      {/* <div className={styles['title']}></div> */}
-      {/* <div className={styles['content']}>
-        <Empty />
-      </div> */}
-    </div>
-  )
 
-  // useEffect(() => {
-  //   _getBranches()
-  // }, [triggerReloadBranch])
 
   useEffect(() => {
     getInfoUser({ user_id: dataUser.data.user_id })
@@ -327,35 +318,12 @@ const BaseLayout = (props) => {
           mode="inline"
         >
           {menu.map(renderMenuItem)}
-          <Menu.Item
-            key={ROUTES.OVERVIEW}
-            // onClick={onSignOut}
-            icon={<DashboardOutlined />}
-          >
-            <Link to={ROUTES.OVERVIEW}>Tổng quan</Link>
-          </Menu.Item>
-          <Menu.Item
-            key={ROUTES.BUSINESS}
-            // onClick={onSignOut}
-            icon={<DashboardOutlined />}
-          >
-            <Link to={ROUTES.BUSINESS}>Cửa hàng</Link>
-          </Menu.Item>
-          {/* <Menu.Item key={ROUTES.CUSTOMER} 
-            // onClick={onSignOut} 
-            icon={<LogoutOutlined />}>
-            <Link to={ROUTES.CUSTOMER}>Cá nhân</Link>
-          </Menu.Item> 
-          <Menu.Item key={ROUTES.BRANCH_MANAGEMENT} 
-            // onClick={onSignOut} 
-            icon={<LogoutOutlined />}>
-            <Link to={ROUTES.BRANCH_MANAGEMENT}>Cửa hàng</Link>
-          </Menu.Item>  */}
+
           <Menu.Item key={ROUTES.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
-            <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
+            <Link >Đăng xuất</Link>
           </Menu.Item>
         </Menu>
-      </Sider>  
+      </Sider>
       <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
         <Affix offsetTop={0}>
           <Row
@@ -425,8 +393,8 @@ const BaseLayout = (props) => {
                 style={{ width: 240 }}
                 onSearch={onSearch}
               /> */}
-              
-               {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
+
+              {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />
@@ -436,7 +404,6 @@ const BaseLayout = (props) => {
                     <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
                   </Badge>
                 </Dropdown>
-
               </div>
               <Dropdown overlay={content} trigger="click">
                 <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
@@ -467,5 +434,3 @@ const BaseLayout = (props) => {
 }
 
 export default React.memo(BaseLayout)
-
-

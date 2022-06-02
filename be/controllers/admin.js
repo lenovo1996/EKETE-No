@@ -872,7 +872,7 @@ module.exports._loginAdmin = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-    console.log(admin3);
+
 };
 module.exports._verifyOTP = async (req, res, next) => {
     try {
@@ -942,7 +942,7 @@ module.exports._verifyOTP = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-    console.log(admin3);
+
 
 };
 module.exports._recoveryPassword = async (req, res, next) => {

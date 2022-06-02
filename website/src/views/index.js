@@ -22,6 +22,8 @@ import VerifyAccountAdmin from './admin/verify-account'
 import OverviewAdmin from './admin/overviewadmin'
 import Business from './admin/business'
 import MenuUser from './admin/menuEKT'
+import MenuBusiness from './admin/menuBusiness'
+import MenuAdmin from './admin/menuAdmin'
 
 
 //user
@@ -77,6 +79,20 @@ const DEFINE_ROUTER_ADMIN = [
     path: ROUTES_ADMIN.MENU_USER,
     Component: () => <MenuUser/>,
     title: 'Menu user',
+    permissions: 'admin',
+    exact: true,
+  },
+  {
+    path: ROUTES_ADMIN.MENU_BUSINESS,
+    Component: () => <MenuBusiness/>,
+    title: 'Menu Business',
+    permissions: 'admin',
+    exact: true,
+  },
+  {
+    path: ROUTES_ADMIN.MENU_ADMIN,
+    Component: () => <MenuAdmin/>,
+    title: 'Menu Admin',
     permissions: 'admin',
     exact: true,
   },
@@ -220,6 +236,7 @@ export default function Views() {
         <Route path="*">
           <NotFound />
         </Route>
+        
 
         {/* ở đây */}
       </Switch>

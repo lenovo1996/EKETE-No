@@ -12,8 +12,6 @@ export const ACTION = {
   //admin
 
   LOGINADMIN: 'LOGINADMIN',
-
-
 }
 
 export const ROLE_DEFAULT = {
@@ -132,9 +130,9 @@ export const ROUTES_ADMIN = {
   REGISTERADMIN: '/registeradmin',
   BUSINESSADMIN: '/businessadmin',
   MENU_USER: '/menu-user',
+  MENU_BUSINESS: '/menu-business',
+  MENU_ADMIN: '/menu-admin'
 }
-
-
 
 export const PERMISSIONS_ADMIN = {
   tong_quan_admin: 'tong_quan_admin',
