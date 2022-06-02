@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import { Button, Col, Form, Input, Modal, notification, Row } from 'antd'
 
 //apis
-import { getShippings, connectShippingGHN, connectShippingGHTK } from 'apis/shipping'
+// import { getShippings, connectShippingGHN, connectShippingGHTK } from 'apis/shipping'
 
 //components
 import Permission from 'components/permission'
@@ -24,40 +24,40 @@ export default function Shipping() {
   const [shippingCompanyName, setShippingCompanyName] = useState('')
 
   const _connectShipping = async () => {
-    try {
-      dispatch({ type: ACTION.LOADING, data: true })
-      const body = form.getFieldsValue()
-      console.log(body)
-      let res
-      if (shippingCompanyName === 'Giao Hàng Nhanh') res = await connectShippingGHN(body)
-      else res = await connectShippingGHTK(body)
-      dispatch({ type: ACTION.LOADING, data: false })
-      if (res.status === 200) {
-        if (res.data.success) {
-          notification.success({ message: 'Kích hoạt thành công' })
-          _getShippings()
-        } else
-          notification.error({
-            message: res.data.message || 'Kích hoạt thất bại, vui lòng thử lại',
-          })
-      } else
-        notification.error({ message: res.data.message || 'Kích hoạt thất bại, vui lòng thử lại' })
-    } catch (error) {
-      console.log(error)
-      dispatch({ type: ACTION.LOADING, data: false })
-    }
+    // try {
+    //   dispatch({ type: ACTION.LOADING, data: true })
+    //   const body = form.getFieldsValue()
+    //   console.log(body)
+    //   let res
+    //   if (shippingCompanyName === 'Giao Hàng Nhanh') res = await connectShippingGHN(body)
+    //   else res = await connectShippingGHTK(body)
+    //   dispatch({ type: ACTION.LOADING, data: false })
+    //   if (res.status === 200) {
+    //     if (res.data.success) {
+    //       notification.success({ message: 'Kích hoạt thành công' })
+    //       _getShippings()
+    //     } else
+    //       notification.error({
+    //         message: res.data.message || 'Kích hoạt thất bại, vui lòng thử lại',
+    //       })
+    //   } else
+    //     notification.error({ message: res.data.message || 'Kích hoạt thất bại, vui lòng thử lại' })
+    // } catch (error) {
+    //   console.log(error)
+    //   dispatch({ type: ACTION.LOADING, data: false })
+    // }
   }
 
   const _getShippings = async () => {
-    try {
-      dispatch({ type: ACTION.LOADING, data: true })
-      const res = await getShippings()
-      console.log(res)
-      if (res.status === 200) setShippings(res.data.data)
-      dispatch({ type: ACTION.LOADING, data: false })
-    } catch (error) {
-      dispatch({ type: ACTION.LOADING, data: false })
-    }
+    // try {
+    //   dispatch({ type: ACTION.LOADING, data: true })
+    //   const res = await getShippings()
+    //   console.log(res)
+    //   if (res.status === 200) setShippings(res.data.data)
+    //   dispatch({ type: ACTION.LOADING, data: false })
+    // } catch (error) {
+    //   dispatch({ type: ACTION.LOADING, data: false })
+    // }
   }
 
   useEffect(() => {

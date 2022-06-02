@@ -23,8 +23,8 @@ import {
 import noData from 'assets/icons/no-data.png'
 
 //apis
-import { getProducts } from 'apis/product'
-import { updatePriceAdjustments, addPriceAdjustments } from 'apis/price-adjustments'
+import { getProducts } from '../../../apis/product'
+// import { updatePriceAdjustments, addPriceAdjustments } from 'apis/price-adjustments'
 
 export default function PriceAdjustments() {
   const history = useHistory()
@@ -38,56 +38,56 @@ export default function PriceAdjustments() {
   const [listProduct, setListProduct] = useState([])
 
   const _createOrUpdatePriceAdjustments = async () => {
-    try {
-      if (listProduct.length === 0) {
-        notification.warning({ message: 'Vui lòng thêm sản phẩm vào phiếu kiểm' })
-        return
-      }
+    // try {
+    //   if (listProduct.length === 0) {
+    //     notification.warning({ message: 'Vui lòng thêm sản phẩm vào phiếu kiểm' })
+    //     return
+    //   }
 
-      dispatch({ type: 'LOADING', data: true })
-      const dataForm = form.getFieldsValue()
-      const body = {
-        ...dataForm,
-        lists: listProduct.map((product) => ({
-          variant_id: product.variant_id,
-          price_new: product.price_after_adjustment,
-        })),
-        code: dataForm.code || '',
-        note: dataForm.note || '',
-        type: 'SELL_PRICE',
-      }
-      console.log(body)
+    //   dispatch({ type: 'LOADING', data: true })
+    //   const dataForm = form.getFieldsValue()
+    //   const body = {
+    //     ...dataForm,
+    //     lists: listProduct.map((product) => ({
+    //       variant_id: product.variant_id,
+    //       price_new: product.price_after_adjustment,
+    //     })),
+    //     code: dataForm.code || '',
+    //     note: dataForm.note || '',
+    //     type: 'SELL_PRICE',
+    //   }
+    //   console.log(body)
 
-      let res
-      if (!location.state) res = await addPriceAdjustments(body)
-      else res = await updatePriceAdjustments(body, location.state.fix_price_id)
-      console.log(res)
+    //   let res
+    //   if (!location.state) res = await addPriceAdjustments(body)
+    //   else res = await updatePriceAdjustments(body, location.state.fix_price_id)
+    //   console.log(res)
 
-      if (res.status === 200) {
-        if (res.data.success) {
-          notification.success({
-            message: `${location.state ? 'Cập nhật' : 'Thêm'} phiếu điều chỉnh thành công`,
-          })
-          history.push({ pathname: ROUTES.PRICE_ADJUSTMENTS })
-        } else
-          notification.error({
-            message:
-              res.data.message ||
-              `${
-                location.state ? 'Cập nhật' : 'Thêm'
-              } phiếu điều chỉnh thất bại, vui lòng thử lại!`,
-          })
-      } else
-        notification.error({
-          message:
-            res.data.message ||
-            `${location.state ? 'Cập nhật' : 'Thêm'} phiếu điều chỉnh thất bại, vui lòng thử lại!`,
-        })
-      dispatch({ type: 'LOADING', data: false })
-    } catch (err) {
-      console.log(err)
-      dispatch({ type: 'LOADING', data: false })
-    }
+    //   if (res.status === 200) {
+    //     if (res.data.success) {
+    //       notification.success({
+    //         message: `${location.state ? 'Cập nhật' : 'Thêm'} phiếu điều chỉnh thành công`,
+    //       })
+    //       history.push({ pathname: ROUTES.PRICE_ADJUSTMENTS })
+    //     } else
+    //       notification.error({
+    //         message:
+    //           res.data.message ||
+    //           `${
+    //             location.state ? 'Cập nhật' : 'Thêm'
+    //           } phiếu điều chỉnh thất bại, vui lòng thử lại!`,
+    //       })
+    //   } else
+    //     notification.error({
+    //       message:
+    //         res.data.message ||
+    //         `${location.state ? 'Cập nhật' : 'Thêm'} phiếu điều chỉnh thất bại, vui lòng thử lại!`,
+    //     })
+    //   dispatch({ type: 'LOADING', data: false })
+    // } catch (err) {
+    //   console.log(err)
+    //   dispatch({ type: 'LOADING', data: false })
+    // }
   }
 
   const _addProductToOrder = (product) => {

@@ -5,26 +5,28 @@ import styles from './business_user.module.scss'
 import FormBusiness from './registerbusiness'
 // moment
 // import { uploadFile } from 'apis/upload'
-// import { ACTION, ROUTES } from 'consts'
-// import { useDispatch } from 'react-redux'
-// import { useHistory } from 'react-router-dom'
+import { ACTION, ROUTES, ROUTES_USER } from 'consts'
+import { useDispatch } from 'react-redux'
+import { useHistory, useLocation } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 
 // antd
 
 import { Button, Modal, Card, Avatar } from 'antd'
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
 // api
-import {getBusinesses} from 'apis/business'
+import { getBusinesses } from 'apis/business'
 import { getuserEKT } from 'apis/user-ekt'
 
-
 // html react parser
- 
+
 export default function Business() {
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const location = useLocation()
 
   const [business, setBusiness] = useState([])
-  const { Meta } = Card;
+  const { Meta } = Card
   // const [user, setUser] = useState([])
 
   const dataUser = localStorage.getItem('accessToken')
@@ -43,15 +45,38 @@ export default function Business() {
 
   // const _letgo = async () => {
   //   try {
-      
+
   //   } catch (error) {
   //     console.log(error);
   //   }
   // }
+  const _loginWithQuery = async (token) => {
+    // dispatch({ type: ACTION.LOGIN, data: token })
 
-  useEffect(() =>{
-    _getBusinesses({user_phone: dataUser.data.phone})
-  }, [ dataUser.data.phone])
+    //luu branch id len redux
+    // const dataUser = jwt_decode(token.accessToken)
+
+    // dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
+
+    const intervalPushRouter = setInterval(() => {
+      if (localStorage.getItem('accessToken')) window.open(ROUTES.OFFER_LIST_CREATE)
+      clearInterval(intervalPushRouter)
+      console.log(localStorage.getItem('accessToken'));
+    }, 500)
+  }
+  useEffect(() => {
+    const query = new URLSearchParams(location.search)
+    // const username = query.get('username')
+    const token = query.get('token')
+    // if (username) formLogin.setFieldsValue({ username: username })
+    if (token) {
+      const tokenParser = JSON.parse(token)
+      _loginWithQuery(tokenParser)
+    } else return
+  }, [])
+  useEffect(() => {
+    _getBusinesses({ user_phone: dataUser.data.phone })
+  }, [dataUser.data.phone])
 
   const ModalCustomer = ({ children, record }) => {
     const [visible, setVisible] = useState(false)
@@ -61,7 +86,7 @@ export default function Business() {
       <>
         <div onClick={toggle}>{children}</div>
         <Modal
-              width="75%"
+          width="75%"
           style={{ top: 20 }}
           onCancel={toggle}
           // width={800}
@@ -80,54 +105,51 @@ export default function Business() {
     )
   }
 
-
   return (
     <div className={styles['body_brand']}>
-             <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
-                <div>Danh sách cửa hàng của bạn</div>
-                <ModalCustomer 
-                // width="100px"
+      <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
+        <div>Danh sách cửa hàng của bạn</div>
+        <ModalCustomer
+        // width="100px"
+        >
+          <Button type="primary">Đăng ký tạo cửa hàng</Button>
+        </ModalCustomer>
+      </div>
+
+      <div className={styles['containerItem']}>
+        {business &&
+          business.map((Item, index) => {
+            return (
+              <a onClick={_loginWithQuery} 
+              // href={`https://${Item.prefix}.${process.env.REACT_APP_HOST}${ROUTES_USER.OVERVIEW}`}
+              >
+                <Card
+                  className={styles['iTem']}
+                  style={{ width: 300 }}
+                  cover={
+                    <img
+                      style={{ width: 300, height: 180, objectFit: 'cover' }}
+                      // style={{'height': '70%'}}
+                      alt="example"
+                      src={Item.logo}
+                    />
+                  }
+                  // actions={[
+                  //   <SettingOutlined key="setting" />,
+                  //   <EditOutlined key="edit" />,
+                  //   <EllipsisOutlined key="ellipsis" />,
+                  // ]}
                 >
-                <Button type="primary">
-                  Đăng ký tạo cửa hàng
-                </Button>
-                </ModalCustomer>
-              </div>
-
-              <div className={styles['containerItem']}>
-
-{
-  business &&
-    business.map((Item, index) => {
-      return(
-
-        <Card className={styles['iTem']}
-    style={{ width: 300 }}
-    cover={
-      <img
-      style={{ width: 300, height: 180, objectFit: 'cover' }}
-      // style={{'height': '70%'}}
-        alt="example"
-        src={Item.logo}
-      />
-   
-    }
-    // actions={[
-    //   <SettingOutlined key="setting" />,
-    //   <EditOutlined key="edit" />,
-    //   <EllipsisOutlined key="ellipsis" />,
-    // ]}
-  >
-    <Meta
-      avatar={<Avatar src="https://joeschmoe.io/api/v1/random"  />}
-      title={Item.business_name}
-      description="This is the description"
-    />
-  </Card>
-      )
-    })
-}
-              {/* <Card className={styles['iTem']}
+                  <Meta
+                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                    title={Item.business_name}
+                    description="This is the description"
+                  />
+                </Card>
+              </a>
+            )
+          })}
+        {/* <Card className={styles['iTem']}
     style={{ width: 300 }}
     cover={
       <img
@@ -147,9 +169,7 @@ export default function Business() {
       description="This is the description"
     />
   </Card> */}
-
-                 </div>
-
+      </div>
     </div>
   )
 }

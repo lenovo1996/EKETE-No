@@ -16,8 +16,8 @@ import { Row, Col, Input, Button, Space, Table, Affix } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 
 //apis
-import { getProducts } from 'apis/product'
-import { getPriceAdjustments } from 'apis/price-adjustments'
+import { getProducts } from '../../../apis/product'
+// import { getPriceAdjustments } from 'apis/price-adjustments'
 import FilterDate from 'components/filter-date'
 
 export default function PriceAdjustments() {
@@ -33,19 +33,19 @@ export default function PriceAdjustments() {
   const [loading, setLoading] = useState(false)
 
   const _getPriceAdjustments = async () => {
-    try {
-      setLoading(true)
-      const res = await getPriceAdjustments({ ...paramsFilter })
-      console.log(res)
-      if (res.status === 200) {
-        setPriceAdjustments(res.data.data)
-        setCountPriceAdjustments(res.data.count)
-      }
-      setLoading(false)
-    } catch (err) {
-      console.log(err)
-      setLoading(false)
-    }
+    // try {
+    //   setLoading(true)
+    //   const res = await getPriceAdjustments({ ...paramsFilter })
+    //   console.log(res)
+    //   if (res.status === 200) {
+    //     setPriceAdjustments(res.data.data)
+    //     setCountPriceAdjustments(res.data.count)
+    //   }
+    //   setLoading(false)
+    // } catch (err) {
+    //   console.log(err)
+    //   setLoading(false)
+    // }
   }
 
   const _onSearch = (e) => {

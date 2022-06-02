@@ -10,7 +10,7 @@ import KeyboardEventHandler from 'react-keyboard-event-handler'
 import ReactToPrint, { useReactToPrint } from 'react-to-print'
 
 //components
-import CustomerForm from 'views/customer/customer-form'
+import CustomerForm from '../customer/customer-form'
 import FilterProductsByCategory from './filter-by-category'
 import FilterProductsBySku from './filter-by-sku'
 import ModalKeyboardShortCuts from './keyboard-shortcuts'
