@@ -35,6 +35,16 @@ module.exports._get = async (req, res, next) => {
                 $match: { menu_id: Number(req.query.menu_id) },
             });
         }
+        if (req.query.creator_id) {
+            aggregateQuery.push({
+                $match: { creator_id: Number(req.query.creator_id) },
+            });
+        }
+        if (req.query.to_date) {
+            aggregateQuery.push({
+                $match: { create_date: { $lte: req.query.to_date } },
+            });
+        }
         // lấy các thuộc tính tìm kiếm với độ chính xác tương đối ('1' == '1', '1' == '12',...)
         if (req.query.name) {
             aggregateQuery.push({
@@ -75,10 +85,10 @@ module.exports._get = async (req, res, next) => {
         }
         // lấy data từ database
         let [menu, counts] = await Promise.all([
-            client.db(SDB).collection(`MenuUser`).aggregate(aggregateQuery).toArray(),
+            client.db(SDB).collection(`MenuAdmin`).aggregate(aggregateQuery).toArray(),
             client
                 .db(SDB)
-                .collection(`MenuUser`)
+                .collection(`Menu`)
                 .aggregate([...countQuery, { $count: 'counts' }])
                 .toArray(),
         ]);
@@ -94,7 +104,7 @@ module.exports._get = async (req, res, next) => {
 
 module.exports._create = async (req, res, next) => {
     try {
-        let insert = await client.db(SDB).collection(`MenuUser`).insertOne(req.body);
+        let insert = await client.db(SDB).collection(`MenuAdmin`).insertOne(req.body);
         if (!insert.insertedId) {
             throw new Error('500: Tạo menu thất bại!');
         }
@@ -106,7 +116,7 @@ module.exports._create = async (req, res, next) => {
 
 module.exports._update = async (req, res, next) => {
     try {
-        await client.db(SDB).collection(`MenuUser`).updateOne(req.params, { $set: req.body });
+        await client.db(SDB).collection(`MenuAdmin`).updateOne(req.params, { $set: req.body });
         res.send({ success: true, data: req.body });
     } catch (err) {
         next(err);

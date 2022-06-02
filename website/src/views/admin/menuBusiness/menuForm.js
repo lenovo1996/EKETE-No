@@ -17,7 +17,7 @@ import {
 } from 'antd'
 
 //apis
-import { getMenu,updateMenu, addMenu } from 'apis/menu-user'
+import { getMenu,updateMenu, addMenu } from 'apis/menu'
 
 export default function MenuForm({
   children,
@@ -145,18 +145,19 @@ export default function MenuForm({
                 label="Tên chức năng"
                 name="name"
                 rules={[
-                  { required: record ? true : true, message: 'Vui lòng nhập tên chức năng!' },
+                  { required: record ? false : true, message: 'Vui lòng nhập tên chức năng!' },
                 ]}
               >
-                <Input placeholder="Nhập tên chức năng" />
+                <Input disabled={record ? true : false} placeholder="Nhập tên chức năng" />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={11} lg={11} xl={11}>
+                                                        {/* nếu có record: không hiển thị  */}
+            <Col xs={24} sm={24} md={11} lg={11} xl={11} style={{ display: record && 'none' }}>
               <Form.Item
               initialValue={'/'}
                 label="URL"
                 name="url"
-                rules={[{ required:  true, message: 'Vui lòng nhập đường dẫn!' }]}
+                rules={[{ required: record ? false : true, message: 'Vui lòng nhập đường dẫn!' }]}
               >
                 <Input  placeholder='Nhập đường dẫn' />
               </Form.Item>

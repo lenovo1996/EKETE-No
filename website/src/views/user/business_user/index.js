@@ -5,7 +5,7 @@ import styles from './business_user.module.scss'
 import FormBusiness from './registerbusiness'
 // moment
 // import { uploadFile } from 'apis/upload'
-// import { ACTION, ROUTES } from 'consts'
+import { ACTION, ROUTES } from 'consts'
 // import { useDispatch } from 'react-redux'
 // import { useHistory } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
@@ -13,18 +13,16 @@ import jwt_decode from 'jwt-decode'
 // antd
 
 import { Button, Modal, Card, Avatar } from 'antd'
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
 // api
-import {getBusinesses} from 'apis/business'
+import { getBusinesses } from 'apis/business'
 import { getuserEKT } from 'apis/user-ekt'
 
-
 // html react parser
- 
-export default function Business() {
 
+export default function Business() {
   const [business, setBusiness] = useState([])
-  const { Meta } = Card;
+  const { Meta } = Card
   // const [user, setUser] = useState([])
 
   const dataUser = localStorage.getItem('accessToken')
@@ -43,15 +41,15 @@ export default function Business() {
 
   // const _letgo = async () => {
   //   try {
-      
+
   //   } catch (error) {
   //     console.log(error);
   //   }
   // }
 
-  useEffect(() =>{
-    _getBusinesses({user_phone: dataUser.data.phone})
-  }, [ dataUser.data.phone])
+  useEffect(() => {
+    _getBusinesses({ user_phone: dataUser.data.phone })
+  }, [dataUser.data.phone])
 
   const ModalCustomer = ({ children, record }) => {
     const [visible, setVisible] = useState(false)
@@ -61,7 +59,7 @@ export default function Business() {
       <>
         <div onClick={toggle}>{children}</div>
         <Modal
-              width="75%"
+          width="75%"
           style={{ top: 20 }}
           onCancel={toggle}
           // width={800}
@@ -80,54 +78,44 @@ export default function Business() {
     )
   }
 
-
   return (
     <div className={styles['body_brand']}>
-             <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
-                <div>Danh sách cửa hàng của bạn</div>
-                <ModalCustomer 
-                // width="100px"
-                >
-                <Button type="primary">
-                  Đăng ký tạo cửa hàng
-                </Button>
-                </ModalCustomer>
-              </div>
+      <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
+        <div>Danh sách cửa hàng của bạn</div>
+        <ModalCustomer
+        // width="100px"
+        >
+          <Button type="primary">Đăng ký cửa hàng</Button>
+        </ModalCustomer>
+      </div>
 
-              <div className={styles['containerItem']}>
-
-{
-  business &&
-    business.map((Item, index) => {
-      return(
-
-        <Card className={styles['iTem']}
-    style={{ width: 300 }}
-    cover={
-      <img
-      style={{ width: 300, height: 180, objectFit: 'cover' }}
-      // style={{'height': '70%'}}
-        alt="example"
-        src={Item.logo}
-      />
-   
-    }
-    // actions={[
-    //   <SettingOutlined key="setting" />,
-    //   <EditOutlined key="edit" />,
-    //   <EllipsisOutlined key="ellipsis" />,
-    // ]}
-  >
-    <Meta
-      avatar={<Avatar src="https://joeschmoe.io/api/v1/random"  />}
-      title={Item.business_name}
-      description="This is the description"
-    />
-  </Card>
-      )
-    })
-}
-              {/* <Card className={styles['iTem']}
+      <div className={styles['containerItem']}>
+        {business &&
+          business.map((Item, index) => {
+            return (
+              <a href={`http://${Item.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`}>
+              <Card
+                className={styles['iTem']}
+                style={{ width: 300 }}
+                cover={
+                  <img
+                    style={{ width: 300, height: 180, objectFit: 'cover' }}
+                    // style={{'height': '70%'}}
+                    alt="example"
+                    src={Item.logo}
+                  />
+                }
+              >
+                <Meta
+                  avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                  title={Item.business_name}
+                  description="This is the description"
+                />
+              </Card>
+              </a>
+            )
+          })}
+        {/* <Card className={styles['iTem']}
     style={{ width: 300 }}
     cover={
       <img
@@ -147,9 +135,7 @@ export default function Business() {
       description="This is the description"
     />
   </Card> */}
-
-                 </div>
-
+      </div>
     </div>
   )
 }
