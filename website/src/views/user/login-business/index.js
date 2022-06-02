@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styles from './login-business.module.scss'
 import { useDispatch } from 'react-redux'
-import { ACTION, ROUTES } from 'consts'
+import { ACTION, ROUTES_USER } from 'consts'
 import { useHistory } from 'react-router-dom'
 
 //antd
@@ -24,12 +24,12 @@ export default function CheckSubdomain() {
       const res = await checkBusiness(body.username)
       if (res.status === 200) {
         if (res.data.data)
-          window.location.href = `http://${res.data.data.prefix}.${process.env.REACT_APP_HOST}${ROUTES.LOGIN}?username=${body.username}`
+          window.location.href = `http://${res.data.data.prefix}.${process.env.REACT_APP_HOST}${ROUTES_USER.LOGIN}?username=${body.username}`
         else
           notification.warning({
             message: 'Bạn chưa đăng ký doanh nghiệp!',
             description: (
-              <Button type="primary" onClick={() => history.push(ROUTES.REGISTER)}>
+              <Button type="primary" onClick={() => history.push(ROUTES_USER.REGISTER)}>
                 Đăng ký ngay
               </Button>
             ),
@@ -38,7 +38,7 @@ export default function CheckSubdomain() {
         notification.warning({
           message: 'Bạn chưa đăng ký doanh nghiệp!',
           description: (
-            <Button type="primary" onClick={() => history.push(ROUTES.REGISTER)}>
+            <Button type="primary" onClick={() => history.push(ROUTES_USER.REGISTER)}>
               Đăng ký ngay
             </Button>
           ),
@@ -110,7 +110,7 @@ export default function CheckSubdomain() {
                   </Col>
                   <Col
                     span={24}
-                    onClick={() => history.push({ pathname: ROUTES.REGISTER })}
+                    onClick={() => history.push({ pathname: ROUTES_USER.REGISTER })}
                     className={styles['login-content-click']}
                   >
                     Đăng ký miễn phí!

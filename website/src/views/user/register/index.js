@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './register.module.scss'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { ACTION, ROUTES } from 'consts'
+import { ACTION, ROUTES_USER } from 'consts'
 import { validatePhone } from 'utils'
 
 //background
@@ -50,7 +50,7 @@ export default function Login() {
             notification.info({ message: 'Vui lòng kiểm tra email để lấy link xác thực tài khoản' })
           } else {
             notification.info({ message: 'Mã otp đã được gửi về số điện thoại của bạn' })
-            history.push({ pathname: ROUTES.OTP, state: res.data.data })
+            history.push({ pathname: ROUTES_USER.OTP, state: res.data.data })
           }
         } else
           notification.error({
@@ -162,7 +162,7 @@ export default function Login() {
                             marginTop: 10,
                             marginRight: '20%',
                           }}
-                          onClick={() => history.push(ROUTES.LOGIN)}
+                          onClick={() => history.push(ROUTES_USER.LOGIN)}
                         >
                           Đi đến trang đăng nhập
                         </div>

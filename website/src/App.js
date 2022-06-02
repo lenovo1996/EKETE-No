@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { ACTION, ROUTES, ROUTES_ADMIN } from './consts'
+import { ACTION, ROUTES_USER, ROUTES_ADMIN } from './consts'
 import { clearBrowserCache } from 'utils'
 import jwt_decode from 'jwt-decode'
 import { socket } from 'socket'
@@ -60,7 +60,7 @@ function App() {
     subDomain &&
     subDomain.length === 1
   )
-    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.LOGIN}`
+    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.LOGIN}`
 
   // const checkSubdomain = async () => {
   //   let router = ''
@@ -133,11 +133,9 @@ function App() {
     // clearBrowserCache()
   }, [])
 
-  return loadingCheckDomain 
-  ? (
+  return loadingCheckDomain ? (
     <LoadingCheckDomain />
   ) : (
-    
     <>
       <Loading />
       <Views />
@@ -146,3 +144,7 @@ function App() {
 }
 
 export default App
+
+
+
+// docker run --name zimbra-ekata2 -it -p 25:25 -p 80:80 -p 465:465 -p 587:587 -p 110:110 -p 143:143 -p 993:993 -p 995:995 -p 443:443 -p 3443:3443 -p 9071:9071 -h mail.ekata.vn --net=zimbranet --dns 0.0.0.0 -v zimbra-ekata:/opt/zimbra -e PASSWORD=Zimbra2021 iwayvietnam/zimbra_all

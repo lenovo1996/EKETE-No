@@ -78,8 +78,8 @@ export default function Login() {
                 <div className={styles['registration-content--logo']}>
                   <img style={{ maxWidth: 120, maxHeight: 120 }} src={logoRegister} alt="logo" />
                 </div>
-                <h2>Đăng ký tài khoản miễn phí</h2>
-                <h2>để bắt đầu theo dõi đơn hàng và tạo gian hàng riêng của mình!</h2>
+                <h2>Hello mấy anh chai admin, đăng ký nào!!</h2>
+                <h2>để bắt đầu làm việc</h2>
               </div>
             }
             key="register"

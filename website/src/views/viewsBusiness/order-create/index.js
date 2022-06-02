@@ -58,7 +58,7 @@ import { getTaxs } from 'apis/tax'
 
 //components
 import Permission from 'components/permission'
-import CustomerForm from 'views/customer/customer-form'
+import CustomerForm from '../customer/customer-form'
 import ChangeDelivery from './change-delivery'
 import ModalPromotion from './promotion'
 import TitlePage from 'components/title-page'

@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './forget-password.module.scss'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { ACTION, ROUTES } from 'consts'
+import { ACTION, ROUTES_USER } from 'consts'
 
 //antd
 import { Form, Input, Button, notification, Row, Col } from 'antd'
@@ -31,7 +31,7 @@ export default function ForgetPassword() {
       if (res.status === 200) {
         if (res.data.success)
           history.push({
-            pathname: ROUTES.OTP,
+            pathname: ROUTES_USER.OTP,
             state: { phone: dataForm.phone, action: 'FORGOT_PASSWORD' },
           })
         else notification.error({ message: res.data.message || 'Không tìm thấy doanh nghiệp này' })
@@ -97,7 +97,7 @@ export default function ForgetPassword() {
             </Form.Item>
           </Row>
           <Row justify="end">
-            <Link to={ROUTES.LOGIN} style={{ color: '#fff' }}>
+            <Link to={ROUTES_USER.LOGIN} style={{ color: '#fff' }}>
               Quay về đăng nhập
             </Link>
           </Row>

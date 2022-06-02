@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './login.module.scss'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import { ACTION, ROUTES } from 'consts'
+import { ACTION, ROUTES_USER } from 'consts'
 import jwt_decode from 'jwt-decode'
 
 //antd
@@ -55,7 +55,7 @@ export default function Login() {
         notification.error({
           message: res.data.message || 'Đăng nhập thất bại, vui lòng thử lại',
         })
-        history.push({ pathname: ROUTES.OTP, state: { phone: body.phone } })
+        history.push({ pathname: ROUTES_USER.OTP, state: { phone: body.phone } })
         return
       }
 
@@ -69,7 +69,7 @@ export default function Login() {
 
           dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
 
-          history.push(ROUTES.OVERVIEW)
+          history.push(ROUTES_USER.OVERVIEW)
         } else
           notification.error({
             message: res.data.message || 'Đăng nhập thất bại, vui lòng thử lại',
@@ -143,12 +143,12 @@ export default function Login() {
                   <Input.Password size="large" type="password" placeholder="Mật khẩu" />
                 </Form.Item>
                 <Row justify="space-between">
-                  <Link to={ROUTES.FORGET_PASSWORD} style={{ margin: '20px 0px', color: 'white' }}>
+                  <Link to={ROUTES_USER.FORGET_PASSWORD} style={{ margin: '20px 0px', color: 'white' }}>
                     Quên mật khẩu?
                   </Link>
                   <a
                     onClick={() =>
-                      (window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`)
+                      (window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.REGISTER}`)
                     }
                     style={{ margin: '20px 0px', color: 'white' }}
                   >

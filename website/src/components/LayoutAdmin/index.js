@@ -1,3 +1,338 @@
+// /* eslint-disable jsx-a11y/anchor-is-valid */
+// import React, { useState, useEffect } from 'react'
+// import styles from './layout.module.scss'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { ACTION, ROUTES, PERMISSIONS,ROUTES_ADMIN, LOGO_DEFAULT, PERMISSIONS_ADMIN } from 'consts'
+// import { Link, useLocation, useRouteMatch, useHistory } from 'react-router-dom'
+// import { Bell, Plus } from 'utils/icon'
+// import jwt_decode from 'jwt-decode'
+
+// import {
+//   Layout,
+//   Menu,
+//   Select,
+//   Button,
+//   Dropdown,
+//   BackTop,
+//   Affix,
+//   Avatar,
+//   Badge,
+//   Empty,
+//   Row,
+//   Popover,
+//   Col,
+//   Input,
+//   Space
+
+// } from 'antd'
+
+// import {
+//   MenuOutlined,
+//   GoldOutlined,
+//   DashboardOutlined,
+//   LogoutOutlined,
+
+//   UserOutlined,
+//   ExportOutlined,
+
+
+// } from '@ant-design/icons'
+
+// //components
+// import Permission from 'components/permission'
+// import ModalUpdateUser from './modal-user'
+// import DropdownLanguage from 'components/dropdown-language'
+
+// //apis
+// import { getuserAdmin } from 'apis/admin'
+// import { getMenu, deleteMenu } from 'apis/menu-user'
+// import Item from 'antd/lib/list/Item'
+
+// const { Search } = Input;
+// const { Sider } = Layout
+// const BaseLayout = (props) => {
+//   const history = useHistory()
+//   const location = useLocation()
+//   const routeMatch = useRouteMatch()
+//   const dispatch = useDispatch()
+//   const WIDTH_MENU_OPEN = 230
+//   const WIDTH_MENU_CLOSE = 60
+
+
+//   const [branches, setBranches] = useState([])
+//   const [user, setUser] = useState({})
+//   const [menu, setMenu] = useState([])
+
+//   const login = useSelector((state) => state.login)
+//   const branchIdApp = useSelector((state) => state.branch.branchId)
+//   const triggerReloadBranch = useSelector((state) => state.branch.trigger)
+//   const setting = useSelector((state) => state.setting)
+
+//   const dataUser = localStorage.getItem('accessToken')
+//     ? jwt_decode(localStorage.getItem('accessToken'))
+//     : {}
+//     console.log("layout",dataUser);
+//   const [loading, setLoading] = useState(false)
+  
+//   const isCollapsed = localStorage.getItem('collapsed')
+//     ? JSON.parse(localStorage.getItem('collapsed'))
+//     : false
+//   const [collapsed, setCollapsed] = useState(isCollapsed)
+//   const [isMobile, setIsMobile] = useState(false)
+
+//   const [openKeys, setOpenKeys] = useState([])
+
+
+
+//     const _getMenu = async () => {
+//       try {
+//         setLoading(true)
+//         const res = await getMenu()
+//         console.log(res)
+//         if (res.status === 200) {
+//           setMenu(res.data.data)
+//           console.log('meunu', res.data.data)
+//         }
+//         setLoading(false)
+//       } catch (e) {
+//         setLoading(false)
+//         console.log(e)
+//       }
+//     }
+ 
+
+//     const _getInfoUser = async (params) => {
+//       try {
+//         const res = await getuserAdmin(params)
+//         console.log("1");
+//         if (res.status === 200) {
+//           if (res.data.data.length) setUser({ ...res.data.data[0] })
+//           console.log('infoAdmin',res.data.data);
+//         }
+//       } catch (error) {
+//         console.log(error)
+//       }
+//     }
+
+//   useEffect(() => {
+//     _getInfoUser({ user_id: dataUser.data.user_id })
+//   }, [dataUser.data.user_id])
+
+//   var toggle = () => {
+//     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
+//     setCollapsed(!collapsed)
+//   }
+
+
+
+ 
+
+//   const onSearch = (value) => console.log(value)
+
+//   const onSignOut = () => {
+//     dispatch({ type: ACTION.LOGOUT })
+//     dispatch({ type: 'UPDATE_INVOICE', data: [] })
+//     // window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
+//     history.push(ROUTES_ADMIN.LOGINADMIN)
+//   }
+
+//   useEffect(() => {
+//     if (localStorage.getItem('openKey')) setOpenKeys([localStorage.getItem('openKey')])
+//   }, [])
+
+
+//   const content = (
+//     <div className={styles['user_information']}>
+//       <ModalUpdateUser user={user} 
+//       reload={getuserAdmin}
+//       >
+//         <div>
+//           <div
+//             style={{ color: '#565656', paddingLeft: 10 }}
+//             onClick={getuserAdmin}
+//           >
+//             <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
+//             Tài khoản của tôi
+//           </div> 
+//         </div> 
+//       </ModalUpdateUser>
+
+//       <div>
+//         <a onClick={onSignOut} style={{ color: '#565656', paddingLeft: 10 }}>
+//           <div>
+//             <ExportOutlined style={{ fontSize: '1rem', marginRight: 10, color: '#565656' }} />
+//             Đăng xuất
+//           </div>
+//         </a>
+//       </div>
+//     </div>
+//   )
+//   const NotifyContent = () => (
+//     <div className={styles['notificationBox']}>
+//       <div className={styles['title']}>Thông báo</div>
+//       {/* <div className={styles['content']}>
+//         <Empty />
+//       </div> */}
+//     </div>
+//   )
+
+
+
+//   //get width device
+//   useEffect(() => {
+//     if (window.innerWidth < 768) {
+//       setIsMobile(true)
+//       setCollapsed(true)
+//     } else setIsMobile(false)
+//   }, [])
+//   useEffect(() => {
+//     _getMenu()
+//   }, [])
+
+//   return (
+    
+//     <Layout style={{ backgroundColor: 'white', height: '100%' }}>
+//        {/* <Permission permissions={['PERMISSIONS_ADMIN.tong_quan_admin']}> */}
+//       <BackTop style={{ right: 10, bottom: 15 }} />
+
+//       <Sider
+//         trigger={null}
+//         collapsible
+//         width={isMobile ? '100%' : WIDTH_MENU_OPEN}
+//         collapsedWidth={isMobile ? 0 : WIDTH_MENU_CLOSE}
+//         style={{
+//           backgroundColor: 'white',
+//           zIndex: isMobile && 6000,
+//           height: '100vh',
+//           position: 'fixed',
+//         }}
+//         collapsed={collapsed}
+//       >
+//         <Row
+//           justify="center"
+//           style={{
+//             display: collapsed ? 'none' : 'flex',
+//             paddingTop: 10,
+//             paddingBottom: 20,
+//           }}
+//         >
+//           <Avatar
+//             src={user && (user.avatar || '')}
+//             style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
+//           />
+//         </Row>
+//         <Menu
+//           style={{
+//             height: `calc(100vh - ${collapsed ? 4 : 96}px)`,
+//             overflowY: 'auto',
+//             overflowX: 'hidden',
+//           }}
+//           theme="light"
+//           onClick={(e) => {
+//             if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
+//           }}
+//           // onOpenChange={onOpenChange}
+//           openKeys={openKeys}
+//           selectedKeys={routeMatch.path}
+//           mode="inline"
+//         >
+
+//           <Menu.Item
+//             key={ROUTES_ADMIN.OVERVIEWADMIN}
+//             // onClick={onSignOut}
+//             icon={<DashboardOutlined />}
+//           >
+//             <Link to={ROUTES_ADMIN.OVERVIEWADMIN}>Tổng quan Admin</Link>
+//           </Menu.Item>
+//           <Menu.Item
+//             key={ROUTES_ADMIN.BUSINESSADMIN}
+//             // onClick={onSignOut}
+//             icon={<DashboardOutlined />}
+//           >
+//             <Link to={ROUTES_ADMIN.BUSINESSADMIN}>Quản lý cửa hàng</Link>
+//           </Menu.Item>
+//           <Menu.Item
+//             key={ROUTES_ADMIN.MENU_USER}
+//             // onClick={onSignOut}
+//             icon={<DashboardOutlined />}
+//           >
+//             <Link to={ROUTES_ADMIN.MENU_USER}>Quản lý menu user</Link>
+//           </Menu.Item>
+//           <Menu.Item
+//             key={ROUTES.LOGOUT}
+//             onClick={onSignOut}
+//             icon={<DashboardOutlined />}
+//           >
+//             <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
+//           </Menu.Item>
+
+
+
+//         </Menu>
+//       </Sider>  
+//       <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
+//         <Affix offsetTop={0}>
+//           <Row
+//             wrap={isMobile}
+//             justify="space-between"
+//             align="middle"
+//             style={{ backgroundColor: '#5b6be8' }}
+//           >
+//             <Row
+//               align="middle"
+//               wrap={false}
+//               style={{
+//                 width: '100%',
+//                 paddingLeft: 5,
+//                 paddingRight: 5,
+//                 paddingTop: 12,
+//                 paddingBottom: 12,
+//               }}
+//               justify={isMobile && 'space-between'}
+//             >
+             
+//             </Row>
+//             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
+//               <DropdownLanguage />
+//               <div style={{ marginTop: 8, marginRight: 15 }}>
+//                 <Dropdown overlay={<NotifyContent />} placement="bottomCenter" trigger="click">
+//                   <Badge count={0} showZero size="small" offset={[-3, 3]}>
+//                     <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
+//                   </Badge>
+//                 </Dropdown>
+
+//               </div>
+//               <Dropdown overlay={content} trigger="click">
+//                 <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
+//                   <Avatar
+//                     src={user && (user.avatar || '')}
+//                     style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 35, height: 35 }}
+//                   />
+//                   <span
+//                     style={{
+//                       textTransform: 'capitalize',
+//                       marginLeft: 5,
+//                       color: 'white',
+//                       fontWeight: 600,
+//                       whiteSpace: 'nowrap',
+//                     }}
+//                   >
+//                     {user && (user.fullname || '...')}
+//                   </span>
+//                 </Row>
+//               </Dropdown>
+//             </Row>
+//           </Row>
+//         </Affix>
+//         <div style={{ backgroundColor: '#f0f2f5', width: '100%' }}>{props.children}</div>
+//       </Layout>
+//       {/* </Permission> */}
+//     </Layout>
+//   )
+// }
+
+
+// export default React.memo(BaseLayout)
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import styles from './layout.module.scss'
@@ -28,15 +363,10 @@ import {
 
 import {
   MenuOutlined,
-  GoldOutlined,
   DashboardOutlined,
   LogoutOutlined,
-
   UserOutlined,
   ExportOutlined,
-
-  ShoppingCartOutlined,
-
 } from '@ant-design/icons'
 
 //components
@@ -59,23 +389,12 @@ const BaseLayout = (props) => {
   const WIDTH_MENU_OPEN = 230
   const WIDTH_MENU_CLOSE = 60
 
-
-
   const [user, setUser] = useState({})
   const [menu, setMenu] = useState([])
 
-
-<<<<<<< Updated upstream
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
     : {}
-    console.log("layout",dataUser);
-=======
-
-  const dataUser = localStorage.getItem('accessToken')
-    ? jwt_decode(localStorage.getItem('accessToken'))
-    : {}
->>>>>>> Stashed changes
   const [loading, setLoading] = useState(false)
   
   const isCollapsed = localStorage.getItem('collapsed')
@@ -87,24 +406,7 @@ const BaseLayout = (props) => {
   const [isMobile, setIsMobile] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
-<<<<<<< Updated upstream
 
-
-
-    const _getMenu = async () => {
-      try {
-        setLoading(true)
-        const res = await getMenu()
-        console.log(res)
-        if (res.status === 200) {
-          setMenu(res.data.data)
-          console.log('meunu', res.data.data)
-        }
-        setLoading(false)
-      } catch (e) {
-        setLoading(false)
-        console.log(e)
-=======
   const rootSubmenuKeys = [
     'store',
     'warehouse',
@@ -124,47 +426,12 @@ const BaseLayout = (props) => {
     }
   }
 
-  const _getMenu = async () => {
-    try {
-      setLoading(true)
-      const res = await getMenu()
-      console.log(res)
-      if (res.status === 200) {
-        setMenu(res.data.data)
-        console.log('meunu', res.data.data)
->>>>>>> Stashed changes
-      }
-      setLoading(false)
-    } catch (e) {
-      setLoading(false)
-      console.log(e)
-    }
-<<<<<<< Updated upstream
- 
-
-    const _getInfoUser = async (params) => {
-      try {
-        const res = await getuserAdmin(params)
-        console.log("1");
-        if (res.status === 200) {
-          if (res.data.data.length) setUser({ ...res.data.data[0] })
-          console.log('infoAdmin',res.data.data);
-        }
-      } catch (error) {
-        console.log(error)
-=======
-  }
-  useEffect(() => {
-    _getMenu()
-  }, [])
-
   const _getInfoUser = async (params) => {
     try {
       const res = await getuserAdmin(params)
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
         console.log('infoAdmin', res.data.data);
->>>>>>> Stashed changes
       }
     } catch (error) {
       console.log(error)
@@ -179,12 +446,34 @@ const BaseLayout = (props) => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
+  const _getMenu = async () => {
+    try {
+      setLoading(true)
+      const res = await getMenu()
+      console.log(res)
+      if (res.status === 200) {
+        setMenu(res.data.data)
+        console.log('res.data.data', res.data.data)
+      }
+      setLoading(false)
+    } catch (e) {
+      setLoading(false)
+      console.log(e)
+    }
+  }
 
+  useEffect(() => {
+    _getMenu()
+  }, [])
 
+  // const renderMenuItem = (_menu) => (
+  //   <>
+  //     {_menu.menuCon ? (
+  //       <Menu.SubMenu
+  //         style={{
+  //           width: '100%',
+  //           height: collapsed ? 40 : '',
 
-<<<<<<< Updated upstream
- 
-=======
   // const renderMenuItem = (_menu) => (
   //   <Permission permissions={_menu.permissions} key={_menu.path}>
   //     {_menu.menuItems ? (
@@ -265,7 +554,6 @@ const BaseLayout = (props) => {
   //     )}
   //   </Permission>
   // )
->>>>>>> Stashed changes
 
   const onSearch = (value) => console.log(value)
 
@@ -280,7 +568,6 @@ const BaseLayout = (props) => {
     if (localStorage.getItem('openKey')) setOpenKeys([localStorage.getItem('openKey')])
   }, [])
 
-
   const content = (
     <div className={styles['user_information']}>
       <ModalUpdateUser user={user}
@@ -289,7 +576,7 @@ const BaseLayout = (props) => {
         <div>
           <div
             style={{ color: '#565656', paddingLeft: 10 }}
-            onClick={getuserAdmin}
+            // onClick={getInfoUser}
           >
             <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
             Tài khoản của tôi
@@ -315,14 +602,22 @@ const BaseLayout = (props) => {
       </div> */}
     </div>
   )
+  const SettingOutlined = () => (
+    <div className={styles['notificationBox']}>
+      {/* <div className={styles['title']}></div> */}
+      {/* <div className={styles['content']}>
+        <Empty />
+      </div> */}
+    </div>
+  )
 
-<<<<<<< Updated upstream
-
-=======
   // useEffect(() => {
   //   _getInfoUser({ user_id: dataUser.data.user_id })
   // }, [dataUser.data.user_id])
->>>>>>> Stashed changes
+
+  // useEffect(() => {
+  //   _getInfoUser({ user_id: dataUser.data.user_id })
+  // }, [dataUser.data.user_id])
 
   //get width device
   useEffect(() => {
@@ -433,6 +728,12 @@ const BaseLayout = (props) => {
             paddingBottom: 20,
           }}
         >
+          {/* <img
+            // src={setting && setting.company_logo ? setting.company_logo : LOGO_DEFAULT}
+            style={{ objectFit: 'contain', maxHeight: 70, width: '100%' }}
+            src={user && (user.avatar || '')}
+            alt=""
+          /> */}
           <Avatar
             src={user && (user.avatar || '')}
             style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
@@ -460,7 +761,7 @@ const BaseLayout = (props) => {
             // onClick={onSignOut}
             icon={<DashboardOutlined />}
           >
-            <Link to={ROUTES_ADMIN.OVERVIEWADMIN}>Tổng quan Admin</Link>
+            <Link to={ROUTES_ADMIN.OVERVIEWADMIN}>Tổng quan</Link>
           </Menu.Item>
           <Menu.Item
             key={ROUTES_ADMIN.BUSINESSADMIN}
@@ -556,10 +857,10 @@ const BaseLayout = (props) => {
         </Affix>
         <div style={{ backgroundColor: '#f0f2f5', width: '100%' }}>{props.children}</div>
       </Layout>
-      {/* </Permission> */}
     </Layout>
   )
 }
 
-
 export default React.memo(BaseLayout)
+
+
