@@ -756,7 +756,7 @@ const BaseLayout = (props) => {
         >
           {menu.map(renderMenuItem)}
 
-          {/* <Menu.Item
+          <Menu.Item
             key={ROUTES_ADMIN.OVERVIEWADMIN}
             // onClick={onSignOut}
             icon={<DashboardOutlined />}
@@ -788,7 +788,7 @@ const BaseLayout = (props) => {
             icon={<DashboardOutlined />}
           >
             <Link to={ROUTES_ADMIN.MENU_ADMIN}>Q/L menu chức năng admin</Link>
-          </Menu.Item> */}
+          </Menu.Item>
           <Menu.Item
             key={ROUTES.LOGOUT}
             onClick={onSignOut}

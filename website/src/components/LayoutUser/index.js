@@ -85,6 +85,7 @@ const BaseLayout = (props) => {
   const getInfoUser = async (params) => {
     try {
       const res = await getuserEKT(params)
+      console.log(res);
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
       }
@@ -320,16 +321,6 @@ const BaseLayout = (props) => {
           >
             <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
           </Menu.Item>
-          {/* <Menu.Item key={ROUTES.CUSTOMER} 
-            // onClick={onSignOut} 
-            icon={<LogoutOutlined />}>
-            <Link to={ROUTES.CUSTOMER}>Cá nhân</Link>
-          </Menu.Item> 
-          <Menu.Item key={ROUTES.BRANCH_MANAGEMENT} 
-            // onClick={onSignOut} 
-            icon={<LogoutOutlined />}>
-            <Link to={ROUTES.BRANCH_MANAGEMENT}>Cửa hàng</Link>
-          </Menu.Item>  */}
           <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
             <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
           </Menu.Item>
