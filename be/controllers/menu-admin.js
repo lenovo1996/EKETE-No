@@ -162,7 +162,7 @@ module.exports._setstatus = async (req, res, next) => {
         //Resend
         res.send({
             success: true,
-            message: 'Xóa người dùng thành công!',
+            message: 'Cập nhật chức năng thành công!',
         });
     } catch (err) {
         next(err);

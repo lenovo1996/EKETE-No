@@ -215,9 +215,9 @@ export default function Employee() {
           if (column.key === 'status') {
             return { ...column, render: (text, record) => (record.status ,      
              <Select defaultValue={record.status}  style={{ width: 120 }} 
-              onChange={() =>
-                _updateMenu(record.menu_id)
-              } >
+              // onChange={() =>
+              //   _updateMenu(record.menu_id)} 
+              >
               <Option value="new">new</Option>
               <Option value="testing">testing</Option>
               <Option value="ready to public" >ready to public</Option>

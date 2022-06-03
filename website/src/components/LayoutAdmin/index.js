@@ -65,17 +65,9 @@ const BaseLayout = (props) => {
   const [menu, setMenu] = useState([])
 
 
-<<<<<<< Updated upstream
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
     : {}
-    console.log("layout",dataUser);
-=======
-
-  const dataUser = localStorage.getItem('accessToken')
-    ? jwt_decode(localStorage.getItem('accessToken'))
-    : {}
->>>>>>> Stashed changes
   const [loading, setLoading] = useState(false)
   
   const isCollapsed = localStorage.getItem('collapsed')
@@ -87,24 +79,6 @@ const BaseLayout = (props) => {
   const [isMobile, setIsMobile] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
-<<<<<<< Updated upstream
-
-
-
-    const _getMenu = async () => {
-      try {
-        setLoading(true)
-        const res = await getMenu()
-        console.log(res)
-        if (res.status === 200) {
-          setMenu(res.data.data)
-          console.log('meunu', res.data.data)
-        }
-        setLoading(false)
-      } catch (e) {
-        setLoading(false)
-        console.log(e)
-=======
   const rootSubmenuKeys = [
     'store',
     'warehouse',
@@ -132,27 +106,12 @@ const BaseLayout = (props) => {
       if (res.status === 200) {
         setMenu(res.data.data)
         console.log('meunu', res.data.data)
->>>>>>> Stashed changes
       }
       setLoading(false)
     } catch (e) {
       setLoading(false)
       console.log(e)
     }
-<<<<<<< Updated upstream
- 
-
-    const _getInfoUser = async (params) => {
-      try {
-        const res = await getuserAdmin(params)
-        console.log("1");
-        if (res.status === 200) {
-          if (res.data.data.length) setUser({ ...res.data.data[0] })
-          console.log('infoAdmin',res.data.data);
-        }
-      } catch (error) {
-        console.log(error)
-=======
   }
   useEffect(() => {
     _getMenu()
@@ -164,7 +123,6 @@ const BaseLayout = (props) => {
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
         console.log('infoAdmin', res.data.data);
->>>>>>> Stashed changes
       }
     } catch (error) {
       console.log(error)
@@ -179,93 +137,6 @@ const BaseLayout = (props) => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
-
-
-
-<<<<<<< Updated upstream
- 
-=======
-  // const renderMenuItem = (_menu) => (
-  //   <Permission permissions={_menu.permissions} key={_menu.path}>
-  //     {_menu.menuItems ? (
-  //       <Menu.SubMenu
-  //         // className={`${styles['edit-submenu-arrow']} edit-submenu-arrow`}
-  //         style={{
-  //           // height: 40,
-  //           backgroundColor:
-  //             (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
-  //             '#e7e9fb',
-  //           width: '100%',
-  //           // height: collapsed ? 40 : '',
-  //           display: 'block',
-  //         }}
-  //         key={_menu.path}
-  //         // onTitleClick={() => history.push(_menu.path)}
-  //         onClick={_menu.path === ROUTES.OVERVIEW && toggle}
-  //         title={
-  //           <Link
-  //             style={{
-  //               fontSize: '0.8rem',
-
-  //               color:
-  //                 location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
-  //                   ? '#5F73E2'
-  //                   : 'rgba(0, 0, 0, 0.85)',
-  //             }}
-  //             to={_menu.path}
-  //           >
-  //             {_menu.title}
-  //           </Link>
-  //         }
-  //         icon={
-  //           <Link
-  //             style={{
-  //               fontSize: '0.8rem',
-  //               color:
-  //                 location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
-  //                   ? '#5F73E2'
-  //                   : 'rgba(0, 0, 0, 0.85)',
-  //             }}
-  //             to={_menu.path}
-  //           >
-  //             {_menu.icon}
-  //           </Link>
-  //         }
-  //       >
-  //         {_menu.menuItems.map((e) => (
-  //           <Permission permissions={e.permissions}>
-  //             <Menu.Item
-  //               key={e.path}
-  //               style={{
-  //                 fontSize: '0.8rem',
-  //                 backgroundColor:
-  //                   (location.pathname === e.path || e.pathsChild.includes(location.pathname)) &&
-  //                   '#e7e9fb',
-  //               }}
-  //             >
-  //               <Link to={e.path}>{e.title}</Link>
-  //             </Menu.Item>
-  //           </Permission>
-  //         ))}
-  //       </Menu.SubMenu>
-  //     ) : (
-  //       <Menu.Item
-  //         key={_menu.path}
-  //         style={{
-  //           fontSize: '0.8rem',
-  //           backgroundColor:
-  //             (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
-  //             '#e7e9fb',
-  //         }}
-  //         icon={_menu.icon}
-  //         onClick={_menu.path === ROUTES.SELL && toggle}
-  //       >
-  //         <Link to={_menu.path}>{_menu.title}</Link>
-  //       </Menu.Item>
-  //     )}
-  //   </Permission>
-  // )
->>>>>>> Stashed changes
 
   const onSearch = (value) => console.log(value)
 
@@ -316,13 +187,6 @@ const BaseLayout = (props) => {
     </div>
   )
 
-<<<<<<< Updated upstream
-
-=======
-  // useEffect(() => {
-  //   _getInfoUser({ user_id: dataUser.data.user_id })
-  // }, [dataUser.data.user_id])
->>>>>>> Stashed changes
 
   //get width device
   useEffect(() => {

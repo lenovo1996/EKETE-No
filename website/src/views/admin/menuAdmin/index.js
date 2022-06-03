@@ -29,6 +29,7 @@ import TitlePage from 'components/title-page'
 import MenuForm from './menuForm'
 import SettingColumns from 'components/setting-columns'
 import columnsM from './columns'
+import { identity } from 'lodash'
 
 const { Option } = Select
 export default function Employee() {
@@ -108,9 +109,10 @@ export default function Employee() {
   const [value, setValue] = useState();
   const handleChange = (value) => {
     setValue(value);
-    console.log(value);
   };
-  const _setstatus = async (menu_id) => {
+    console.log(value);
+
+  const _setstatus = async (menu_id, value) => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
       const res = await setstatus(menu_id, value)
@@ -132,7 +134,6 @@ export default function Employee() {
       console.log(err)
     }
   }
-
 
 
   return (
@@ -225,10 +226,10 @@ export default function Employee() {
                     defaultValue={record.status}
                     style={{ width: 120 }}
                     onChange={handleChange}
+                    // onChange={()=>{alo(record.menu_id)}}
                   >
                     
                     <Option value="new">new</Option>
-              
                     <Option value="testing">testing</Option>
                     <Option value="ready to public">ready to public</Option>
                     <Option value="public ">public</Option>
