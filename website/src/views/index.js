@@ -105,6 +105,7 @@ import VerifyAccountUser from './user/verify-account'
 import NotFoundUser from './user/not-found/404'
 import BusinessUser from './user/business_user'
 import OverviewUser from './user/overview'
+import NewfeedComponent from './user/newfeed'
 
 //apis
 
@@ -617,6 +618,13 @@ const AUTH_ROUTER = [
     title: 'Forget password',
     permissions: [],
   },
+  {
+    path: ROUTES_USER.NEWFEED,
+    Component: () => <NewfeedComponent />,
+    title: 'Sản phẩm hot trong tháng',
+    permissions: [],
+    exact: true,
+  },
 
   //admin
   {
@@ -686,7 +694,6 @@ export default function Views() {
             <Authentication {...rest}>
               <BaseLayout>
                 <Component />
-                
               </BaseLayout>
             </Authentication>
           </Route>

@@ -60,7 +60,7 @@ function App() {
     subDomain &&
     subDomain.length === 1
   )
-    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.LOGIN}`
+    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.NEWFEED}`
 
   // const checkSubdomain = async () => {
   //   let router = ''
@@ -108,7 +108,7 @@ function App() {
       const res = await refresh({ refreshToken: refreshToken })
       if (res.status === 404) {
         dispatch({ type: ACTION.LOGOUT })
-        history.push(ROUTES_ADMIN.LOGINADMIN)
+        history.push(ROUTES_ADMIN.LOGIN)
       } else {
         if (res.data.success) {
           dispatch({ type: ACTION.LOGIN, data: res.data })
@@ -126,6 +126,7 @@ function App() {
   // useEffect(() => {
   //   getBusiness()
   // }, [dataUser])
+  // useEffect(() => {})
 
   useEffect(() => {
     checkToken()

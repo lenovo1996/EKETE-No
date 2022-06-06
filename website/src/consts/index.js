@@ -12,8 +12,6 @@ export const ACTION = {
   //admin
 
   LOGINADMIN: 'LOGINADMIN',
-
-
 }
 
 export const ROLE_DEFAULT = {
@@ -49,7 +47,7 @@ export const ROUTES_USER = {
   FORGET_PASSWORD: '/forget-password',
   OVERVIEW: '/overview',
   BUSINESS: '/business',
-
+  NEWFEED: '/newfeed',
 }
 
 export const ROUTES_ADMIN = {
@@ -64,8 +62,6 @@ export const ROUTES_ADMIN = {
   BUSINESSADMIN: '/businessadmin',
   MENU_USER: '/menu-user',
 }
-
-
 
 export const PERMISSIONS_ADMIN = {
   tong_quan_admin: 'tong_quan_admin',
@@ -231,7 +227,7 @@ export const LOGO_DEFAULT =
 
 export const FILTER_SIZE = ''
 export const FILTER_COL_HEIGHT = ''
-export const PAGE_SIZE = 20
+export const PAGE_SIZE = ``
 export const PAGE_SIZE_OPTIONS = [20, 40, 50, 60, 80, 100]
 export const POSITION_TABLE = ['bottomLeft']
 
