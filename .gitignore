@@ -1,0 +1,5 @@
+/be/.idea/*
+/website/.idea/*
+
+/be/yarn.lock
+/website/yarn.lock
