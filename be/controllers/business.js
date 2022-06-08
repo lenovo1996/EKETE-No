@@ -46,6 +46,14 @@ module.exports._getOne = async(req,res,next) =>{
     }
 }
 
+module.exports._getProductList = async(req,res,next) =>{
+    try {
+        await businessService._getProductList(req, res, next);
+    } catch (err) {
+        next(err);
+    }
+}
+
 module.exports._getgoBusiness = async (req, res, next) => {
     try {
         let shop = req.headers[`shop`];
@@ -226,10 +234,10 @@ module.exports._create = async (req, res, next) => {
             company_phone: req.body.company_phone ,
             company_website: req.body.company_website ,
             company_address: req.body.company_address ,
-            company_district: req.body.company_district ,
-            company_province: req.body.company_province ,
-            tax_code: req.body.tax_code ,
-            tax_codeimage: req.body.avarta3,
+            company_district: req.body.company_district,
+            company_province: req.body.company_province,
+            tax_code: req.body.tax_code || '',
+            tax_code_image: req.body.tax_code_image ||'',
             career_id: req.body.career_id,
             price_recipe: req.body.price_recipe || 'FIFO',
             verify_with: (() => {
@@ -246,10 +254,8 @@ module.exports._create = async (req, res, next) => {
             })(),
             otp_code: otpCode,
             otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
-            // CMND_CCCD: req.body.CMND,
-            // CMNDimage: req.body.avatar1 || '',
             business_registration_number: req.body.business_registration_number || '',
-            business_registration_image: req.body.avarta2 || '',
+            business_registration_image: req.body.business_registration_image || '',
             profile_status: 1,
             status: 1  ,
             is_delete: false,
@@ -257,6 +263,7 @@ module.exports._create = async (req, res, next) => {
             creator_id: user_id,
             last_update: moment().tz(TIMEZONE).format(),
             updater_id: user_id,
+            slug_name: removeUnicode(String(req.body.business_name), true).toLowerCase(),
             active: false,
         };
         
@@ -403,6 +410,8 @@ module.exports._create = async (req, res, next) => {
             role_name: "ADMIN",
             logo: req.body.logo,
             create_date: moment().tz(TIMEZONE).format(),
+            business_id: business_id
+
         }
         await Promise.all([
             client.db(SDB).collection('Business').insertOne(_business),
@@ -516,6 +525,7 @@ module.exports._update = async (req, res, next) => {
                 return 5
 
             })(),
+
         };
         req['body'] = _business;
         await businessService._update(req, res, next);
@@ -660,6 +670,21 @@ module.exports._verifyOTP = async (req, res, next) => {
                 message: `Mã OTP chính xác, xác thực thành công!`,
             });
         }
+    } catch (err) {
+        next(err);
+    }
+};
+module.exports._setstatus = async (req, res, next) => {
+    try {
+        await client
+            .db(SDB)
+            .collection(`Business`)
+            .updateOne({business_id: Number(req.body.business_id)},{ $set: {status: req.body.status} });
+        //Resend
+        res.send({
+            success: true,
+            message: 'Cập nhật trạng thái cửa hàng thành công!',
+        });
     } catch (err) {
         next(err);
     }

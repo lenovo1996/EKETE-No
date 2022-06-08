@@ -89,6 +89,8 @@ const BaseLayout = (props) => {
     : false
   const [collapsed, setCollapsed] = useState(isCollapsed)
   const [isMobile, setIsMobile] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [menu, setMenu] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
   const rootSubmenuKeys = [
@@ -133,6 +135,21 @@ const BaseLayout = (props) => {
   var toggle = () => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
+  }
+  const _getMenu = async () => {
+    try {
+      setLoading(true)
+      const res = await getMenu()
+      // console.log(res)
+      if (res.status === 200) {
+        setMenu(res.data.data)
+        // console.log('res.data.data', res.data.data)
+      }
+      setLoading(false)
+    } catch (e) {
+      setLoading(false)
+      console.log(e)
+    }
   }
 
   const MENUS = [
@@ -455,6 +472,15 @@ const BaseLayout = (props) => {
                     '#e7e9fb',
                 }}
               >
+                <svg
+            style={{ marginRight: 10 }}
+            width="1.1rem"
+            height="1.1rem"
+            fill="currentColor"
+            viewBox="0 0 1024 1024"
+          >
+            <path d={_menu.icon} />
+          </svg>
                 <Link to={e.url}>{e.name}</Link>
               </Menu.Item>
             </Permission>

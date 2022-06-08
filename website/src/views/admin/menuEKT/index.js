@@ -23,7 +23,7 @@ import {
 import { SearchOutlined, ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons'
 
 //apis
-import { getMenu, deleteMenu, updateMenu } from 'apis/menu-user'
+import { getMenu, deleteMenu, setstatus } from 'apis/menu-user'
 
 //components
 import TitlePage from 'components/title-page'
@@ -109,29 +109,29 @@ export default function Employee() {
     _getMenu()
   }, [paramsFilter])
 
-  const _updateMenu = async (body, id) => {
+  const _setstatus = async ( value,menu_id) => {
     try {
-      setLoading(true)
-      let res = await updateMenu(body, id)
-      console.log(res)
+      dispatch({ type: ACTION.LOADING, data: true })
+      const res = await setstatus(menu_id, value)
+      dispatch({ type: ACTION.LOADING, data: false })
       if (res.status === 200) {
-        if (res.data.success) notification.success({ message: 'Cập nhật thành công!' })
-        else
+        if (res.data.success) {
+          notification.success({ message: 'Cập nhật chức năng thành công' })
+          _getMenu()
+        } else
           notification.error({
-            message: res.data.message || 'Cập nhật thất bại, vui lòng thử lại!',
+            message: res.data.message || 'Cập nhật chức năng thất bại, vui lòng thử lại',
           })
       } else
         notification.error({
-          message: res.data.message || 'Cập nhật thất bại, vui lòng thử lại!',
+          message: res.data.message || 'Cập nhật chức năng thất bại, vui lòng thử lại',
         })
-
-      await _getMenu()
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
+    } catch (err) {
+      dispatch({ type: ACTION.LOADING, data: false })
+      console.log(err)
     }
   }
+
 
   return (
     <div className="card">
@@ -221,7 +221,7 @@ export default function Employee() {
                   <Select
                     defaultValue={record.status}
                     style={{ width: 120 }}
-                    onChange={() => _updateMenu(Option.value ,record.menu_id)}
+                    onChange={(e) => _setstatus(e ,record.menu_id)}
                   >
                     <Option value="new">new</Option>
                     <Option value="testing">testing</Option>
