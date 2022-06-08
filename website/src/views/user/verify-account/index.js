@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { ROUTES } from 'consts'
+import { ROUTES_USER } from 'consts'
 
 import { useLocation, useHistory } from 'react-router'
 import { notification, Row, Spin } from 'antd'
@@ -15,7 +15,7 @@ export default function VerifyAccount() {
       console.log('res', res)
       if (res.status === 200) {
         if (res.data.success) {
-          history.push({ pathname: ROUTES.OTP, state: res.data.data })
+          history.push({ pathname: ROUTES_USER.OTP, state: res.data.data })
           return
         } else
           notification.error({
@@ -26,9 +26,9 @@ export default function VerifyAccount() {
           message: res.data.message || 'Xác thực không thành công, vui lòng thử lại',
         })
 
-      history.push(ROUTES.OVERVIEW)
+      history.push(ROUTES_USER.OVERVIEW)
     } catch (error) {
-      history.push(ROUTES.OVERVIEW)
+      history.push(ROUTES_USER.OVERVIEW)
       console.log(error)
     }
   }
@@ -36,7 +36,7 @@ export default function VerifyAccount() {
   useEffect(() => {
     const uid = new URLSearchParams(location.search).get('uid')
 
-    if (!uid) history.push(ROUTES.OVERVIEW)
+    if (!uid) history.push(ROUTES_USER.OVERVIEW)
     else _checkLink(uid)
   }, [])
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import styles from './password-new.module.scss'
 import { Link, useLocation, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { ACTION, ROUTES } from 'consts/index'
+import { ACTION, ROUTES_USER } from 'consts/index'
 import jwt_decode from 'jwt-decode'
 
 //antd
@@ -59,7 +59,7 @@ export default function PasswordNew() {
   }
 
   useEffect(() => {
-    if (!location.state) history.push(ROUTES.LOGIN)
+    if (!location.state) history.push(ROUTES_USER.LOGIN)
   }, [])
 
   return (

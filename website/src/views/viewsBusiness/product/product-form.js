@@ -12,9 +12,11 @@ import delay from 'delay'
 //components
 import NotSupportMobile from 'components/not-support-mobile'
 import TitlePage from 'components/title-page'
-import SupplierForm from 'views/supplier/supplier-form'
+// import SupplierForm from 'views/supplier/supplier-form'
+import SupplierForm from '../supplier/supplier-form'
+
 import Permission from 'components/permission'
-import CreateCategory from 'views/category'
+import CreateCategory from '../category'
 
 //antd
 import {

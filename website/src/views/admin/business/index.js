@@ -198,9 +198,9 @@ export default function Employee() {
                ...column,
                render: (text, record) => (
                  <Popconfirm
-                  //  title="Bạn có muốn xóa nhân viên này không?"
-                  //  okText="Đồng ý"
-                  //  cancelText="Từ chối"
+                   title="Bạn có muốn xóa cửa hàng này không?"
+                   okText="Đồng ý"
+                   cancelText="Từ chối"
                   //  onConfirm={() => _deleteUser(record.user_id)}
                  >
                    <Button icon={<DeleteOutlined />} type="primary" danger />

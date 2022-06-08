@@ -54,6 +54,75 @@ module.exports._getProductList = async(req,res,next) =>{
     }
 }
 
+module.exports._getgoBusiness = async (req, res, next) => {
+    try {
+        let shop = req.headers[`shop`];
+        
+        // let [prefix, username] = req.body.username.split("_");
+        var username = req.body.username;
+        let business = await client.db(SDB).collection('Business').findOne({ prefix: shop.toLowerCase() });
+
+        if (business.active == false) {
+            throw new Error(`403: Doanh nghiệp chưa được xác thực!`);
+        }
+        if (business.active == `banned`) {
+            throw new Error(`404: Doanh nghiệp đang bị tạm khoá!`);
+        }
+        const DB = (() => {
+            if (business && business.database_name) {
+                return business.database_name;
+            }
+            throw new Error('404: Không tìm thấy doanh nghiệp này!');
+        })();
+        let [user] = await client
+            .db(DB)
+            .collection(`Users`)
+            .aggregate([
+                { $match: { username: username } },
+                {
+                    $lookup: {
+                        from: 'Roles',
+                        localField: 'role_id',
+                        foreignField: 'role_id',
+                        as: '_role',
+                    },
+                },
+                { $unwind: { path: '$_role', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'Branchs',
+                        localField: 'branch_id',
+                        foreignField: 'branch_id',
+                        as: '_branch',
+                    },
+                },
+                { $unwind: { path: '$_branch', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'Stores',
+                        localField: 'store_id',
+                        foreignField: 'store_id',
+                        as: '_store',
+                    },
+                },
+                { $unwind: { path: '$_store', preserveNullAndEmptyArrays: true } },
+            ])
+            .toArray();
+
+        let [accessToken, refreshToken, _update] = await Promise.all([
+            jwt.createToken({ ...user, database: DB, _business: business }, 30 * 24 * 60 * 60),
+            jwt.createToken({ ...user, database: DB, _business: business }, 30 * 24 * 60 * 60 * 10),
+            client
+                .db(DB)
+                .collection(`Users`)
+                .updateOne({ user_id: Number(user.user_id) }, { $set: { last_login: moment().tz(TIMEZONE).format() } }),
+        ]);
+        res.send({ success: true, data: { accessToken, refreshToken } });
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports._create = async (req, res, next) => {
     try {
         ['business_name', 'company_phone'].map((e) => {
@@ -467,20 +536,20 @@ module.exports._update = async (req, res, next) => {
 
 module.exports._delete = async (req, res, next) => {
     try {
-        let business = await client
-            .db(SDB)
-            .collection('Business')
-            .find({ business_id:  req.body.business_id  })
-            .toArray();
-        const DBs = business.map((eBusiness) => {
-            return eBusiness.database_name;
-        });
+        // let business = await client
+        //     .db(SDB)
+        //     .collection('Business')
+        //     .find({ business_id:  req.body.business_id  })
+        //     .toArray();
+        // const DBs = business.map((eBusiness) => {
+        //     return eBusiness.database_name;
+        // });
         await client
             .db(SDB)
             .collection('Business')
             // .deleteMany({ business_id: { $in: req.body.business_id } });
             .updateOne(
-                {business_id: req.body.business_id },
+                {business_id: Number(req.body.business_id) },
                 {
                     $set: {
                         is_delete: true

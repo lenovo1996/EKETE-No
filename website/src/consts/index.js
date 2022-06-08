@@ -120,6 +120,19 @@ export const ROUTES = {
   // EMPLOYEEADMIN: '/employeedmin'
 }
 
+export const ROUTES_USER = {
+  CHECK_SUBDOMAIN: '/business-login',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  OTP: '/otp',
+  VERIFY_ACCOUNT: '/verify-account',
+  PASSWORD_NEW: '/password-new',
+  FORGET_PASSWORD: '/forget-password',
+  OVERVIEW: '/overview',
+  BUSINESS: '/business',
+
+}
+
 export const ROUTES_ADMIN = {
   OVERVIEWADMIN: '/overviewadmin',
   OTPADMIN: '/otpadmin',

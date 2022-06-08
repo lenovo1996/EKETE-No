@@ -7,16 +7,18 @@ import { Modal, Form, Row, Col, Input, Button, Upload, notification } from 'antd
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 
 //apis
-import { updateEmployee } from 'apis/employee'
+import { updateuserEKT, getuserEKT } from 'apis/user-ekt'
 import { uploadFile } from 'apis/upload'
 
 export default function ModalUpdateUser({ user, children, reload }) {
   const [form] = Form.useForm()
-
   const [loading, setLoading] = useState(false)
   const [avatar, setAvatar] = useState('')
   const [visible, setVisible] = useState(false)
   const toggle = () => setVisible(!visible)
+
+
+
 
   const _updateUser = async () => {
     try {
@@ -27,13 +29,15 @@ export default function ModalUpdateUser({ user, children, reload }) {
         avatar: avatar,
       }
       setLoading(true)
-      const res = await updateEmployee(body, user && user.user_id)
+      const res = await updateuserEKT(body, user && user.user_id)
       console.log(res)
       if (res.status === 200) {
         if (res.data.success) {
           toggle()
+          reload()
           notification.success({ message: 'Cập nhật thông tin cá nhân thành công' })
           reload({ user_id: res.data.data.user_id })
+     
         } else
           notification.error({
             message: res.data.message || 'Cập nhật thông tin cá nhân thành công',
@@ -116,33 +120,46 @@ export default function ModalUpdateUser({ user, children, reload }) {
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
-              <Form.Item label="Nhập họ" name="first_name">
-                <Input placeholder="Nhập họ" />
+              <Form.Item 
+                label="Nhập tên " 
+                name="fullname"
+                rules={[{ message: 'Vui lòng nhập tên', required: true }]}
+                >
+                <Input placeholder="Nhập tên của bạn... " />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Form.Item
-                name="last_name"
-                label="Nhập tên"
-                rules={[{ message: 'Vui lòng nhập tên', required: true }]}
+                name="job"
+                label="Công việc"
+                rules={[{ message: 'Vui lòng nhập công việc ', required: true }]}
               >
-                <Input placeholder="Nhập tên" />
+                <Input placeholder="Nhập công việc của bạn..." />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Form.Item name="email" label="Email">
-                <Input placeholder="Nhập email" disabled />
+                <Input placeholder="Nhập email"  />
+                {/* <Input placeholder="" disabled /> */}
+                
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
+              <Form.Item name="phone" label="Số điện thoại">
+                {/* <Input placeholder="Nhập email"  /> */}
+                <Input placeholder="" disabled />
+
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Form.Item name="address" label="Địa chỉ">
-                <Input placeholder="Nhập địa chỉ" />
+                <Input placeholder="Nhập địa chỉ của bạn..." />
               </Form.Item>
             </Col>
           </Row>
           <Row justify="end">
             <Form.Item>
-              <Button loading={loading} type="primary" onClick={_updateUser}>
+              <Button loading={loading} type="primary" onClick={_updateUser} >
                 Cập nhật
               </Button>
             </Form.Item>
