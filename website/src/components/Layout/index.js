@@ -89,6 +89,8 @@ const BaseLayout = (props) => {
     : false
   const [collapsed, setCollapsed] = useState(isCollapsed)
   const [isMobile, setIsMobile] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [menu, setMenu] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
   const rootSubmenuKeys = [
