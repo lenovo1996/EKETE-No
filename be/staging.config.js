@@ -5,9 +5,9 @@ module.exports = {
             name: 'AO-Staging',
             watch: true,
             env: {
-                LOCAL_PORT: '6000',
-                GLOBAL_PORT: '6001',
-                SOCKET_PORT: '6002',
+                LOCAL_PORT: '8000',
+                GLOBAL_PORT: '8001',
+                SOCKET_PORT: '8002',
                 DOMAIN: 'staging.ekata.vn',
                 END_POINT: 'api',
                 TIMEZONE: 'Asia/Ho_Chi_Minh',
