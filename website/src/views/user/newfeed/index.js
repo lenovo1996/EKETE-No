@@ -4,7 +4,8 @@ import Sidebar from './Slidebar/Sidebar'
 import Home from './Home/Home'
 import styles from './index.module.scss'
 
-export default function index() {
+export default function index({ detailshopping, children, record }) {
+    // console.log("alo",detailshopping);
     return (
         <div className={styles['wrapper']}>
             <Header />
@@ -14,6 +15,7 @@ export default function index() {
                     <Home />
                 </div>
             </div>
+            {/* <h1>{ record.detailshopping }</h1>      */}
         </div>
     )
 }
