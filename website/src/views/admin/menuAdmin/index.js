@@ -18,6 +18,7 @@ import {
   Space,
   notification,
   Tooltip,
+  Alert
 } from 'antd'
 import { SearchOutlined, ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons'
 
@@ -106,13 +107,14 @@ export default function Employee() {
     _getMenu()
   }, [paramsFilter])
 
-  const [value, setValue] = useState();
-  const handleChange = (value) => {
-    setValue(value);
-  };
-    console.log(value);
+  // const [value, setValue] = useState();
 
-  const _setstatus = async (menu_id, value) => {
+  // const handleChange = (value) => {
+  //   setValue(value)
+  // };
+  //   console.log(value);
+
+  const _setstatus = async ( value,menu_id) => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
       const res = await setstatus(menu_id, value)
@@ -225,8 +227,8 @@ export default function Employee() {
                   <Select
                     defaultValue={record.status}
                     style={{ width: 120 }}
-                    onChange={handleChange}
-                    // onChange={()=>{alo(record.menu_id)}}
+                    onChange={(e)=>{ _setstatus(e,record.menu_id)}}
+                    
                   >
                     
                     <Option value="new">new</Option>
@@ -237,7 +239,7 @@ export default function Employee() {
                     <Option value="pending">pending</Option>
                     
                   </Select>
-                  
+                
                 )
               ),
             }

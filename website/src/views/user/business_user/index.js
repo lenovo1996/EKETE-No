@@ -1,29 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react'
-
+import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 // style
 import styles from './business_user.module.scss'
 import FormBusiness from './registerbusiness'
-// moment
-// import { uploadFile } from 'apis/upload'
 import { ACTION, ROUTES } from 'consts'
-// import { useDispatch } from 'react-redux'
-// import { useHistory } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
+
 
 // antd
 
 import { Button, Modal, Card, Avatar } from 'antd'
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
 // api
-import { getBusinesses } from 'apis/business'
-import { getuserEKT } from 'apis/user-ekt'
+import { getBusinesses,detailBusiness } from 'apis/business'
+
 
 // html react parser
 
 export default function Business() {
   const [business, setBusiness] = useState([])
   const { Meta } = Card
+  const history = useHistory()
   // const [user, setUser] = useState([])
+  const [detailBusiness1, setDetailBusiness] = useState([])
 
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
@@ -39,17 +39,11 @@ export default function Business() {
     }
   }
 
-  // const _letgo = async () => {
-  //   try {
-
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
   useEffect(() => {
     _getBusinesses({ user_phone: dataUser.data.phone })
   }, [dataUser.data.phone])
+
+ 
 
   const ModalCustomer = ({ children, record }) => {
     const [visible, setVisible] = useState(false)
@@ -94,6 +88,8 @@ export default function Business() {
           business.map((Item, index) => {
             return (
               <a href={`http://${Item.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`}>
+                 
+                 {/* <Link to={`/detail-business/${Item.business_id}`}> */}
               <Card
                 className={styles['iTem']}
                 style={{ width: 300 }}
@@ -112,7 +108,7 @@ export default function Business() {
                   description="This is the description"
                 />
               </Card>
-              </a>
+               </a>
             )
           })}
         {/* <Card className={styles['iTem']}

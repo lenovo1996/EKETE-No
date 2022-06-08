@@ -16,25 +16,21 @@ import {
   Select,
   Table,
   Button,
-  Space,
   notification,
-  DatePicker,
+  DatePicker,  Space,
+
 } from 'antd'
 import { SearchOutlined, ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons'
 
 //apis
-import { getEmployees, deleteEmployee } from 'apis/employee'
-import { getDistricts, getProvinces } from 'apis/address'
-import { getAllBranch } from 'apis/branch'
-import { getRoles } from 'apis/role'
-import { getuserEKT } from 'apis/user-ekt'
-import { getBusinesses } from'apis/business'
+
+import { getBusinesses , setstatus } from'apis/business'
 
 //components
 import TitlePage from 'components/title-page'
 import SettingColumns from 'components/setting-columns'
 import columnsBusiness from './columns'
-import { render } from '@testing-library/react'
+import BusinessForm from './BusinessForm'
 
 const { Option } = Select
 export default function Employee() {
@@ -76,9 +72,6 @@ export default function Employee() {
       console.log(res)
       if (res.status === 200) {
         setBusiness(res.data.data)
-        // if(res.data.data.profile_status === 1){
-        //   console.log(11);
-        // }
       }
       setLoading(false)
     } catch (e) {
@@ -91,8 +84,30 @@ export default function Employee() {
     console.log(`selected ${value}`);
   };
 
-  useEffect(() => {
+  const _setstatus = async (value, business_id) => {
+    try {
+      dispatch({ type: ACTION.LOADING, data: true })
+      const res = await setstatus(business_id, value)
+      dispatch({ type: ACTION.LOADING, data: false })
+      if (res.status === 200) {
+        if (res.data.success) {
+          notification.success({ message: 'Cập nhật trạng thái  thành công' })
+          _getBusinesses()
+        } else
+          notification.error({
+            message: res.data.message || 'Cập nhật trạng thái thất bại, vui lòng thử lại',
+          })
+      } else
+        notification.error({
+          message: res.data.message || 'Cập nhật trạng thái thất bại, vui lòng thử lại',
+        })
+    } catch (err) {
+      dispatch({ type: ACTION.LOADING, data: false })
+      console.log(err)
+    }
+  }
 
+  useEffect(() => {
     _getBusinesses()
   }, [])
 
@@ -136,7 +151,15 @@ export default function Employee() {
         }}
         columns={columns.map((column) => {
           if (column.key === 'stt') return { ...column, render: (text, record, index) => index + 1 }
-          if (column.key === 'business_name') return { ...column, render: (text, record) => <a>{record.business_name}</a> }
+          if (column.key === 'business_name') return { ...column,render: (text, record) => (
+            <BusinessForm
+              record={record}
+              reloadData={_getBusinesses}
+              // roles={roles}
+            >
+              <a>{record.business_name}</a>
+            </BusinessForm>
+          ),}
           if (column.key === 'user_name') return { ...column, render: (text, record) => record.user_name }
           if (column.key === 'company_address') return { ...column, render: (text, record) => record.company_address }
           if (column.key === 'company_phone') return { ...column, render: (text, record) => record.company_phone }
@@ -163,12 +186,12 @@ export default function Employee() {
           if (column.key === 'status') return { ...column, render: (text, record) => 
             (
               // record.status, 
-            <Select defaultValue={record.status}  style={{ width: 120 }} onChange={handleChange}>
-            <Option value={record.status=1}>Active</Option>
-            <Option value={record.status=2}>Warnning</Option>
-            <Option value={record.status=3}>Block</Option>
-            <Option value={record.status=4}>Band</Option>
-            <Option value={record.status=5}>Waiting for review  </Option>
+            <Select defaultValue={record.status}  style={{ width: 120 }} onChange={(e)=>{ _setstatus(e,record.business_id)}}>
+            <Option value={1}>Active</Option>
+            <Option value={2}>Warnning</Option>
+            <Option value={3}>Block</Option>
+            <Option value={4}>Band</Option>
+            <Option value={5}>Waiting for review  </Option>
           </Select> )}
              if (column.key === 'action')
              return {

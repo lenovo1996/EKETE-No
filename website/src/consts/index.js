@@ -106,6 +106,7 @@ export const ROUTES = {
   CONTACT: '/contact',
   IMPORT_INVENTORIES: '/import-inventories',
   IMPORT_INVENTORY: '/import-inventory',
+  DETAIL_BUSINESS: `/detail-business/:id`,
 
   //admin
   // OVERVIEWADMIN: '/overviewadmin',

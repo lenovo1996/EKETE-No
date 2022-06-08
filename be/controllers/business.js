@@ -46,6 +46,14 @@ module.exports._getOne = async(req,res,next) =>{
     }
 }
 
+module.exports._getProductList = async(req,res,next) =>{
+    try {
+        await businessService._getProductList(req, res, next);
+    } catch (err) {
+        next(err);
+    }
+}
+
 module.exports._create = async (req, res, next) => {
     try {
         ['business_name', 'company_phone'].map((e) => {
@@ -186,6 +194,7 @@ module.exports._create = async (req, res, next) => {
             creator_id: user_id,
             last_update: moment().tz(TIMEZONE).format(),
             updater_id: user_id,
+            slug_name: removeUnicode(String(req.body.business_name), true).toLowerCase(),
             active: false,
         };
         
@@ -332,6 +341,8 @@ module.exports._create = async (req, res, next) => {
             role_name: "ADMIN",
             logo: req.body.logo,
             create_date: moment().tz(TIMEZONE).format(),
+            business_id: business_id
+
         }
         await Promise.all([
             client.db(SDB).collection('Business').insertOne(_business),
@@ -445,6 +456,7 @@ module.exports._update = async (req, res, next) => {
                 return 5
 
             })(),
+
         };
         req['body'] = _business;
         await businessService._update(req, res, next);
@@ -589,6 +601,21 @@ module.exports._verifyOTP = async (req, res, next) => {
                 message: `Mã OTP chính xác, xác thực thành công!`,
             });
         }
+    } catch (err) {
+        next(err);
+    }
+};
+module.exports._setstatus = async (req, res, next) => {
+    try {
+        await client
+            .db(SDB)
+            .collection(`Business`)
+            .updateOne({business_id: Number(req.body.business_id)},{ $set: {status: req.body.status} });
+        //Resend
+        res.send({
+            success: true,
+            message: 'Cập nhật trạng thái cửa hàng thành công!',
+        });
     } catch (err) {
         next(err);
     }

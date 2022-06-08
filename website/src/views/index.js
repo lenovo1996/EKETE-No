@@ -37,6 +37,7 @@ import VerifyAccount from './user/verify-account'
 import NotFound from './user/not-found/404'
 import BusinessUser from './user/business_user'
 import Overview from './user/overview'
+import DetailBusiness from './user/business_user/detail_business'
 
 //apis
 
@@ -54,6 +55,13 @@ const DEFINE_ROUTER = [
     path: ROUTES.BUSINESS,
     Component: () => <BusinessUser />,
     title: 'Danh sách thương hiệu',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES.DETAIL_BUSINESS,
+    Component: () => <DetailBusiness />,
+    title: 'Chi tiết cửa hàng',
     permissions: [],
     exact: true,
   },

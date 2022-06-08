@@ -1,0 +1,90 @@
+.header {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  // border-radius: 10px;
+  border: 0 solid transparent;
+  overflow: hidden;
+  background-color: hwb(0 100% 0%);
+  display: flex;
+  flex-direction: row;
+  height: 300px;
+  width: 100%;
+}
+
+.Card {
+  width: 600px;
+  height: 250px;
+  border-radius: 10px;
+  background-image: url(https://thietkethicongshop.net/wp-content/uploads/2019/08/983954EB-C7A6-4396-B1D8-154AED24A0A8.jpg );
+  margin: 10px;
+}
+
+
+.icon {
+  font-size: 30px;
+  margin-right: 20px;
+}
+
+.col {
+  float: left;
+  margin-left: 100px;
+  margin-top: 20px;
+}
+
+.row {
+  margin-top: 40px;
+}
+
+.menu {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  border: 0 solid transparent;
+  overflow: hidden;
+  background-color: hwb(0 100% 0%);
+  display: flex;
+  flex-direction: column;
+  height: 300;
+  display: inline-block;
+  width: 100%;
+  text-size-adjust: 100px;
+  align-items: center;
+
+}
+
+.container1 {
+  margin-top: 0px;
+  background-color: hwb(0 100% 0%);
+  width: 100%;
+
+}
+.container {
+  border: 0 solid transparent;
+  overflow: hidden;
+  background-color: hwb(0 100% 0%);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  // display: block;
+  width: 100%;
+  align-items: center;
+
+}
+
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+/*reset css*/
+.div,label{margin:0;padding:0;}
+.body{margin:20px;}
+.h1{font-size:1.5em;margin:10px;}
+/****** Style Star Rating Widget *****/
+.rating{border:none;float:left;}
+.rating>input{display:none;}/*ẩn input radio - vì chúng ta đã có label là GUI*/
+.rating>label:before{margin:5px;font-size:1.25em;font-family:FontAwesome;display:inline-block;content:"\f005";}/*1 ngôi sao*/
+.rating>.half:before{content:"\f089";position:absolute;}/*0.5 ngôi sao*/
+.rating>label{color:#ddd;float:right;}/*float:right để lật ngược các ngôi sao lại đúng theo thứ tự trong thực tế*/
+/*thêm màu cho sao đã chọn và các ngôi sao phía trước*/
+.rating>input:checked~label,
+.rating:not(:checked)>label:hover, 
+.rating:not(:checked)>label:hover~label{color:#FFD700;}
+/* Hover vào các sao phía trước ngôi sao đã chọn*/
+.rating>input:checked+label:hover,
+.rating>input:checked~label:hover,
+.rating>label:hover~input:checked~label,
+.rating>input:checked~label:hover~label{color:#FFED85;}

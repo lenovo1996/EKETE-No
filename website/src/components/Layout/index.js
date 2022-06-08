@@ -116,10 +116,10 @@ const BaseLayout = (props) => {
     try {
       setLoading(true)
       const res = await getMenu()
-      console.log(res)
+      // console.log(res)
       if (res.status === 200) {
         setMenu(res.data.data)
-        console.log('res.data.data', res.data.data)
+        // console.log('res.data.data', res.data.data)
       }
       setLoading(false)
     } catch (e) {
@@ -174,6 +174,15 @@ const BaseLayout = (props) => {
                   fontSize: '0.9rem',
                 }}
               >
+                <svg
+            style={{ marginRight: 10 }}
+            width="1.1rem"
+            height="1.1rem"
+            fill="currentColor"
+            viewBox="0 0 1024 1024"
+          >
+            <path d={_menu.icon} />
+          </svg>
                 <Link to={e.url}>{e.name}</Link>
               </Menu.Item>
             </>

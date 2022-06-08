@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from './layout.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { ACTION, ROUTES, PERMISSIONS, ROUTES_ADMIN, LOGO_DEFAULT, PERMISSIONS_ADMIN } from 'consts'
+import { ACTION, ROUTES, PERMISSIONS, LOGO_DEFAULT } from 'consts'
 import { Link, useLocation, useRouteMatch, useHistory } from 'react-router-dom'
 import { Bell, Plus } from 'utils/icon'
 import jwt_decode from 'jwt-decode'
@@ -22,8 +22,7 @@ import {
   Popover,
   Col,
   Input,
-  Space
-
+  Space,
 } from 'antd'
 
 import {
@@ -31,12 +30,9 @@ import {
   GoldOutlined,
   DashboardOutlined,
   LogoutOutlined,
-
   UserOutlined,
   ExportOutlined,
-
   ShoppingCartOutlined,
-
 } from '@ant-design/icons'
 
 //components
@@ -46,10 +42,9 @@ import DropdownLanguage from 'components/dropdown-language'
 
 //apis
 import { getuserAdmin } from 'apis/admin'
-import { getMenu, deleteMenu } from 'apis/menu-admin'
+import { getMenu } from 'apis/menu-admin'
 
-
-const { Search } = Input;
+const { Search } = Input
 const { Sider } = Layout
 const BaseLayout = (props) => {
   const history = useHistory()
@@ -59,22 +54,23 @@ const BaseLayout = (props) => {
   const WIDTH_MENU_OPEN = 230
   const WIDTH_MENU_CLOSE = 60
 
-
-
+  const [branches, setBranches] = useState([])
   const [user, setUser] = useState({})
+  const [loading, setLoading] = useState(false)
   const [menu, setMenu] = useState([])
 
+  const login = useSelector((state) => state.login)
+  const branchIdApp = useSelector((state) => state.branch.branchId)
+  const triggerReloadBranch = useSelector((state) => state.branch.trigger)
+  const setting = useSelector((state) => state.setting)
 
-  const dataUser = localStorage.getItem('accessToken')
-    ? jwt_decode(localStorage.getItem('accessToken'))
-    : {}
-  const [loading, setLoading] = useState(false)
-  
+  // const dataUser = localStorage.getItem('accessToken')
+  //   ? jwt_decode(localStorage.getItem('accessToken'))
+  //   : {}
+
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
     : false
-
-
   const [collapsed, setCollapsed] = useState(isCollapsed)
   const [isMobile, setIsMobile] = useState(false)
 
@@ -97,7 +93,25 @@ const BaseLayout = (props) => {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
     }
   }
+  const dataUser = localStorage.getItem('accessToken')
+    ? jwt_decode(localStorage.getItem('accessToken'))
+    : {}
 
+  const getInfoUser = async (params) => {
+    try {
+      const res = await getuserAdmin(params)
+      if (res.status === 200) {
+        if (res.data.data.length) setUser({ ...res.data.data[0] })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  var toggle = () => {
+    localStorage.setItem('collapsed', JSON.stringify(!collapsed))
+    setCollapsed(!collapsed)
+  }
   const _getMenu = async () => {
     try {
       setLoading(true)
@@ -105,7 +119,7 @@ const BaseLayout = (props) => {
       console.log(res)
       if (res.status === 200) {
         setMenu(res.data.data)
-        console.log('meunu', res.data.data)
+        console.log('res.data.data', res.data.data)
       }
       setLoading(false)
     } catch (e) {
@@ -113,88 +127,11 @@ const BaseLayout = (props) => {
       console.log(e)
     }
   }
+
   useEffect(() => {
     _getMenu()
   }, [])
 
-  const _getInfoUser = async (params) => {
-    try {
-      const res = await getuserAdmin(params)
-      if (res.status === 200) {
-        if (res.data.data.length) setUser({ ...res.data.data[0] })
-        console.log('infoAdmin', res.data.data);
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    _getInfoUser({ user_id: dataUser.data.user_id })
-  }, [dataUser.data.user_id])
-
-  var toggle = () => {
-    localStorage.setItem('collapsed', JSON.stringify(!collapsed))
-    setCollapsed(!collapsed)
-  }
-
-  const onSearch = (value) => console.log(value)
-
-  const onSignOut = () => {
-    dispatch({ type: ACTION.LOGOUT })
-    dispatch({ type: 'UPDATE_INVOICE', data: [] })
-    // window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
-    history.push(ROUTES_ADMIN.LOGINADMIN)
-  }
-
-  useEffect(() => {
-    if (localStorage.getItem('openKey')) setOpenKeys([localStorage.getItem('openKey')])
-  }, [])
-
-
-  const content = (
-    <div className={styles['user_information']}>
-      <ModalUpdateUser user={user}
-        reload={getuserAdmin}
-      >
-        <div>
-          <div
-            style={{ color: '#565656', paddingLeft: 10 }}
-            onClick={getuserAdmin}
-          >
-            <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
-            Tài khoản của tôi
-          </div>
-        </div>
-      </ModalUpdateUser>
-
-      <div>
-        <a onClick={onSignOut} style={{ color: '#565656', paddingLeft: 10 }}>
-          <div>
-            <ExportOutlined style={{ fontSize: '1rem', marginRight: 10, color: '#565656' }} />
-            Đăng xuất
-          </div>
-        </a>
-      </div>
-    </div>
-  )
-  const NotifyContent = () => (
-    <div className={styles['notificationBox']}>
-      <div className={styles['title']}>Thông báo</div>
-      {/* <div className={styles['content']}>
-        <Empty />
-      </div> */}
-    </div>
-  )
-
-
-  //get width device
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      setIsMobile(true)
-      setCollapsed(true)
-    } else setIsMobile(false)
-  }, [])
   const renderMenuItem = (_menu) => (
     <>
       {_menu.menuCon ? (
@@ -237,6 +174,15 @@ const BaseLayout = (props) => {
                   fontSize: '0.9rem',
                 }}
               >
+                <svg
+            style={{ marginRight: 10 }}
+            width="1.1rem"
+            height="1.1rem"
+            fill="currentColor"
+            viewBox="0 0 1024 1024"
+          >
+            <path d={_menu.icon} />
+          </svg>
                 <Link to={e.url}>{e.name}</Link>
               </Menu.Item>
             </>
@@ -269,12 +215,69 @@ const BaseLayout = (props) => {
     </>
   )
 
+
+
+  const onSignOut = () => {
+    dispatch({ type: ACTION.LOGOUT })
+    dispatch({ type: 'UPDATE_INVOICE', data: [] })
+    // window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
+    history.push(ROUTES.LOGIN)
+     
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('openKey')) setOpenKeys([localStorage.getItem('openKey')])
+  }, [])
+
+  const content = (
+    <div className={styles['user_information']}>
+      <ModalUpdateUser user={user} reload={getInfoUser}>
+        <div>
+          <div
+            style={{ color: '#565656', paddingLeft: 10 }}
+            // onClick={getInfoUser}
+          >
+            <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
+            Tài khoản của tôi
+          </div>
+        </div>
+      </ModalUpdateUser>
+
+      <div>
+        <a onClick={onSignOut} style={{ color: '#565656', paddingLeft: 10 }}>
+          <div>
+            <ExportOutlined style={{ fontSize: '1rem', marginRight: 10, color: '#565656' }} />
+            Đăng xuất
+          </div>
+        </a>
+      </div>
+    </div>
+  )
+  const NotifyContent = () => (
+    <div className={styles['notificationBox']}>
+      <div className={styles['title']}>Thông báo</div>
+      {/* <div className={styles['content']}>
+        <Empty />
+      </div> */}
+    </div>
+  )
+
+
+  useEffect(() => {
+    getInfoUser({ user_id: dataUser.data.user_id })
+  }, [dataUser.data.user_id])
+
+  //get width device
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsMobile(true)
+      setCollapsed(true)
+    } else setIsMobile(false)
+  }, [])
+
   return (
-
     <Layout style={{ backgroundColor: 'white', height: '100%' }}>
-      {/* <Permission permissions={['PERMISSIONS_ADMIN.tong_quan_admin']}> */}
       <BackTop style={{ right: 10, bottom: 15 }} />
-
 
       <Sider
         trigger={null}
@@ -297,6 +300,12 @@ const BaseLayout = (props) => {
             paddingBottom: 20,
           }}
         >
+          {/* <img
+            // src={setting && setting.company_logo ? setting.company_logo : LOGO_DEFAULT}
+            style={{ objectFit: 'contain', maxHeight: 70, width: '100%' }}
+            src={user && (user.avatar || '')}
+            alt=""
+          /> */}
           <Avatar
             src={user && (user.avatar || '')}
             style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
@@ -312,56 +321,16 @@ const BaseLayout = (props) => {
           onClick={(e) => {
             if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
           }}
-          // onOpenChange={onOpenChange}
+          onOpenChange={onOpenChange}
           openKeys={openKeys}
           selectedKeys={routeMatch.path}
           mode="inline"
         >
           {menu.map(renderMenuItem)}
 
-          {/* <Menu.Item
-            key={ROUTES_ADMIN.OVERVIEWADMIN}
-            // onClick={onSignOut}
-            icon={<DashboardOutlined />}
-          >
-            <Link to={ROUTES_ADMIN.OVERVIEWADMIN}>Tổng quan Admin</Link>
+          <Menu.Item key={ROUTES.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
+            <Link >Đăng xuất</Link>
           </Menu.Item>
-          <Menu.Item
-            key={ROUTES_ADMIN.BUSINESSADMIN}
-            // onClick={onSignOut}
-            icon={<MenuOutlined />}
-          >
-            <Link to={ROUTES_ADMIN.BUSINESSADMIN}>Q/L cửa hàng</Link>
-          </Menu.Item>
-          <Menu.Item
-            key={ROUTES_ADMIN.MENU_USER}
-            // onClick={onSignOut}
-            icon={<DashboardOutlined />}
-          >
-            <Link to={ROUTES_ADMIN.MENU_USER}>Q/L menu chức năng user</Link>
-          </Menu.Item>
-          <Menu.Item
-            key={ROUTES_ADMIN.MENU_BUSINESS}
-            icon={<DashboardOutlined />}
-          >
-            <Link to={ROUTES_ADMIN.MENU_BUSINESS}>Q/L menu chức năng cửa hàng</Link>
-          </Menu.Item>
-          <Menu.Item
-            key={ROUTES_ADMIN.MENU_ADMIN}
-            icon={<DashboardOutlined />}
-          >
-            <Link to={ROUTES_ADMIN.MENU_ADMIN}>Q/L menu chức năng admin</Link>
-          </Menu.Item> */}
-          <Menu.Item
-            key={ROUTES.LOGOUT}
-            onClick={onSignOut}
-            icon={<LogoutOutlined />}
-          >
-            <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
-          </Menu.Item>
-
-
-
         </Menu>
       </Sider>
       <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
@@ -384,7 +353,57 @@ const BaseLayout = (props) => {
               }}
               justify={isMobile && 'space-between'}
             >
+              <MenuOutlined
+                onClick={toggle}
+                style={{ fontSize: 20, marginRight: 18, color: 'white' }}
+              />
+              <Permission permissions={[PERMISSIONS.them_cua_hang]}>
+                <Link
+                  to={{ pathname: ROUTES.BRANCH, state: 'show-modal-create-branch' }}
+                  style={{ marginRight: '1rem', cursor: 'pointer' }}
+                >
+                  <Button
+                    type="primary"
+                    size="large"
+                    style={{
+                      backgroundColor: '#FFAB2D',
+                      borderColor: '#FFAB2D',
+                      fontSize: 18,
+                      marginLeft: 10,
+                      display: login.role === 'EMPLOYEE' && 'none',
+                    }}
+                  >
+                    <Plus />
+                  </Button>
+                </Link>
+              </Permission>
+              {/* <Row align="middle">
+                <div style={{ color: 'white', marginRight: 8 }}>Chi nhánh:</div>
+                <Select
+                  // disabled={user && user.role_id === 1 ? false : true}
+                  placeholder="Chi nhánh"
+                  style={{ width: isMobile ? '90%' : 250 }}
+                  onChange={(value) => dispatch({ type: 'SET_BRANCH_ID', data: value })}
+                  value={branchIdApp}
+                >
+                  {branches.map((e, index) => (
+                    <Select.Option value={e.branch_id} key={index}>
+                      {e.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Row> */}
+              {/* <Search
+              // className={'ant-input-group-addon'}
+                placeholder="Tìm kiếm"
+                allowClear
+                enterButton="Search"
+                size="large"
+                style={{ width: 240 }}
+                onSearch={onSearch}
+              /> */}
 
+              {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />
@@ -394,7 +413,6 @@ const BaseLayout = (props) => {
                     <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
                   </Badge>
                 </Dropdown>
-
               </div>
               <Dropdown overlay={content} trigger="click">
                 <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
@@ -420,10 +438,8 @@ const BaseLayout = (props) => {
         </Affix>
         <div style={{ backgroundColor: '#f0f2f5', width: '100%' }}>{props.children}</div>
       </Layout>
-      {/* </Permission> */}
     </Layout>
   )
 }
-
 
 export default React.memo(BaseLayout)

@@ -6,10 +6,10 @@ import { useLocation } from 'react-router-dom'
 import { uploadFile } from 'apis/upload'
 
 //antd
-import { Row, Col, notification, Form, Input, Button, Upload, Steps, Result } from 'antd'
+import { Row, Col, notification, Form, Input, Button, Upload, Steps, Result, Modal } from 'antd'
 
 //icons antd
-import { UploadOutlined, LoadingOutlined } from '@ant-design/icons'
+import { UploadOutlined, LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { useStepsForm } from 'sunflower-antd'
 //apis
 
@@ -20,15 +20,14 @@ function Form_business() {
   const { Step } = Steps
   let location = useLocation()
   const [loading, setLoading] = useState(false)
-  const [loading1, setLoading1] = useState(false)
   const [loading2, setLoading2] = useState(false)
   const [loading3, setLoading3] = useState(false)
   const [avatar, setAvatar] = useState('')
-  const [image, setImage] = useState('')
   const [image1, setImage1] = useState('')
   const [image2, setImage2] = useState('')
   const [valuesdata, setValuesdata] = useState('')
-
+  const [business_registration_number, setBusiness_registration_number] = useState('')
+  const [tax_code, setTax_code] = useState('')
   const layout = {
     labelCol: { span: 50 },
     wrapperCol: { span: 50 },
@@ -62,17 +61,6 @@ function Form_business() {
       setLoading(false)
     } catch (error) {
       setLoading(false)
-    }
-  }
-  const _upload1 = async (file) => {
-    try {
-      setLoading1(true)
-      const url = await uploadFile(file)
-      console.log(url)
-      setImage(url || '')
-      setLoading1(false)
-    } catch (error) {
-      setLoading1(false)
     }
   }
 
@@ -153,6 +141,7 @@ function Form_business() {
     },
   })
   console.log(valuesdata)
+
   const _addBusiness = async () => {
     try {
       const body = {
@@ -161,11 +150,11 @@ function Form_business() {
         company_phone: valuesdata.company_phone,
         company_address: valuesdata.company_address,
         company_website: valuesdata.company_website,
-        company_district: '',
-        company_province: '',
+        // company_district: '',
+        // company_province: '',
         career_id: valuesdata.career_id,
-        business_registration_number: valuesdata.business_registration_number,
         business_registration_image: image1,
+        business_registration_number: valuesdata.business_registration_number,
         tax_code: valuesdata.tax_code,
         tax_code_image: image2,
       }
@@ -186,6 +175,17 @@ function Form_business() {
       console.log(error)
       dispatch({ type: ACTION.LOADING, data: false })
     }
+  }
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+  const showModal = () => {
+    setIsModalVisible(true)
+  }
+  const handleOk = () => {
+    _addBusiness();
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false)
   }
 
   const formList = [
@@ -375,12 +375,19 @@ function Form_business() {
             className={styles['containerItemUpload']}
             style={{ marginLeft: 'auto', marginRight: 'auto' }}
           >
-            <div className={styles['iTemupload']}>
-
-            </div>
+            <div className={styles['iTemupload']}></div>
             <div>
               <Col>
-                <Form.Item name="image1" {...item1}>
+                <Form.Item
+                  name="image1"
+                  {...item1}
+                  rules={[
+                    {
+                      required: true,
+                      message: '!!!!!',
+                    },
+                  ]}
+                >
                   <Col>
                     <Upload
                       name="image1"
@@ -450,13 +457,22 @@ function Form_business() {
               onClick={() => {
                 submit().then((result) => {
                   if (result === 'ok') {
-                    _addBusiness()
+                    showModal()
+                    // _addBusiness()
                   }
                 })
               }}
             >
               Tiếp tục
             </Button>
+            <Modal
+              title="Basic Modal"
+              visible={isModalVisible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <h1>Đăng ký cửa hàng !!!</h1>
+            </Modal>
           </Form.Item>
         </Form>
       </div>
