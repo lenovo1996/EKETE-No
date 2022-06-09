@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
 import { PERMISSIONS_ADMIN, ROUTES, ROUTES_ADMIN } from 'consts'
@@ -38,10 +38,9 @@ import NotFound from './user/not-found/404'
 import BusinessUser from './user/business_user'
 import Overview from './user/overview'
 import DetailBusiness from './user/business_user/detail_business'
+import { getMenu } from '../apis/menu-admin'
 
 //apis
-
-
 
 const DEFINE_ROUTER = [
   {
@@ -208,6 +207,25 @@ const AUTH_ROUTER = [
 ]
 
 export default function Views() {
+
+  const [menu, setMenu] = useState([])
+
+  const _getMenuAdmin = async () => {
+    try {
+      const res = await getMenu()
+      if (res.status === 200) {
+        setMenu(res.data.data)
+        console.log('res.data.data', res.data.data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    _getMenuAdmin()
+  }, [])
+
   return (
     <BrowserRouter>
       <Switch>
@@ -218,7 +236,7 @@ export default function Views() {
         {DEFINE_ROUTER_ADMIN.map(({ Component, ...rest }, index) => (
           <Route {...rest} key={index}>
             <AuthenticationAdmin {...rest}>
-              <BaseLayoutAdmin>
+              <BaseLayoutAdmin menu={menu}>
                 <Component />
               </BaseLayoutAdmin>
             </AuthenticationAdmin>
