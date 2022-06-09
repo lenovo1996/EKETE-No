@@ -432,6 +432,10 @@ module.exports._create = async (req, res, next) => {
             orderId: orderId,
             user_phone: customer.phone,
             user_name: customer.slug_name,
+            final_cost: req.body.final_cost,
+            create_date: moment().tz(TIMEZONE).format(),
+
+
 
         }
         // // req[`body`] = _oderEKT;

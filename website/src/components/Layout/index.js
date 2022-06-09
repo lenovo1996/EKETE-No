@@ -20,8 +20,6 @@ import {
   Row,
   Popover,
   Col,
-  Input,
-  Space,
 } from 'antd'
 
 import {
@@ -58,10 +56,6 @@ import DropdownLanguage from 'components/dropdown-language'
 import { updateEmployee, getEmployees } from 'apis/employee'
 import { getAllBranch } from 'apis/branch'
 
-import { getuserEKT } from 'apis/user-ekt'
-import { getMenu } from 'apis/menu-user'
-
-const { Search } = Input
 const { Sider } = Layout
 const BaseLayout = (props) => {
   const history = useHistory()
@@ -424,10 +418,7 @@ const BaseLayout = (props) => {
               '#e7e9fb',
             width: '100%',
             // height: collapsed ? 40 : '',
-            height: collapsed ? 40 : '',
             display: 'block',
-
-            // fontSize: '0.9rem',
           }}
           key={_menu.path}
           // onTitleClick={() => history.push(_menu.path)}
@@ -441,8 +432,6 @@ const BaseLayout = (props) => {
                   location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
                     ? '#5F73E2'
                     : 'rgba(0, 0, 0, 0.85)',
-                fontSize: '0.9rem',
-                color: 'black',
               }}
               to={_menu.path}
             >
@@ -450,15 +439,18 @@ const BaseLayout = (props) => {
             </Link>
           }
           icon={
-            <svg
-              marginRight={20}
-              width="1rem"
-              height="1rem"
-              fill="currentColor"
-              viewBox="0 0 1024 1024"
+            <Link
+              style={{
+                fontSize: '0.8rem',
+                color:
+                  location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
+                    ? '#5F73E2'
+                    : 'rgba(0, 0, 0, 0.85)',
+              }}
+              to={_menu.path}
             >
-              <path d={_menu.icon} />
-            </svg>
+              {_menu.icon}
+            </Link>
           }
         >
           {_menu.menuItems.map((e) => (
@@ -490,34 +482,24 @@ const BaseLayout = (props) => {
         <Menu.Item
           key={_menu.path}
           style={{
-            // fontSize: '0.9rem',
-            width: '100%',
-            height: collapsed ? 40 : '',
-            display: 'block',
+            fontSize: '0.8rem',
+            backgroundColor:
+              (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
+              '#e7e9fb',
           }}
-
-          // onClick={_menu.url === ROUTES.SELL && toggle}
+          icon={_menu.icon}
+          onClick={_menu.path === ROUTES.SELL && toggle}
         >
-          <svg
-            style={{ marginRight: 10 }}
-            width="1.1rem"
-            height="1.1rem"
-            fill="currentColor"
-            viewBox="0 0 1024 1024"
-          >
-            <path d={_menu.icon} />
-          </svg>
-          <Link to={_menu.url}>{_menu.name}</Link>
+          <Link to={_menu.path}>{_menu.title}</Link>
         </Menu.Item>
       )}
     </Permission>
-)
+  )
 
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
     dispatch({ type: 'UPDATE_INVOICE', data: [] })
     history.push(ROUTES.LOGIN)
-     
   }
 
   const content = (
@@ -550,10 +532,28 @@ const BaseLayout = (props) => {
     </div>
   )
 
+  const saveScrollTop = () => {
+    setTimeout(() => {
+      const scrollTopMenu = document.querySelector('#scrollTopMenu')
+      const scrollTop = localStorage.getItem('scrollTop')
+      if (scrollTopMenu && scrollTop) {
+        scrollTopMenu.scrollTop = scrollTop
+        localStorage.removeItem('scrollTop')
+      }
+    }, 100)
+  }
 
   useEffect(() => {
-    getInfoUser({ user_id: dataUser.data.user_id })
-  }, [dataUser.data.user_id])
+    if (localStorage.getItem('openKey')) setOpenKeys([localStorage.getItem('openKey')])
+  }, [])
+
+  useEffect(() => {
+    _getBranches()
+  }, [triggerReloadBranch])
+
+  // useEffect(() => {
+  //   getInfoUser({ user_id: dataUser.data.user_id })
+  // }, [dataUser.data.user_id])
 
   //get width device
   useEffect(() => {
@@ -561,6 +561,10 @@ const BaseLayout = (props) => {
       setIsMobile(true)
       setCollapsed(true)
     } else setIsMobile(false)
+  }, [])
+
+  useEffect(() => {
+    saveScrollTop()
   }, [])
 
   return (
@@ -614,9 +618,8 @@ const BaseLayout = (props) => {
           mode="inline"
         >
           {MENUS.map(renderMenuItem)}
-
           <Menu.Item key={ROUTES.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
-            <Link >Đăng xuất</Link>
+            <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -660,17 +663,6 @@ const BaseLayout = (props) => {
                   ))}
                 </Select>
               </Row>
-              {/* <Search
-              // className={'ant-input-group-addon'}
-                placeholder="Tìm kiếm"
-                allowClear
-                enterButton="Search"
-                size="large"
-                style={{ width: 240 }}
-                onSearch={onSearch}
-              /> */}
-
-              {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />
