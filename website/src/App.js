@@ -60,7 +60,7 @@ function App() {
     subDomain &&
     subDomain.length === 1
   )
-    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.NEWFEED}`
+    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.LOGIN}`
 
   // const checkSubdomain = async () => {
   //   let router = ''
@@ -108,7 +108,7 @@ function App() {
       const res = await refresh({ refreshToken: refreshToken })
       if (res.status === 404) {
         dispatch({ type: ACTION.LOGOUT })
-        history.push(ROUTES_ADMIN.LOGIN)
+        history.push(ROUTES_ADMIN.LOGINADMIN)
       } else {
         if (res.data.success) {
           dispatch({ type: ACTION.LOGIN, data: res.data })
@@ -126,7 +126,6 @@ function App() {
   // useEffect(() => {
   //   getBusiness()
   // }, [dataUser])
-  // useEffect(() => {})
 
   useEffect(() => {
     checkToken()
@@ -145,3 +144,7 @@ function App() {
 }
 
 export default App
+
+
+
+// docker run --name zimbra-ekata2 -it -p 25:25 -p 80:80 -p 465:465 -p 587:587 -p 110:110 -p 143:143 -p 993:993 -p 995:995 -p 443:443 -p 3443:3443 -p 9071:9071 -h mail.ekata.vn --net=zimbranet --dns 0.0.0.0 -v zimbra-ekata:/opt/zimbra -e PASSWORD=Zimbra2021 iwayvietnam/zimbra_all
