@@ -13,7 +13,7 @@ import jwt_decode from 'jwt-decode'
 // antd
 
 import { Button, Modal, Card, Avatar } from 'antd'
-// import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
 // api
 import { getBusinesses } from 'apis/business'
 import { getuserEKT } from 'apis/user-ekt'
@@ -21,10 +21,6 @@ import { getuserEKT } from 'apis/user-ekt'
 // html react parser
 
 export default function Business() {
-  const dispatch = useDispatch()
-  const history = useHistory()
-  const location = useLocation()
-
   const [business, setBusiness] = useState([])
   const { Meta } = Card
   // const [user, setUser] = useState([])
@@ -57,16 +53,6 @@ export default function Business() {
       console.log(localStorage.getItem('accessToken'))
     }, 500)
   }
-  useEffect(() => {
-    const query = new URLSearchParams(location.search)
-    // const username = query.get('username')
-    const token = query.get('token')
-    // if (username) formLogin.setFieldsValue({ username: username })
-    if (token) {
-      const tokenParser = JSON.parse(token)
-      _loginWithQuery(tokenParser)
-    } else return
-  }, [])
   useEffect(() => {
     _getBusinesses({ user_phone: dataUser.data.phone })
   }, [dataUser.data.phone])
@@ -105,7 +91,7 @@ export default function Business() {
         <ModalCustomer
         // width="100px"
         >
-          <Button type="primary">Đăng ký tạo cửa hàng</Button>
+          <Button type="primary">Đăng ký cửa hàng</Button>
         </ModalCustomer>
       </div>
 
@@ -138,6 +124,26 @@ export default function Business() {
               </a>
             )
           })}
+        {/* <Card className={styles['iTem']}
+    style={{ width: 300 }}
+    cover={
+      <img
+        alt="example"
+        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+      />
+    }
+    actions={[
+      <SettingOutlined key="setting" />,
+      <EditOutlined key="edit" />,
+      <EllipsisOutlined key="ellipsis" />,
+    ]}
+  >
+    <Meta
+      avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+      title="Card title"
+      description="This is the description"
+    />
+  </Card> */}
       </div>
     </div>
   )
