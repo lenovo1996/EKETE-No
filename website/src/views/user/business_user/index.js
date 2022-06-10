@@ -87,7 +87,7 @@ export default function Business() {
         {business &&
           business.map((Item, index) => {
             return (
-              <a href={`http://${Item.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`}>
+              <a href={`${process.env.SCHEMA}${Item.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`}>
                  
                  {/* <Link to={`/detail-business/${Item.business_id}`}> */}
               <Card

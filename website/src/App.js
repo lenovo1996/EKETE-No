@@ -53,14 +53,14 @@ function App() {
   // }
 
   if (
-    (domain === `http://${process.env.REACT_APP_HOST}/` ||
-      domain === `http://${process.env.REACT_APP_HOST}` ||
+    (domain === `${process.env.REACT_APP_HOST}${process.env.REACT_APP_HOST}/` ||
+      domain === `${process.env.REACT_APP_HOST}${process.env.REACT_APP_HOST}` ||
       domain === `${process.env.REACT_APP_HOST}/` ||
       domain === process.env.REACT_APP_HOST) &&
     subDomain &&
     subDomain.length === 1
   )
-    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.LOGIN}`
+    window.location.href = `${process.env.SCHEMA}${process.env.REACT_APP_HOST}${ROUTES_USER.LOGIN}`
 
   // const checkSubdomain = async () => {
   //   let router = ''

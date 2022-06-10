@@ -44,7 +44,7 @@ export default function OTP() {
           // //luu branch id len redux
           const dataUser = jwt_decode(res.data.data.accessToken)
 
-          window.location.href = `http://${dataUser.data._business.prefix}.${process.env.REACT_APP_HOST
+          window.location.href = `${process.env.SCHEMA}${dataUser.data._business.prefix}.${process.env.REACT_APP_HOST
           }${ROUTES.LOGIN}?token=${JSON.stringify(res.data.data)}`
         } else
           notification.warning({

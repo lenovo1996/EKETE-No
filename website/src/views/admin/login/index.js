@@ -151,7 +151,7 @@ export default function Login() {
                   </Link>
                   <a
                     onClick={() =>
-                      (window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_ADMIN.REGISTERADMIN}`)
+                      (window.location.href = `${process.env.SCHEMA}${process.env.REACT_APP_HOST}${ROUTES_ADMIN.REGISTERADMIN}`)
                     }
                     style={{ margin: '20px 0px', color: 'white' }}
                   >

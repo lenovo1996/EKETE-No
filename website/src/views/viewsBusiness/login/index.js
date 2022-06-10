@@ -88,7 +88,7 @@ export default function Login() {
       const domain = window.location.href
       let subDomain = domain.split(`.${process.env.REACT_APP_HOST}`)
       if (subDomain && subDomain.length === 1 && !localStorage.getItem('accessToken'))
-        window.location.href = `httpF://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
+        window.location.href = `${process.env.SCHEMA}${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
     } catch (error) {
       console.log(error)
     }
@@ -135,7 +135,7 @@ export default function Login() {
                   </Link>
                   <a
                     onClick={() =>
-                      (window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`)
+                      (window.location.href = `${process.env.SCHEMA}${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`)
                     }
                     style={{ margin: '20px 0px', color: 'white' }}
                   >
