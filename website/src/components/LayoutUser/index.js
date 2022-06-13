@@ -41,12 +41,13 @@ import DropdownLanguage from 'components/dropdown-language'
 
 //apis
 import { getuserEKT } from 'apis/user-ekt'
-import { getMenu } from 'apis/menu-user'
+
 
 
 const { Search } = Input;
 const { Sider } = Layout
 const BaseLayout = (props) => {
+  let menu = props.menu;
   const history = useHistory()
   const location = useLocation()
   const routeMatch = useRouteMatch()
@@ -58,7 +59,7 @@ const BaseLayout = (props) => {
   const [branches, setBranches] = useState([])
   const [user, setUser] = useState({})
   const [loading, setLoading] = useState(false)
-  const [menu, setMenu] = useState([])
+
 
   const login = useSelector((state) => state.login)
   const branchIdApp = useSelector((state) => state.branch.branchId)
@@ -97,26 +98,13 @@ const BaseLayout = (props) => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
-  const _getMenu = async () => {
-    try {
-      setLoading(true)
-      const res = await getMenu()
-      console.log(res)
-      if (res.status === 200) {
-        setMenu(res.data.data)
-        console.log('res.data.data', res.data.data)
-      }
-      setLoading(false)
-    } catch (e) {
-      setLoading(false)
-      console.log(e)
-    }
+
+
+  const linkto =(menu)=>{console.log(menu);
+    if(menu.status === 'public'){
+      return menu.url
+    }else return '/message1'
   }
-
-  useEffect(() => {
-    _getMenu()
-  }, [])
-
   const renderMenuItem = (_menu) => (
     <>
       {_menu.menuCon ? (
@@ -124,25 +112,31 @@ const BaseLayout = (props) => {
           style={{
             width: '100%',
             height: collapsed ? 40 : '',
-
             display: 'block',
+
+            // fontSize: '0.9rem',
           }}
           title={
             <Link
               style={{
                 fontSize: '0.9rem',
-                
+                color: 'black',
               }}
-              to={_menu.url}
+              // to={_menu.url}
+              to={linkto(_menu)}
             >
               {_menu.name}
             </Link>
           }
           icon={
-            <svg marginRight={20} width="1rem" height="1rem" fill="currentColor" viewBox="0 0 1024 1024">
-              
+            <svg
+              marginRight={20}
+              width="1rem"
+              height="1rem"
+              fill="currentColor"
+              viewBox="0 0 1024 1024"
+            >
               <path d={_menu.icon} />
-
             </svg>
           }
         >
@@ -154,7 +148,16 @@ const BaseLayout = (props) => {
                   fontSize: '0.9rem',
                 }}
               >
-                <Link  to={e.url}>{e.name}</Link>
+                <svg
+                  style={{ marginRight: 10 }}
+                  width="1.1rem"
+                  height="1.1rem"
+                  fill="currentColor"
+                  viewBox="0 0 1024 1024"
+                >
+                  <path d={_menu.icon} />
+                </svg>
+                <Link to={linkto(e)}>{e.name}</Link>
               </Menu.Item>
             </>
           ))}
@@ -163,24 +166,28 @@ const BaseLayout = (props) => {
         <Menu.Item
           key={_menu.url}
           style={{
-            fontSize: '0.9rem',
+            // fontSize: '0.9rem',
+            width: '100%',
+            height: collapsed ? 40 : '',
+            display: 'block',
           }}
-        
-        // onClick={_menu.url === ROUTES.SELL && toggle}
-        >
-          <svg style={{marginRight : 10}} width="1.1rem" height="1.1rem" fill="currentColor" viewBox="0 0 1024 1024" >
-              
-              <path d={_menu.icon}/>
 
-            </svg>
-          <Link  to={_menu.url}>{_menu.name}</Link>
+          // onClick={_menu.url === ROUTES.SELL && toggle}
+        >
+          <svg
+            style={{ marginRight: 10 }}
+            width="1.1rem"
+            height="1.1rem"
+            fill="currentColor"
+            viewBox="0 0 1024 1024"
+          >
+            <path d={_menu.icon} />
+          </svg>
+          <Link to={linkto(_menu)}>{_menu.name}</Link>
         </Menu.Item>
       )}
     </>
-
-
   )
-
 
   const onSearch = (value) => console.log(value)
 
@@ -306,32 +313,9 @@ const BaseLayout = (props) => {
           mode="inline"
         >
           {menu.map(renderMenuItem)}
-          <Menu.Item
-            key={ROUTES_USER.OVERVIEW}
-            // onClick={onSignOut}
-            icon={<DashboardOutlined />}
-          >
-            <Link to={ROUTES_USER.OVERVIEW}>Tổng quan</Link>
-          </Menu.Item>
-          <Menu.Item
-            key={ROUTES_USER.BUSINESS}
-            // onClick={onSignOut}
-            icon={<DashboardOutlined />}
-          >
-            <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
-          </Menu.Item>
-          {/* <Menu.Item key={ROUTES.CUSTOMER} 
-            // onClick={onSignOut} 
-            icon={<LogoutOutlined />}>
-            <Link to={ROUTES.CUSTOMER}>Cá nhân</Link>
-          </Menu.Item> 
-          <Menu.Item key={ROUTES.BRANCH_MANAGEMENT} 
-            // onClick={onSignOut} 
-            icon={<LogoutOutlined />}>
-            <Link to={ROUTES.BRANCH_MANAGEMENT}>Cửa hàng</Link>
-          </Menu.Item>  */}
+          
           <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
-            <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
+            <Link>Đăng xuất</Link>
           </Menu.Item>
         </Menu>
       </Sider>  

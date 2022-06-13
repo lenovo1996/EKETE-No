@@ -58,8 +58,6 @@ import DropdownLanguage from 'components/dropdown-language'
 import { updateEmployee, getEmployees } from 'apis/employee'
 import { getAllBranch } from 'apis/branch'
 
-import { getuserEKT } from 'apis/user-ekt'
-import { getMenu } from 'apis/menu-user'
 
 const { Search } = Input
 const { Sider } = Layout
@@ -136,21 +134,7 @@ const BaseLayout = (props) => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
-  const _getMenu = async () => {
-    try {
-      setLoading(true)
-      const res = await getMenu()
-      // console.log(res)
-      if (res.status === 200) {
-        setMenu(res.data.data)
-        // console.log('res.data.data', res.data.data)
-      }
-      setLoading(false)
-    } catch (e) {
-      setLoading(false)
-      console.log(e)
-    }
-  }
+
 
   const MENUS = [
     {
