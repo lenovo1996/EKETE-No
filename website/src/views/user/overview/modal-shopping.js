@@ -218,9 +218,4 @@ export default function ModalShopping({ detailshopping, children, reload, record
             </Modal>
         </>
     )
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> admin-user-ngoc-ha
