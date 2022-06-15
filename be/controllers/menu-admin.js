@@ -151,20 +151,19 @@ module.exports._delete = async (req, res, next) => {
 };
 module.exports._setstatus = async (req, res, next) => {
     try {
-        // await client
-        //     .db(SDB)
-        //     .collection(`MenuAdmin`)
-        //     .deleteMany({ menu_id: { $in: req.body.menu_id } });
         await client
             .db(SDB)
             .collection(`MenuAdmin`)
             .updateOne({menu_id: Number(req.body.menu_id)},{ $set: {status: req.body.status} });
-        //Resend
+                // await client
+                // .db(SDB)
+                // .collection(`MenuAdmin`)
+                // .updateOne({menu_id: Number(req.body.menu_id)},[{ $set: {url: {$concat: ['$url', '/', req.body.status]}} }]);
         res.send({
             success: true,
-            message: 'Xóa người dùng thành công!',
+            message: 'Cập nhật chức năng thành công!',
         });
-    } catch (err) {
+    } catch (err) {     
         next(err);
     }
 };

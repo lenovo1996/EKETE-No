@@ -58,8 +58,6 @@ import DropdownLanguage from 'components/dropdown-language'
 import { updateEmployee, getEmployees } from 'apis/employee'
 import { getAllBranch } from 'apis/branch'
 
-import { getuserEKT } from 'apis/user-ekt'
-import { getMenu } from 'apis/menu-user'
 
 const { Search } = Input
 const { Sider } = Layout
@@ -89,6 +87,8 @@ const BaseLayout = (props) => {
     : false
   const [collapsed, setCollapsed] = useState(isCollapsed)
   const [isMobile, setIsMobile] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [menu, setMenu] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
   const rootSubmenuKeys = [
@@ -134,6 +134,7 @@ const BaseLayout = (props) => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
+
 
   const MENUS = [
     {
@@ -455,6 +456,15 @@ const BaseLayout = (props) => {
                     '#e7e9fb',
                 }}
               >
+                <svg
+            style={{ marginRight: 10 }}
+            width="1.1rem"
+            height="1.1rem"
+            fill="currentColor"
+            viewBox="0 0 1024 1024"
+          >
+            <path d={_menu.icon} />
+          </svg>
                 <Link to={e.url}>{e.name}</Link>
               </Menu.Item>
             </Permission>

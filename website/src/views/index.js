@@ -1,13 +1,18 @@
 import React from 'react'
+import  { useState, useEffect } from 'react'
 
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
-import { PERMISSIONS_ADMIN, ROUTES, ROUTES_ADMIN } from 'consts'
+import { PERMISSIONS_ADMIN, ROUTES, ROUTES_ADMIN, ROUTES_USER } from 'consts'
 
 //base layout
 import BaseLayout from 'components/Layout'
 import BaseLayoutAdmin from 'components/LayoutAdmin'
+import BaseLayoutUser from 'components/LayoutUser'
 import Authentication from 'components/authentication'
 import AuthenticationAdmin from 'components/authenticationAdmin'
+
+import { getMenu } from 'apis/menu-admin'
+import { getMenuU } from 'apis/menu-user'
 
 //views
 
@@ -24,7 +29,7 @@ import Business from './admin/business'
 import MenuUser from './admin/menuEKT'
 import MenuBusiness from './admin/menuBusiness'
 import MenuAdmin from './admin/menuAdmin'
-
+import Message from './admin/message'
 
 //user
 import LoginBusiness from './user/login-business'
@@ -37,6 +42,9 @@ import VerifyAccount from './user/verify-account'
 import NotFound from './user/not-found/404'
 import BusinessUser from './user/business_user'
 import Overview from './user/overview'
+import DetailBusiness from './user/business_user/detail_business'
+import UpdateBusiness from './user/business_user/Update_business'
+import Message1 from './user/message1'
 
 //apis
 
@@ -57,7 +65,28 @@ const DEFINE_ROUTER = [
     permissions: [],
     exact: true,
   },
-
+  {
+    path: ROUTES_USER.DETAIL_BUSINESS,
+    Component: () => <DetailBusiness />,
+    title: 'Chi tiết cửa hàng',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.UPDATE_BUSINESS,
+    Component: () => <UpdateBusiness />,
+    title: 'Cập nhật cửa hàng',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.MESSIAGE1,
+    Component: () => <Message1 />,
+    title: 'thông báo ',
+    permissions: [],
+    exact: true,
+  },
+  
 ]
 
 const DEFINE_ROUTER_ADMIN = [
@@ -96,6 +125,14 @@ const DEFINE_ROUTER_ADMIN = [
     permissions: 'admin',
     exact: true,
   },
+  {
+    path: ROUTES_ADMIN.MESSAGE,
+    Component: () => <Message />,
+    title: 'Thông báo chức năng chưa hoàn thiện',
+    permissions: [],
+    exact: true,
+  },
+
 
 ]
 
@@ -200,6 +237,44 @@ const AUTH_ROUTER = [
 ]
 
 export default function Views() {
+  const [menu, setMenu] = useState([])
+  const [menuU, setMenuU] = useState([])
+
+  const _getMenuAdmin = async () => {
+    try {
+      const res = await getMenu()
+      if (res.status === 200) {
+        setMenu(res.data.data)
+        // console.log('res.data.data', res.data.data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const _getMenu = async () => {
+    try {
+
+      const res = await getMenuU()
+      console.log(res)
+      if (res.status === 200) {
+        setMenuU(res.data.data)
+        // console.log('res.data.data', res.data.data)
+      }
+  
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+
+  useEffect(() => {
+    _getMenuAdmin()
+  }, [])
+  useEffect(() => {
+    _getMenu()
+  }, [])
+
+
   return (
     <BrowserRouter>
       <Switch>
@@ -210,7 +285,7 @@ export default function Views() {
         {DEFINE_ROUTER_ADMIN.map(({ Component, ...rest }, index) => (
           <Route {...rest} key={index}>
             <AuthenticationAdmin {...rest}>
-              <BaseLayoutAdmin>
+              <BaseLayoutAdmin menu={menu}>
                 <Component />
               </BaseLayoutAdmin>
             </AuthenticationAdmin>
@@ -220,9 +295,9 @@ export default function Views() {
         {DEFINE_ROUTER.map(({ Component, ...rest }, index) => (
           <Route {...rest} key={index}>
             <Authentication {...rest}>
-              <BaseLayout>
+              <BaseLayoutUser menu={menuU}>
                 <Component />
-              </BaseLayout>
+              </BaseLayoutUser>
             </Authentication>
           </Route>
         ))}

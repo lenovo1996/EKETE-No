@@ -100,9 +100,8 @@ module.exports._update = async (req, res, next) => {
 }
 module.exports._getOne = async (req, res, next) => {
   let SDB = `${req.params.name}DB`;
-  let order_id = req.params.order_id;
-  // console.log(SDB);
-  // console.log(order_id);
+  
+  
   try {
     let aggregateQuery = [];
     // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)

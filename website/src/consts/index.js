@@ -106,6 +106,7 @@ export const ROUTES = {
   CONTACT: '/contact',
   IMPORT_INVENTORIES: '/import-inventories',
   IMPORT_INVENTORY: '/import-inventory',
+  
 
   //admin
   // OVERVIEWADMIN: '/overviewadmin',
@@ -129,7 +130,9 @@ export const ROUTES_USER = {
   FORGET_PASSWORD: '/forget-password',
   OVERVIEW: '/overview',
   BUSINESS: '/business',
-
+  DETAIL_BUSINESS: `/detail-business/:id`,
+  UPDATE_BUSINESS: `/update-business/:id`,
+  MESSIAGE1: '/message1'
 }
 
 export const ROUTES_ADMIN = {
@@ -144,7 +147,8 @@ export const ROUTES_ADMIN = {
   BUSINESSADMIN: '/businessadmin',
   MENU_USER: '/menu-user',
   MENU_BUSINESS: '/menu-business',
-  MENU_ADMIN: '/menu-admin'
+  MENU_ADMIN: '/menu-admin',
+  MESSAGE: '/message'
 }
 
 export const PERMISSIONS_ADMIN = {
