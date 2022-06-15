@@ -35,7 +35,7 @@ export default function OTP() {
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Xác thực otp thành công' })
-      if (localStorage.getItem('accessToken')) history.push(ROUTES_USER.OVERVIEW)
+      if (localStorage.getItem('accessToken')) history.push(ROUTES_USER.LOGIN)
 
           dispatch({ type: ACTION.LOGIN, data: res.data.data })
 

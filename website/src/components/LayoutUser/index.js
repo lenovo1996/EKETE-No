@@ -259,13 +259,16 @@ const BaseLayout = (props) => {
                     style={{
                         display: collapsed ? 'none' : 'flex',
                         paddingTop: 10,
-                        paddingBottom: 20,
+                        // paddingBottom: 20,
                     }}
                 >
-                    <Avatar
+                    {/* <Avatar
                         src={user && (user.avatar || '')}
                         style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
-                    />
+                    /> */}
+                    <div style={{ width: 80, height: 80, fontSize: 24, fontWeight: 600 }}>
+                        <h3>EKETE</h3>
+                    </div>
                 </Row>
                 <Menu
                     style={{
@@ -338,33 +341,6 @@ const BaseLayout = (props) => {
                                     </Button>
                                 </Link>
                             </Permission>
-                            {/* <Row align="middle">
-                <div style={{ color: 'white', marginRight: 8 }}>Chi nhánh:</div>
-                <Select
-                  // disabled={user && user.role_id === 1 ? false : true}
-                  placeholder="Chi nhánh"
-                  style={{ width: isMobile ? '90%' : 250 }}
-                  onChange={(value) => dispatch({ type: 'SET_BRANCH_ID', data: value })}
-                  value={branchIdApp}
-                >
-                  {branches.map((e, index) => (
-                    <Select.Option value={e.branch_id} key={index}>
-                      {e.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Row> */}
-                            {/* <Search
-              // className={'ant-input-group-addon'}
-                placeholder="Tìm kiếm"
-                allowClear
-                enterButton="Search"
-                size="large"
-                style={{ width: 240 }}
-                onSearch={onSearch}
-              /> */}
-
-                            {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
                         </Row>
                         <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
                             <DropdownLanguage />
