@@ -16,6 +16,10 @@ export default function ModalUpdateUser({ user, children, reload }) {
     const [avatar, setAvatar] = useState('')
     const [visible, setVisible] = useState(false)
     const toggle = () => setVisible(!visible)
+<<<<<<< HEAD
+=======
+    // console.log("usser nef", user);
+>>>>>>> admin-user-ngoc-ha
     const _updateUser = async () => {
         try {
             await form.validateFields()
@@ -94,6 +98,10 @@ export default function ModalUpdateUser({ user, children, reload }) {
                 <Form layout="vertical" form={form}>
                     <Row gutter={[16, 16]} align="middle">
                         <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+<<<<<<< HEAD
+=======
+                            {/* <h1></h1> */}
+>>>>>>> admin-user-ngoc-ha
                             <Upload
                                 name="avatar"
                                 listType="picture-card"

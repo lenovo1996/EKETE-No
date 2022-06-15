@@ -432,9 +432,14 @@ module.exports._create = async (req, res, next) => {
             orderId: orderId,
             user_phone: customer.phone,
             user_name: customer.slug_name,
+<<<<<<< HEAD
             create_day: moment().tz(TIMEZONE).format('YYYY-MM-DD'),
             final_cost: req.body.final_cost,
 
+=======
+            final_cost: req.body.final_cost,
+            create_date: moment().tz(TIMEZONE).format(),
+>>>>>>> admin-user-ngoc-ha
 
 
 

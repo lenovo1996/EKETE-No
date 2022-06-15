@@ -16,6 +16,7 @@ import { Form, Input, Button, notification, Row, Col } from 'antd'
 import background from 'assets/img/bg1.jpg'
 
 export default function OTP() {
+<<<<<<< HEAD
   const dispatch = useDispatch()
   let history = useHistory()
   let location = useLocation()
@@ -74,87 +75,146 @@ export default function OTP() {
     } catch (error) {
       console.log(error)
       dispatch({ type: ACTION.LOADING, data: false })
+=======
+    const dispatch = useDispatch()
+    let history = useHistory()
+    let location = useLocation()
+    const [form] = Form.useForm()
+
+    const phone = location.state && (location.state.phone || '')
+
+    const _verifyAccount = async () => {
+        try {
+            await form.validateFields()
+            dispatch({ type: ACTION.LOADING, data: true })
+            const dataForm = form.getFieldsValue()
+            var body = { phone: phone, otp_code: dataForm.otp }
+            const res = await verify(body)
+            dispatch({ type: ACTION.LOADING, data: false })
+            console.log(res)
+            if (res.status === 200) {
+                if (res.data.success) {
+                    notification.success({ message: 'Xác thực otp thành công' })
+                    dispatch({ type: ACTION.LOGIN, data: res.data.data })
+                    if (localStorage.getItem('accessToken')) history.push(ROUTES_USER.LOGIN)
+
+                   
+                    if (location.state.action && location.state.action === 'FORGOT_PASSWORD') {
+                        history.push({ pathname: ROUTES_USER.PASSWORD_NEW, state: { phone } })
+                        return
+                    }
+                    // notification.success({ message: 'Xác thực otp thành công' })
+                    // if (localStorage.getItem('accessToken')) history.push(ROUTES_USER.LOGIN)
+
+                    // dispatch({ type: ACTION.LOGIN, data: res.data.data })
+
+                    // if (location.state.action && location.state.action === 'FORGOT_PASSWORD') {
+                    //     history.push({ pathname: ROUTES_USER.PASSWORD_NEW, state: { phone } })
+                    //     return
+                    // }
+
+                    // dispatch({ type: ACTION.LOGIN, data: res.data.data })
+
+                    //luu branch id len redux
+                    // const dataUser = jwt_decode(res.data.data.accessToken)
+                    // localStorage.setItem('accessToken', res.data.data.accessToken)
+                    // dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
+
+                    // await delay(300)
+                    // const dataUser = jwt_decode(res.data.data.accessToken)
+
+                    // window.location.href = `http://${
+                    //   process.env.REACT_APP_HOST
+                    // }${ROUTES.LOGIN}`
+
+                    // window.location.href = `https://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`
+                } else
+                    notification.warning({
+                        message: res.data.message || `Xác thực OTP thất bại, vui lòng bấm vào 'Gửi lại OTP' để thử lại`,
+                    })
+            } else
+                notification.warning({
+                    message: res.data.message || `Xác thực OTP thất bại, vui lòng bấm vào 'Gửi lại OTP' để thử lại`,
+                })
+        } catch (error) {
+            console.log(error)
+            dispatch({ type: ACTION.LOADING, data: false })
+        }
+>>>>>>> admin-user-ngoc-ha
     }
-  }
 
-  const _resendOtp = async () => {
-    try {
-      dispatch({ type: ACTION.LOADING, data: true })
-      const res = await getOtp(phone)
-      if (res.status === 200) {
-        if (res.data.success)
-          notification.success({ message: 'Gửi lại otp thành công, vui lòng kiểm tra lại' })
-        else notification.error({ message: 'Gửi lại otp thất bại, vui lòng thử lại' })
-      } else notification.error({ message: 'Gửi lại otp thất bại, vui lòng thử lại' })
-      dispatch({ type: ACTION.LOADING, data: false })
-    } catch (error) {
-      console.log(error)
-      dispatch({ type: ACTION.LOADING, data: false })
+    const _resendOtp = async () => {
+        try {
+            dispatch({ type: ACTION.LOADING, data: true })
+            const res = await getOtp(phone)
+            if (res.status === 200) {
+                if (res.data.success) notification.success({ message: 'Gửi lại otp thành công, vui lòng kiểm tra lại' })
+                else notification.error({ message: 'Gửi lại otp thất bại, vui lòng thử lại' })
+            } else notification.error({ message: 'Gửi lại otp thất bại, vui lòng thử lại' })
+            dispatch({ type: ACTION.LOADING, data: false })
+        } catch (error) {
+            console.log(error)
+            dispatch({ type: ACTION.LOADING, data: false })
+        }
     }
-  }
 
-  useEffect(() => {
-    if (!location.state) history.push(ROUTES_USER.LOGIN)
-  }, [])
+    useEffect(() => {
+        if (!location.state) history.push(ROUTES_USER.LOGIN)
+    }, [])
 
-  return (
-    <Row align="middle" className={styles['otp-container']}>
-      <img
-        src={background}
-        style={{
-          width: '100%',
-          height: '100vh',
-        }}
-        alt=""
-      />
-      <Col xs={24} sm={24} md={24} lg={24} xl={24} className={styles['otp-content']}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
-            paddingLeft: '10%',
-            paddingRight: '10%',
-          }}
-        >
-          <div style={{ fontSize: '1.5rem', fontWeight: '700' }}>Xác minh mã OTP</div>
-          <div>
-            Mã OTP đã được gửi vào{' '}
-            {
-              <i>
-                <b>{phone}</b>
-              </i>
-            }{' '}
-            của bạn
-          </div>
-          <Form form={form} style={{ marginTop: 15, width: '80%' }}>
-            <Form.Item name="otp" rules={[{ required: true, message: 'Bạn chưa nhập mã OTP' }]}>
-              <Input
-                size="large"
-                onPressEnter={_verifyAccount}
-                className={styles['input']}
-                maxLength="6"
-                placeholder="Nhập mã xác thực OTP"
-              />
-            </Form.Item>
-            <Row wrap={false} align="end" style={{ color: 'white' }}>
-              <div>Bạn chưa nhận được mã?</div>
-              <p onClick={_resendOtp} className={styles['otp-content-resent']}>
-                Gửi lại OTP
-              </p>
-            </Row>
-          </Form>
-          <Button
-            size="large"
-            type="primary"
-            className={styles['otp-button']}
-            onClick={_verifyAccount}
-          >
-            Xác thực
-          </Button>
-        </div>
-      </Col>
-    </Row>
-  )
+    return (
+        <Row align="middle" className={styles['otp-container']}>
+            <img
+                src={background}
+                style={{
+                    width: '100%',
+                    height: '100vh',
+                }}
+                alt=""
+            />
+            <Col xs={24} sm={24} md={24} lg={24} xl={24} className={styles['otp-content']}>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        paddingLeft: '10%',
+                        paddingRight: '10%',
+                    }}
+                >
+                    <div style={{ fontSize: '1.5rem', fontWeight: '700' }}>Xác minh mã OTP</div>
+                    <div>
+                        Mã OTP đã được gửi vào{' '}
+                        {
+                            <i>
+                                <b>{phone}</b>
+                            </i>
+                        }{' '}
+                        của bạn
+                    </div>
+                    <Form form={form} style={{ marginTop: 15, width: '80%' }}>
+                        <Form.Item name="otp" rules={[{ required: true, message: 'Bạn chưa nhập mã OTP' }]}>
+                            <Input
+                                size="large"
+                                onPressEnter={_verifyAccount}
+                                className={styles['input']}
+                                maxLength="6"
+                                placeholder="Nhập mã xác thực OTP"
+                            />
+                        </Form.Item>
+                        <Row wrap={false} align="end" style={{ color: 'white' }}>
+                            <div>Bạn chưa nhận được mã?</div>
+                            <p onClick={_resendOtp} className={styles['otp-content-resent']}>
+                                Gửi lại OTP
+                            </p>
+                        </Row>
+                    </Form>
+                    <Button size="large" type="primary" className={styles['otp-button']} onClick={_verifyAccount}>
+                        Xác thực
+                    </Button>
+                </div>
+            </Col>
+        </Row>
+    )
 }

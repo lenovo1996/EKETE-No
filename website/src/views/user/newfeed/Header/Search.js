@@ -8,12 +8,8 @@ function Searchnewfeed() {
     return (
         <div className={styles['search']}>
             <input
-                // ref={inputRef}
-                // value={searchValue}
                 placeholder="Tìm kiếm sản phẩm và cửa hàng"
                 spellCheck={false}
-                // onChange={handleChange}
-                // onFocus={() => setShowResult(true)}
             />
 
             <button className={styles['search-btn']} onMouseDown={(e) => e.preventDefault()}>
