@@ -92,13 +92,12 @@ export default function Employee() {
     try {
       setLoading(true)
       const res = await getMenuU({ ...paramsFilter })
-      console.log(res)
       if (res.status === 200) {
         setMenu(res.data.data)
       }
-      if(menu.menuCon){
-        
-      }
+        // if(menu.menuCon){
+          
+        // }
       setLoading(false)
     } catch (e) {
       setLoading(false)
@@ -114,6 +113,7 @@ export default function Employee() {
       dispatch({ type: ACTION.LOADING, data: true })
       const res = await setstatus(menu_id, value)
       dispatch({ type: ACTION.LOADING, data: false })
+      dispatch({ type: 'UPDATE_MENU_USER', menu_id, status: value })
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Cập nhật chức năng thành công' })

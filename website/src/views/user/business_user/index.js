@@ -87,9 +87,10 @@ export default function Business() {
         {business &&
           business.map((Item, index) => {
             return (
-              <a href={`http://${Item.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`}>
+              // <a href={`http://${Item.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`}>
                  
-                 {/* <Link to={`/detail-business/${Item.business_id}`}> */}
+                  // <Link to={`/detail-business/${Item.business_id}`}> 
+                  <Link to={`/update-business/${Item.business_id}`}>
               <Card
                 className={styles['iTem']}
                 style={{ width: 300 }}
@@ -108,7 +109,8 @@ export default function Business() {
                   description="This is the description"
                 />
               </Card>
-               </a>
+              </Link>
+              //  </a>
             )
           })}
         {/* <Card className={styles['iTem']}

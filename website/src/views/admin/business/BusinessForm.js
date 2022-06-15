@@ -79,7 +79,8 @@ export default function MenuForm({
       }
       console.log(body)
 
-      let res = await updateBusiness(body, record.menu_id)
+      let res
+      if (record) res = await updateBusiness(body, record.business_id)
      
       if (res.status === 200) {
         if (res.data.success) {

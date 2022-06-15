@@ -256,7 +256,7 @@ module.exports._create = async (req, res, next) => {
             otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
             business_registration_number: req.body.business_registration_number || '',
             business_registration_image: req.body.business_registration_image || '',
-            profile_status: 1,
+            profile_status: 'Chưa xác thực',
             status: 1  ,
             is_delete: false,
             create_date: moment().tz(TIMEZONE).format(),
@@ -265,6 +265,9 @@ module.exports._create = async (req, res, next) => {
             updater_id: user_id,
             slug_name: removeUnicode(String(req.body.business_name), true).toLowerCase(),
             active: false,
+            business_desiption: '',
+            business_cover_image: '',
+            list_image: []
         };
         
         let _user = {
@@ -512,20 +515,10 @@ module.exports._update = async (req, res, next) => {
             status: _business.status  ,
             business_registration_number: _business.business_registration_number || '',
             business_registration_image: _business.business_registration_image || '',
-            profile_status: (()=> {
-                if(_business.active === false && _business.business_registration_image === "") {
-                    return '2'
-                }
-                if(_business.active === true && _business.business_registration_image === "") {
-                    return '3'
-                }
-                if(_business.active === true && _business.business_registration_image != "") {
-                    return '4'
-                }  
-                return 5
-
-            })(),
-
+            profile_status: _business.profile_status || '',
+            business_desiption: _business.business_desiption ||'',
+            business_cover_image: _business.business_cover_image ||'',
+            list_image: _business.list_image ||''
         };
         req['body'] = _business;
         await businessService._update(req, res, next);
@@ -680,6 +673,22 @@ module.exports._setstatus = async (req, res, next) => {
             .db(SDB)
             .collection(`Business`)
             .updateOne({business_id: Number(req.body.business_id)},{ $set: {status: req.body.status} });
+        //Resend
+        res.send({
+            success: true,
+            message: 'Cập nhật trạng thái cửa hàng thành công!',
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports._set_profile_status = async (req, res, next) => {
+    try {
+        await client
+            .db(SDB)
+            .collection(`Business`)
+            .updateOne({business_id: Number(req.body.business_id)},{ $set: {profile_status: req.body.profile_status} });
         //Resend
         res.send({
             success: true,

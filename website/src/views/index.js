@@ -1,6 +1,8 @@
 import React from 'react'
 import  { useState, useEffect } from 'react'
 
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
 import { PERMISSIONS_ADMIN, ROUTES, ROUTES_ADMIN, ROUTES_USER } from 'consts'
 
@@ -220,42 +222,37 @@ const AUTH_ROUTER = [
  
 ]
 
+
 export default function Views() {
-  const [menu, setMenu] = useState([])
-  const [menuU, setMenuU] = useState([])
+  const dispatch = useDispatch()
 
   const _getMenuAdmin = async () => {
     try {
       const res = await getMenu()
       if (res.status === 200) {
-        setMenu(res.data.data)
-        // console.log('res.data.data', res.data.data)
+        dispatch({ type: 'SET_MENU_ADMIN', menu_data: res.data.data })
       }
     } catch (e) {
       console.log(e)
     }
   }
-  const _getMenu = async () => {
-    try {
-
-      const res = await getMenuU()
-      console.log(res)
-      if (res.status === 200) {
-        setMenuU(res.data.data)
-        // console.log('res.data.data', res.data.data)
-      }
-  
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
 
   useEffect(() => {
     _getMenuAdmin()
   }, [])
-  useEffect(() => {
-    _getMenu()
+
+  const _getMenuUser = async ()=>{
+    try {
+      const res = await getMenuU()
+      if(res.status === 200){
+        dispatch({type:'SET_MENU_USER', menu_data: res.data.data})
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(()=>{
+    _getMenuUser()
   }, [])
 
 
@@ -269,7 +266,7 @@ export default function Views() {
         {DEFINE_ROUTER_ADMIN.map(({ Component, ...rest }, index) => (
           <Route {...rest} key={index}>
             <AuthenticationAdmin {...rest}>
-              <BaseLayoutAdmin menu={menu}>
+              <BaseLayoutAdmin>
                 <Component />
               </BaseLayoutAdmin>
             </AuthenticationAdmin>
@@ -279,7 +276,7 @@ export default function Views() {
         {DEFINE_ROUTER.map(({ Component, ...rest }, index) => (
           <Route {...rest} key={index}>
             <Authentication {...rest}>
-              <BaseLayoutUser menu={menuU}>
+              <BaseLayoutUser>
                 <Component />
               </BaseLayoutUser>
             </Authentication>
