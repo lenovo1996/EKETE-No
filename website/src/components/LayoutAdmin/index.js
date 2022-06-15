@@ -47,7 +47,8 @@ import { render } from '@testing-library/react'
 const { Search } = Input
 const { Sider } = Layout
 const BaseLayout = (props) => {
-  let menu = props.menu;
+  let menu = useSelector(state => state.menuAdmin)
+  // console.log('1', menu);
   const history = useHistory()
   const location = useLocation()
   const routeMatch = useRouteMatch()

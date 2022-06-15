@@ -118,7 +118,8 @@ export default function Employee() {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
       const res = await setstatus(menu_id, value)
-      dispatch({ type: ACTION.LOADING, data: false })
+      dispatch({ type: ACTION.LOADING, data: false }) 
+      dispatch({ type: 'UPDATE_MENU_ADMIN', menu_id, status: value })
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Cập nhật chức năng thành công' })
@@ -223,23 +224,18 @@ export default function Employee() {
               render: (text, record) => (
                 record.status,
                 (
-                  
                   <Select
                     defaultValue={record.status}
                     style={{ width: 120 }}
                     onChange={(e)=>{ _setstatus(e,record.menu_id)}}
-                    
-                  >
-                    
+                  > 
                     <Option value="new">new</Option>
                     <Option value="testing">testing</Option>
                     <Option value="ready to public">ready to public</Option>
                     <Option value="public">public</Option>
                     <Option value="waiting for review">waiting for review</Option>
                     <Option value="pending">pending</Option>
-                    
                   </Select>
-                
                 )
               ),
             }

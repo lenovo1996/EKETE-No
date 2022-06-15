@@ -1,0 +1,80 @@
+.header {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  // border-radius: 10px;
+  border: 0 solid transparent;
+  overflow: hidden;
+  background-color: hwb(0 100% 0%);
+  display: flex;
+  flex-direction: row;
+  height: 300px;
+  width: 100%;
+}
+
+.card {
+  position: relative;
+  width: 600px;
+  height: 250px;
+  border-radius: 10px;
+  margin: 10px;
+  background-image: url(http://cosp.com.vn/uploaded/Shop-thoi-trang-nam-PenViet-1.jpg);
+  
+}
+
+.card_opacity{
+  position: absolute;
+ 
+  background-color: gray;
+  width: 600px;
+  height: 250px;
+ 
+  opacity: 0.5;
+}
+
+.icon {
+  font-size: 30px;
+  margin-right: 20px;
+}
+
+.col {
+  float: left;
+  margin-left: 100px;
+  margin-top: 20px;
+}
+
+.row {
+  margin-top: 40px;
+}
+
+.menu {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  border: 0 solid transparent;
+  overflow: hidden;
+  background-color: hwb(0 100% 0%);
+  display: flex;
+  flex-direction: column;
+  height: 300;
+  display: inline-block;
+  width: 100%;
+  text-size-adjust: 100px;
+  align-items: center;
+
+}
+
+.container1 {
+  margin-top: 0px;
+  background-color: hwb(0 100% 0%);
+  width: 100%;
+
+}
+.container {
+  border: 0 solid transparent;
+  overflow: hidden;
+  background-color: hwb(0 100% 0%);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  // display: block;
+  width: 100%;
+  align-items: center;
+}
+

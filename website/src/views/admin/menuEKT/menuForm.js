@@ -100,7 +100,6 @@ export default function MenuForm({
     try {
       setLoading(true)
       const res = await getMenuU({ ...paramsFilter })
-      console.log(res)
       if (res.status === 200) {
         setMenu(res.data.data)
       }

@@ -47,7 +47,7 @@ import { getuserEKT } from 'apis/user-ekt'
 const { Search } = Input;
 const { Sider } = Layout
 const BaseLayout = (props) => {
-  let menu = props.menu;
+  let menu = useSelector(state => state.menuUser) 
   const history = useHistory()
   const location = useLocation()
   const routeMatch = useRouteMatch()
@@ -100,7 +100,7 @@ const BaseLayout = (props) => {
   }
 
 
-  const linkto =(menu)=>{console.log(menu);
+  const linkto =(menu)=>{;
     if(menu.status === 'public'){
       return menu.url
     }else return '/message1'
@@ -189,7 +189,6 @@ const BaseLayout = (props) => {
     </>
   )
 
-  const onSearch = (value) => console.log(value)
 
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })

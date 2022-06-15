@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 
-import moment from 'moment'
-import { compare } from 'utils'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { ACTION, ROUTES_ADMIN } from 'consts'
 import { useHistory } from 'react-router-dom'
@@ -17,14 +16,14 @@ import {
   Table,
   Button,
   notification,
-  DatePicker,  Space,
+  DatePicker, 
 
 } from 'antd'
 import { SearchOutlined, ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons'
 
 //apis
 
-import { getBusinesses , setstatus } from'apis/business'
+import { getBusinesses , setstatus, setprofilestatus } from'apis/business'
 
 //components
 import TitlePage from 'components/title-page'
@@ -34,42 +33,31 @@ import BusinessForm from './BusinessForm'
 
 const { Option } = Select
 export default function Employee() {
-  const typingTimeoutRef = useRef(null)
   const history = useHistory()
   const dispatch = useDispatch()
-  const branchIdApp = useSelector((state) => state.branch.branchId)
 
-  const [roles, setRoles] = useState([])
-  const [districts, setDistricts] = useState([])
-  const [branches, setBranches] = useState([])
-  const [provinces, setProvinces] = useState([])
+
   const [columns, setColumns] = useState([])
-  const [users, setUsers] = useState([])
   const [countUser, setCountUser] = useState([])
   const [loading, setLoading] = useState(false)
-  const [Address, setAddress] = useState({ province: [], district: [] })
   const [paramsFilter, setParamsFilter] = useState({ page: 1, page_size: 20 })
-  const [valueDateSearch, setValueDateSearch] = useState(null)
-  const [valueSearch, setValueSearch] = useState('')
-  const [valueTime, setValueTime] = useState() //dùng để hiện thị value trong filter by time
-  const [valueDateTimeSearch, setValueDateTimeSearch] = useState({})
   const [isOpenSelect, setIsOpenSelect] = useState(false)
   const toggleOpenSelect = () => setIsOpenSelect(!isOpenSelect)
 
-  const [user, setUser] = useState([])
+
   const [business, setBusiness] = useState('')
 
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
     : {}
-    console.log("business", dataUser);
+    // console.log("business", dataUser);
 
 
   const _getBusinesses = async () => {
     try {
       setLoading(true)
       const res = await getBusinesses({ ...paramsFilter })
-      console.log(res)
+      // console.log(res)
       if (res.status === 200) {
         setBusiness(res.data.data)
       }
@@ -80,26 +68,44 @@ export default function Employee() {
     }
   }
 
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
-
   const _setstatus = async (value, business_id) => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
       const res = await setstatus(business_id, value)
-      dispatch({ type: ACTION.LOADING, data: false })
+      dispatch({ type: ACTION.LOADING, data: false }) 
       if (res.status === 200) {
         if (res.data.success) {
-          notification.success({ message: 'Cập nhật trạng thái  thành công' })
+          notification.success({ message: 'Cập nhật cửa hàng thành công' })
           _getBusinesses()
         } else
           notification.error({
-            message: res.data.message || 'Cập nhật trạng thái thất bại, vui lòng thử lại',
+            message: res.data.message || 'Cập nhật cửa hàng thất bại, vui lòng thử lại',
           })
       } else
         notification.error({
-          message: res.data.message || 'Cập nhật trạng thái thất bại, vui lòng thử lại',
+          message: res.data.message || 'Cập nhật cửa hàng thất bại, vui lòng thử lại',
+        })
+    } catch (err) {
+      dispatch({ type: ACTION.LOADING, data: false })
+      console.log(err)
+    }
+  }
+  const _setprofilestatus = async (value, business_id) => {
+    try {
+      dispatch({ type: ACTION.LOADING, data: true })
+      const res = await setprofilestatus(business_id, value)
+      dispatch({ type: ACTION.LOADING, data: false })
+      if (res.status === 200) {
+        if (res.data.success) {
+          notification.success({ message: 'Cập nhật trạng thái hồ sơ thành công' })
+          _getBusinesses()
+        } else
+          notification.error({
+            message: res.data.message || 'Cập nhật trạng thái hồ sơ thất bại, vui lòng thử lại',
+          })
+      } else
+        notification.error({
+          message: res.data.message || 'Cập nhật trạng thái hồ sơ thất bại, vui lòng thử lại',
         })
     } catch (err) {
       dispatch({ type: ACTION.LOADING, data: false })
@@ -107,10 +113,16 @@ export default function Employee() {
     }
   }
 
+
   useEffect(() => {
     _getBusinesses()
   }, [])
 
+  const _setBackgroud=(de)=>{
+    if(de === 'Chưa xác thực') return 'green'
+    if(de === 'Đã xác thực số điện thoại') return '#99ffff'
+    if(de === 'Đã gửi hình ảnh xác thực đăng ký kinh doanh') return 'yellow'
+  }
   return (
     <div className="card">
     
@@ -167,18 +179,19 @@ export default function Employee() {
             return { ...column, render: (text, record) => 
               (
                 // record.profile_status, 
-              <Select defaultValue={record.profile_status} 
-               style={{ width: 240 }} 
-               onChange={handleChange}
-              //  onClick={getAddress}
+              <Select defaultValue={record.profile_status}
+              style={{ width: 240 }}
+              //  className={styles['select_profile']}
+              //  style={{background:(_setBackgroud(record.profile_status))}}
+               onChange={(e)=> _setprofilestatus(e,record.business_id)}
+             
                >
-              <Option value={record.profile_status=1}>Chưa xác thực</Option>
-              <Option value={record.profile_status=2}>Đã xác thực số điện thoại</Option>
-              <Option value={record.profile_status=3}> Đã gửi hình ảnh xác thực đăng ký kinh doanh </Option>
-              <Option value={record.profile_status=4}>Chờ xác thực</Option>
-              <Option value={record.profile_status=5}>Xác thực thành công</Option>
+              <Option value={'Chưa xác thực'}>Chưa xác thực</Option>
+              <Option value={'Đã xác thực số điện thoại'}>Đã xác thực số điện thoại</Option>
+              <Option value={'Đã gửi hình ảnh xác thực đăng ký kinh doanh'}>Đã gửi hình ảnh xác thực đăng ký kinh doanh</Option>
+              <Option value={'Chờ xác thực'}>Chờ xác thực</Option>
+              <Option value={'Xác thực thành công'}>Xác thực thành công</Option>  
             </Select>)
-
           }
     
         }
@@ -187,11 +200,11 @@ export default function Employee() {
             (
               // record.status, 
             <Select defaultValue={record.status}  style={{ width: 120 }} onChange={(e)=>{ _setstatus(e,record.business_id)}}>
-            <Option value={1}>Active</Option>
-            <Option value={2}>Warnning</Option>
-            <Option value={3}>Block</Option>
-            <Option value={4}>Band</Option>
-            <Option value={5}>Waiting for review  </Option>
+            <Option value={'Active'}>Active</Option>
+            <Option value={'Warnning'}>Warnning</Option>
+            <Option value={'Block'}>Block</Option>
+            <Option value={'Banned'}>Banned</Option>
+            <Option value={'Waiting for review'}>Waiting for review  </Option>
           </Select> )}
              if (column.key === 'action')
              return {
@@ -207,8 +220,6 @@ export default function Employee() {
                  </Popconfirm>
                ),
              }
-          
-
           return column
         })}
         dataSource={business}
