@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styles from './otp.module.scss'
 import { useDispatch } from 'react-redux'
-import { ACTION, ROUTES_USER, ROUTES_ADMIN } from 'consts/index'
+import { ACTION, ROUTES, ROUTES_ADMIN } from 'consts/index'
 import { useHistory, useLocation } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 import delay from 'delay'
@@ -35,13 +35,13 @@ export default function OTP() {
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Xác thực otp thành công' })
-      if (localStorage.getItem('accessToken')) history.push(ROUTES_USER.OVERVIEW)
+      if (localStorage.getItem('accessToken')) history.push(ROUTES.OVERVIEW)
 
           dispatch({ type: ACTION.LOGIN, data: res.data.data })
 
 
           if (location.state.action && location.state.action === 'FORGOT_PASSWORD') {
-            history.push({ pathname: ROUTES_USER.PASSWORD_NEW, state: { phone } })
+            history.push({ pathname: ROUTES.PASSWORD_NEW, state: { phone } })
             return
           }
 
@@ -94,7 +94,7 @@ export default function OTP() {
   }
 
   useEffect(() => {
-    if (!location.state) history.push(ROUTES_USER.LOGIN)
+    if (!location.state) history.push(ROUTES_ADMIN.LOGIN)
   }, [])
 
   return (
