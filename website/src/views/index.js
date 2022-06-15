@@ -43,8 +43,6 @@ import NotFound from './user/not-found/404'
 import BusinessUser from './user/business_user'
 import Overview from './user/overview'
 import DetailBusiness from './user/business_user/detail_business'
-import UpdateBusiness from './user/business_user/Update_business'
-import Message1 from './user/message1'
 
 //apis
 
@@ -72,21 +70,7 @@ const DEFINE_ROUTER = [
     permissions: [],
     exact: true,
   },
-  {
-    path: ROUTES_USER.UPDATE_BUSINESS,
-    Component: () => <UpdateBusiness />,
-    title: 'Cập nhật cửa hàng',
-    permissions: [],
-    exact: true,
-  },
-  {
-    path: ROUTES_USER.MESSIAGE1,
-    Component: () => <Message1 />,
-    title: 'thông báo ',
-    permissions: [],
-    exact: true,
-  },
-  
+
 ]
 
 const DEFINE_ROUTER_ADMIN = [
