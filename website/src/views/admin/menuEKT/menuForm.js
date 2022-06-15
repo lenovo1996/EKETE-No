@@ -17,7 +17,7 @@ import {
 } from 'antd'
 
 //apis
-import { getMenu,updateMenu, addMenu } from 'apis/menu-user'
+import { getMenuU,updateMenu, addMenu } from 'apis/menu-user'
 
 export default function MenuForm({
   children,
@@ -99,8 +99,7 @@ export default function MenuForm({
   const _getMenu = async () => {
     try {
       setLoading(true)
-      const res = await getMenu({ ...paramsFilter })
-      console.log(res)
+      const res = await getMenuU({ ...paramsFilter })
       if (res.status === 200) {
         setMenu(res.data.data)
       }
@@ -207,7 +206,7 @@ export default function MenuForm({
                   <Option value="new">new</Option>
                   <Option value="testing">testing</Option>
                   <Option value="ready to public" >ready to public</Option>
-                  <Option value="public ">public</Option>
+                  <Option value="public">public</Option>
                   <Option value="waiting for review">waiting for review</Option>
                   <Option value="pending">pending</Option>
                 </Select>

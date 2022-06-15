@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from './layout.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { ACTION, ROUTES, PERMISSIONS, ROUTES_ADMIN, LOGO_DEFAULT, PERMISSIONS_ADMIN } from 'consts'
+import { ACTION, ROUTES, ROUTES_ADMIN, PERMISSIONS, LOGO_DEFAULT } from 'consts'
 import { Link, useLocation, useRouteMatch, useHistory } from 'react-router-dom'
 import { Bell, Plus } from 'utils/icon'
 import jwt_decode from 'jwt-decode'
@@ -35,7 +35,8 @@ import DropdownLanguage from 'components/dropdown-language'
 
 //apis
 import { getuserAdmin } from 'apis/admin'
-import { getMenu, deleteMenu } from 'apis/menu-admin'
+import { getMenu } from 'apis/menu-admin'
+import { render } from '@testing-library/react'
 
 const { Search } = Input
 const { Sider } = Layout

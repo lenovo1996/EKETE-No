@@ -83,6 +83,8 @@ const BaseLayout = (props) => {
     : false
   const [collapsed, setCollapsed] = useState(isCollapsed)
   const [isMobile, setIsMobile] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [menu, setMenu] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
   const rootSubmenuKeys = [
@@ -128,6 +130,7 @@ const BaseLayout = (props) => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
+
 
   const MENUS = [
     {

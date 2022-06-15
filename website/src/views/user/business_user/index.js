@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-
+import { Link } from 'react-router-dom'
 // style
 import styles from './business_user.module.scss'
 import FormBusiness from './registerbusiness'
@@ -10,13 +10,14 @@ import { useDispatch } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 
+
 // antd
 
 import { Button, Modal, Card, Avatar } from 'antd'
 // import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
 // api
-import { getBusinesses } from 'apis/business'
-import { getuserEKT } from 'apis/user-ekt'
+import { getBusinesses,detailBusiness } from 'apis/business'
+
 
 // html react parser
 
@@ -28,6 +29,7 @@ export default function Business() {
   const [business, setBusiness] = useState([])
   const { Meta } = Card
   // const [user, setUser] = useState([])
+  const [detailBusiness1, setDetailBusiness] = useState([])
 
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
@@ -70,6 +72,8 @@ export default function Business() {
   useEffect(() => {
     _getBusinesses({ user_phone: dataUser.data.phone })
   }, [dataUser.data.phone])
+
+ 
 
   const ModalCustomer = ({ children, record }) => {
     const [visible, setVisible] = useState(false)

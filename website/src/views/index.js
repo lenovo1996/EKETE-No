@@ -1,15 +1,22 @@
 import React from 'react'
+import  { useState, useEffect } from 'react'
+
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
 import { PERMISSIONS_ADMIN, ROUTES_USER, ROUTES_ADMIN, ROUTES } from 'consts'
 
 //base layout
 import BaseLayout from 'components/LayoutUser'
+import BaseLayoutUser from 'components/LayoutUser'
 import BaseLayoutAdmin from 'components/LayoutAdmin'
 import BaseLayoutBusiness from 'components/Layout'
 import Authentication from 'components/authentication'
 import AuthenticationAdmin from 'components/authenticationAdmin'
 import AuthenticationBusiness from 'components/authenticationBusiness'
+
+import { getMenu } from 'apis/menu-admin'
+import { getMenuU } from 'apis/menu-user'
 
 //views
 //views
@@ -671,7 +678,40 @@ const AUTH_ROUTER = [
   },
 ]
 
+
 export default function Views() {
+  const dispatch = useDispatch()
+
+  const _getMenuAdmin = async () => {
+    try {
+      const res = await getMenu()
+      if (res.status === 200) {
+        dispatch({ type: 'SET_MENU_ADMIN', menu_data: res.data.data })
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    _getMenuAdmin()
+  }, [])
+
+  const _getMenuUser = async ()=>{
+    try {
+      const res = await getMenuU()
+      if(res.status === 200){
+        dispatch({type:'SET_MENU_USER', menu_data: res.data.data})
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(()=>{
+    _getMenuUser()
+  }, [])
+
+
   return (
     <BrowserRouter>
       <Switch>
@@ -692,9 +732,9 @@ export default function Views() {
         {DEFINE_ROUTER_USER.map(({ Component, ...rest }, index) => (
           <Route {...rest} key={index}>
             <Authentication {...rest}>
-              <BaseLayout>
+              <BaseLayoutUser>
                 <Component />
-              </BaseLayout>
+              </BaseLayoutUser>
             </Authentication>
           </Route>
         ))}

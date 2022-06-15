@@ -149,3 +149,18 @@ module.exports._delete = async (req, res, next) => {
         next(err);
     }
 };
+module.exports._setstatus = async (req, res, next) => {
+    try {
+        await client
+            .db(SDB)
+            .collection(`Menu`)
+            .updateOne({menu_id: Number(req.body.menu_id)},{ $set: {status: req.body.status} });
+        //Resend
+        res.send({
+            success: true,
+            message: 'Cập nhật chức năng thành công!',
+        });
+    } catch (err) {
+        next(err);
+    }
+};

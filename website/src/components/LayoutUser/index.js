@@ -31,10 +31,9 @@ import { MenuOutlined, DashboardOutlined, LogoutOutlined, UserOutlined, ExportOu
 import Permission from 'components/permission'
 import ModalUpdateUser from './modal-user'
 import DropdownLanguage from 'components/dropdown-language'
-
+import {getMenu} from 'apis/menu-user'
 //apis
 import { getuserEKT } from 'apis/user-ekt'
-import { getMenu } from 'apis/menu-user'
 
 const { Search } = Input
 const { Sider } = Layout

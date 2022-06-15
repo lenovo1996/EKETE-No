@@ -18,6 +18,7 @@ import {
   Space,
   notification,
   Tooltip,
+  Alert
 } from 'antd'
 import { SearchOutlined, ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons'
 
@@ -29,6 +30,7 @@ import TitlePage from 'components/title-page'
 import MenuForm from './menuForm'
 import SettingColumns from 'components/setting-columns'
 import columnsM from './columns'
+import { identity } from 'lodash'
 
 const { Option } = Select
 export default function Employee() {
@@ -105,16 +107,19 @@ export default function Employee() {
     _getMenu()
   }, [paramsFilter])
 
-  const [value, setValue] = useState();
-  const handleChange = (value) => {
-    setValue(value);
-    console.log(value);
-  };
-  const _setstatus = async (menu_id) => {
+  // const [value, setValue] = useState();
+
+  // const handleChange = (value) => {
+  //   setValue(value)
+  // };
+  //   console.log(value);
+
+  const _setstatus = async ( value,menu_id) => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
       const res = await setstatus(menu_id, value)
-      dispatch({ type: ACTION.LOADING, data: false })
+      dispatch({ type: ACTION.LOADING, data: false }) 
+      dispatch({ type: 'UPDATE_MENU_ADMIN', menu_id, status: value })
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Cập nhật chức năng thành công' })
@@ -132,7 +137,6 @@ export default function Employee() {
       console.log(err)
     }
   }
-
 
 
   return (
@@ -220,23 +224,18 @@ export default function Employee() {
               render: (text, record) => (
                 record.status,
                 (
-                  
                   <Select
                     defaultValue={record.status}
                     style={{ width: 120 }}
-                    onChange={handleChange}
-                  >
-                    
+                    onChange={(e)=>{ _setstatus(e,record.menu_id)}}
+                  > 
                     <Option value="new">new</Option>
-              
                     <Option value="testing">testing</Option>
                     <Option value="ready to public">ready to public</Option>
-                    <Option value="public ">public</Option>
+                    <Option value="public">public</Option>
                     <Option value="waiting for review">waiting for review</Option>
                     <Option value="pending">pending</Option>
-                    
                   </Select>
-                  
                 )
               ),
             }
