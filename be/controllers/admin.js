@@ -497,22 +497,5 @@ module.exports._refreshToken = async (req, res, next) => {
         next(err);
     }
 };
-module.exports._checkVerifyLink = async (req, res, next) => {
-    try {
-        ['UID'].map((e) => {
-            if (!req.body[e]) {
-                throw new Error(`400: Thiếu thuộc tính ${e}!`);
-            }
-        });
-        let link = await client.db(SDB).collection(`VerifyLinks`).findOne({
-            UID: req.body.UID,
-        });
-        if (!link) {
-            throw new Error('400: UID không tồn tại!');
-        }
-        res.send({ success: true, data: link });
-    } catch (err) {
-        next(err);
-    }
-};
+
 

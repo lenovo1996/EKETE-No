@@ -23,7 +23,7 @@ import {
 import { SearchOutlined, ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons'
 
 //apis
-import { getMenu, deleteMenu, setstatus } from 'apis/menu-user'
+import { getMenuU, deleteMenu, setstatus } from 'apis/menu-user'
 
 //components
 import TitlePage from 'components/title-page'
@@ -91,7 +91,7 @@ export default function Employee() {
   const _getMenu = async () => {
     try {
       setLoading(true)
-      const res = await getMenu({ ...paramsFilter })
+      const res = await getMenuU({ ...paramsFilter })
       console.log(res)
       if (res.status === 200) {
         setMenu(res.data.data)
@@ -226,7 +226,7 @@ export default function Employee() {
                     <Option value="new">new</Option>
                     <Option value="testing">testing</Option>
                     <Option value="ready to public">ready to public</Option>
-                    <Option value="public ">public</Option>
+                    <Option value="public">public</Option>
                     <Option value="waiting for review">waiting for review</Option>
                     <Option value="pending">pending</Option>
                   </Select>

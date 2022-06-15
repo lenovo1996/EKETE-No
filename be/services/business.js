@@ -178,7 +178,7 @@ module.exports._getOne = async (req, res, next) => {
 module.exports._getProductList = async (req, res, next) => {
     try {
         let business = await client.db(SDB).collection('Business').findOne({business_id: Number(req.params.business_id)})
-        let database = business.slug_name + 'DB';
+        let database = business.database_name;
         
         let {countQuery, aggregateQuery} = buildProductAggregateQuery(req);
         // lấy data từ database
@@ -234,8 +234,7 @@ module.exports._create = async (req, res, next) => {
 
 module.exports._update = async (req, res, next) => {
     try {
-        await client.db(SDB).collection(`Business`).updateOne(req.params, 
-            { $set: req.body });
+        await client.db(SDB).collection(`Business`).updateOne(req.params, { $set: req.body });
         // try {
         //     let _action = {
         //         business_id: req.user.business_id,

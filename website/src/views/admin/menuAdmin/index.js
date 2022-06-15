@@ -234,7 +234,7 @@ export default function Employee() {
                     <Option value="new">new</Option>
                     <Option value="testing">testing</Option>
                     <Option value="ready to public">ready to public</Option>
-                    <Option value="public ">public</Option>
+                    <Option value="public">public</Option>
                     <Option value="waiting for review">waiting for review</Option>
                     <Option value="pending">pending</Option>
                     
