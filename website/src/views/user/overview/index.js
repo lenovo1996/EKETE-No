@@ -330,7 +330,7 @@ function App() {
                             position: 'fixed',
                             backgroundColor: '#fff',
                         }}
-                        // className={styles['card-overview']}
+                        className={styles['card-overview']}
                     >
                         <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
                             <div>TOP CỬA HÀNG </div>

@@ -14,7 +14,7 @@ export default function Infor() {
         <div className={styles['font-bold']}>Thông tin cá nhân </div>
         <div className={styles['container-icon-setting']}>
                 
-                <Link to={ROUTES_USER.SETTINGINFOR}> <SettingOutlined /></Link>
+                <Link to={ROUTES_USER.SETTINGINFOR} className={styles['icon-setting']}> <SettingOutlined /></Link>
               </div>
       </div>
       <div>
