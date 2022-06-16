@@ -113,6 +113,8 @@ import NotFoundUser from './user/not-found/404'
 import BusinessUser from './user/business_user'
 import OverviewUser from './user/overview'
 import NewfeedComponent from './user/newfeed'
+import Infor from '../components/LayoutUser/infor'
+import SettingInfor from '../components/LayoutUser/setting-infor'
 
 //apis
 
@@ -546,6 +548,20 @@ const DEFINE_ROUTER_USER = [
     path: ROUTES_USER.BUSINESS,
     Component: () => <BusinessUser />,
     title: 'Danh sách cửa hàng của bạn',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.INFOR,
+    Component: () => <Infor />,
+    title: 'Thông tin cá nhân',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.SETTINGINFOR,
+    Component: () => <SettingInfor />,
+    title: 'Thiết lập thông tin cá nhân',
     permissions: [],
     exact: true,
   },

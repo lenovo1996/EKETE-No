@@ -318,7 +318,7 @@ function App() {
                             </div>
                         </div>
                     </Col>
-                    {/* <div
+                    <div
                         style={{
                             // marginLeft: 80,
                             top: 80,
@@ -356,89 +356,13 @@ function App() {
                                         <a> + Theo dõi</a>
                                     </div>
                                 </List.Item>
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={
-                                            <Avatar
-                                                style={{
-                                                    color: '#FFF',
-                                                    backgroundColor: '#FDAA3E',
-                                                    width: 60,
-                                                    height: 60,
-                                                }}
-                                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                            />
-                                        }
-                                        title={<a href="https://ant.design">@hadudu</a>}
-                                        description="Chất lượng tạo nên thương hiệu EKETE"
-                                    />
-                                    <div>
-                                        <a> + Theo dõi</a>
-                                    </div>
-                                </List.Item>
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={
-                                            <Avatar
-                                                style={{
-                                                    color: '#FFF',
-                                                    backgroundColor: '#FDAA3E',
-                                                    width: 60,
-                                                    height: 60,
-                                                }}
-                                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                            />
-                                        }
-                                        title={<a href="https://ant.design">@hadudu</a>}
-                                        description="Chất lượng tạo nên thương hiệu EKETE"
-                                    />
-                                    <div>
-                                        <a> + Theo dõi</a>
-                                    </div>
-                                </List.Item>
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={
-                                            <Avatar
-                                                style={{
-                                                    color: '#FFF',
-                                                    backgroundColor: '#FDAA3E',
-                                                    width: 60,
-                                                    height: 60,
-                                                }}
-                                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                            />
-                                        }
-                                        title={<a href="https://ant.design">@hadudu</a>}
-                                        description="Chất lượng tạo nên thương hiệu EKETE"
-                                    />
-                                    <div>
-                                        <a> + Theo dõi</a>
-                                    </div>
-                                </List.Item>
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={
-                                            <Avatar
-                                                style={{
-                                                    color: '#FFF',
-                                                    backgroundColor: '#FDAA3E',
-                                                    width: 60,
-                                                    height: 60,
-                                                }}
-                                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                            />
-                                        }
-                                        title={<a href="https://ant.design">@hadudu</a>}
-                                        description="Chất lượng tạo nên thương hiệu EKETE"
-                                    />
-                                    <div>
-                                        <a> + Theo dõi</a>
-                                    </div>
-                                </List.Item>
+                                
+                               
+                                
+                               
                             </List>
                         </div>
-                    </div> */}
+                    </div>
                 </Row>
             </div>
         </div>

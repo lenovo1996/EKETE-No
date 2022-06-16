@@ -26,7 +26,7 @@ export default function Login() {
       // const regexPassword =
       //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/
 
-      // if (!regexPassword.test(dataForm.password)) {
+      // if (test(dataForm.password)) {
       //   notification.error({
       //     message:
       //       'Mật khẩu không được chứa dấu và tối thiểu 8 ký tự, ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt',
@@ -78,7 +78,7 @@ export default function Login() {
                 <div className={styles['registration-content--logo']}>
                   <img style={{ maxWidth: 120, maxHeight: 120 }} src={logoRegister} alt="logo" />
                 </div>
-                <h2>Hello mấy anh chai admin, đăng ký nào!!</h2>
+                <h2>Đăng ký tài khoản admin,</h2>
                 <h2>để bắt đầu làm việc</h2>
               </div>
             }
@@ -128,7 +128,16 @@ export default function Login() {
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <Form.Item
                         name="password"
-                        rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+                        rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' },
+                        {
+                          pattern: new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/),
+                          message: 'Vui lòng nhập mật khẩu đúng định dạng',
+                          
+                        }
+                      ]
+                        
+                      }
+                        
                       >
                         <Input.Password
                           allowClear

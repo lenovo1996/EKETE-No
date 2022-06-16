@@ -181,17 +181,16 @@ const BaseLayout = (props) => {
 
     const content = (
         <div className={styles['user_information']}>
-            <ModalUpdateUser user={user} reload={getInfoUser}>
+            {/* <ModalUpdateUser user={user} reload={getInfoUser}> */}
                 <div>
                     <div
                         style={{ color: '#565656', paddingLeft: 10 }}
-                        // onClick={getInfoUser}
                     >
                         <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
-                        Tài khoản của tôi
+                        <Link to={ROUTES_USER.INFOR}> Tài khoản của tôi</Link>
                     </div>
                 </div>
-            </ModalUpdateUser>
+            {/* </ModalUpdateUser> */}
 
             <div>
                 <a onClick={onSignOut} style={{ color: '#565656', paddingLeft: 10 }}>
