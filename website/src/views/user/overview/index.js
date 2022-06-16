@@ -2,7 +2,7 @@
 
 // import { PAGE_SIZE } from 'consts'
 import React, { useState, useEffect } from 'react'
-import styles from './overview.module.scss'
+import styles from './styles/overview.module.scss'
 import { Avatar, Button, Table, Tabs, List } from 'antd'
 import { Row, Col, Timeline, Modal, Card } from 'antd'
 import jwt_decode from 'jwt-decode'
@@ -85,7 +85,7 @@ function App() {
         <div className={styles['container-layout']}>
             <div className={styles['container-content']}>
                 <Row>
-                    <Col xs={24} sm={24} md={24} lg={14} xl={14}>
+                    {/* <Col xs={24} sm={24} md={24} lg={14} xl={14}> */}
                         <div
                             style={{
                                 marginLeft: 0,
@@ -317,7 +317,7 @@ function App() {
                                     })}
                             </div>
                         </div>
-                    </Col>
+                    {/* </Col> */}
                     <div
                         style={{
                             // marginLeft: 80,
@@ -328,8 +328,9 @@ function App() {
                             // height: 500,
                             marginBottom: 15,
                             position: 'fixed',
+                            backgroundColor: '#fff',
                         }}
-                        className={styles['card-overview']}
+                        // className={styles['card-overview']}
                     >
                         <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
                             <div>TOP CỬA HÀNG </div>
