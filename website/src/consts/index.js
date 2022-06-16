@@ -39,6 +39,8 @@ export const SHIP_STATUS_ORDER = {
 
 export const ROUTES_USER = {
   CHECK_SUBDOMAIN: '/business-login',
+  INFOR: '/infor',
+  SETTINGINFOR: '/setting-infor',
   LOGIN: '/login',
   REGISTER: '/register',
   OTP: '/otp',
