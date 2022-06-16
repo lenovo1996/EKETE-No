@@ -128,16 +128,15 @@ export default function Login() {
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <Form.Item
                         name="password"
-                        rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' },
-                        {
-                          pattern: new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/),
-                          message: 'Vui lòng nhập mật khẩu đúng định dạng',
-                          
-                        }
-                      ]
-                        
-                      }
-                        
+                        rules={[
+                          { required: true, message: 'Vui lòng nhập mật khẩu' },
+                          {
+                            pattern: new RegExp(
+                              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/
+                            ),
+                            message: 'Vui lòng nhập mật khẩu đúng định dạng',
+                          },
+                        ]}
                       >
                         <Input.Password
                           allowClear
