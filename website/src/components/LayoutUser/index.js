@@ -236,7 +236,7 @@ const BaseLayout = (props) => {
     }, [])
 
     return (
-        <Layout style={{ backgroundColor: 'white', height: '100%' }}>
+        <Layout style={{ backgroundColor: '#F9F9F9', height: '100%' }}>
             <BackTop style={{ right: 10, bottom: 15 }} />
 
             <Sider
@@ -291,13 +291,13 @@ const BaseLayout = (props) => {
                     >
                         <Link to={ROUTES_USER.OVERVIEW}>Tổng quan</Link>
                     </Menu.Item>
-                    <Menu.Item
+                    {/* <Menu.Item
                         key={ROUTES_USER.BUSINESS}
                         // onClick={onSignOut}
                         icon={<DashboardOutlined />}
                     >
                         <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
-                    </Menu.Item>
+                    </Menu.Item> */}
                     <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
                         <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
                     </Menu.Item>
@@ -371,7 +371,7 @@ const BaseLayout = (props) => {
                         </Row>
                     </Row>
                 </Affix>
-                <div style={{ backgroundColor: '#f0f2f5', width: '100%' }}>{props.children}</div>
+                <div style={{ backgroundColor: '#F9F9F9', width: '100%' }}>{props.children}</div>
             </Layout>
         </Layout>
     )

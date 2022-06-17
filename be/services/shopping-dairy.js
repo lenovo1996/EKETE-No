@@ -1,7 +1,7 @@
 const moment = require(`moment-timezone`);
 const TIMEZONE = process.env.TIMEZONE;
 const client = require(`../config/mongodb`);
-const DB = process.env.DATABASE;
+const SDB = process.env.DATABASE;
 
 let removeUnicode = (text, removeSpace) => {
     /*
@@ -39,33 +39,20 @@ module.exports._get = async (req, res, next) => {
             let page_size = Number(req.query.page_size) || 50;
             aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
         }
-        /**
-         * creatBy: tailuong
-         *
-         */
         // lấy data từ database
         let [orders, counts] = await Promise.all([
-            client.db(DB).collection(`Shopping`).aggregate(aggregateQuery).toArray(),
+            client.db(SDB).collection(`Shopping`).aggregate(aggregateQuery).toArray(),
             client
-                .db(DB)
+                .db(SDB)
                 .collection(`Shopping`)
                 .aggregate([...countQuery, { $count: 'counts' }])
                 .toArray(),
-        ]); 
-
-
-
+        ]);
         res.send({
             success: true,
             count: counts[0] ? counts[0].counts : 0,
             data: orders,
         });
-        // let orders = await client.db(SDB).collection(`Orders`).aggregate(aggregateQuery).toArray();
-
-        // res.send({
-        //     success: true,
-        //     data: orders,
-        // });
     } catch (err) {
         next(err);
     }
@@ -80,22 +67,53 @@ module.exports._update = async (req, res, next) => {
     }
 };
 module.exports._getOne = async (req, res, next) => {
-    let SDB = `${req.params.name}DB`;
-    let order_id = req.params.order_id;
     try {
         let aggregateQuery = [];
         // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
-        if (req.params.order_id) {
-            aggregateQuery.push({ $match: { order_id: Number(req.params.order_id) } });
-        }
-        // lấy data từ database
-        let orders = await client.db(SDB).collection(`Orders`).aggregate(aggregateQuery).toArray();
 
+        if (req.query.business_id) {
+            aggregateQuery.push({ $match: { business_id: Number(req.query.business_id) } });
+        }
+        let countQuery = [...aggregateQuery];
+        aggregateQuery.push({ $sort: { create_date: -1 } });
+        if (req.query.page && req.query.page_size) {
+            let page = Number(req.query.page) || 1;
+            let page_size = Number(req.query.page_size) || 50;
+            aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
+        }
+        let [business, counts] = await Promise.all([
+            client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray(),
+            client
+                .db(SDB)
+                .collection(`Business`)
+                .aggregate([...countQuery, { $count: 'counts' }])
+                .toArray(),
+        ]);
         res.send({
             success: true,
-            data: orders,
+            count: counts[0] ? counts[0].counts : 0,
+            data: business,
         });
-    } catch (err) {
-        next(err);
+    } catch (error) {
+        next(error)
     }
+
+    // let SDB = `${req.params.name}DB`;
+    // let order_id = req.params.order_id;
+    // try {
+    //     let aggregateQuery = [];
+    //     // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
+    //     if (req.params.order_id) {
+    //         aggregateQuery.push({ $match: { order_id: Number(req.params.order_id) } });
+    //     }
+    //     // lấy data từ database
+    //     let orders = await client.db(SDB).collection(`Orders`).aggregate(aggregateQuery).toArray();
+
+    //     res.send({
+    //         success: true,
+    //         data: orders,
+    //     });
+    // } catch (err) {
+    //     next(err);
+    // }
 };
