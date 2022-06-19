@@ -302,4 +302,6 @@ ul#scrollTopMenu {
   width: 13px;
 }
 
-
+.ant-menu-item::after {
+    border: none!important;
+}
