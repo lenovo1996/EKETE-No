@@ -426,13 +426,13 @@ module.exports._create = async (req, res, next) => {
 
         // Tạo thêm bảng mua của userEKT
         let _oderEKT = {
-            business_id: req.user._business.business_name,
-            business_prefix: req.user._business.prefix,
-            branch_id: _order.sale_location.branch_id,
+            business_id: req.user._business.business_id,
+            // business_prefix: req.user._business.prefix,
+            // branch_id: _order.sale_location.branch_id,
             orderId: orderId,
-            user_phone: customer.phone,
-            create_day: moment().tz(TIMEZONE).format('YYYY-MM-DD'),
-            final_cost: req.body.final_cost,
+            // user_phone: customer.phone,
+            // create_day: moment().tz(TIMEZONE).format('YYYY-MM-DD'),
+            // final_cost: req.body.final_cost,
 
 
 

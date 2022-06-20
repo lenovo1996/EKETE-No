@@ -565,6 +565,14 @@ const DEFINE_ROUTER_USER = [
     permissions: [],
     exact: true,
   },
+  // {
+  //   path: ROUTES_USER.NEWFEED,
+  //   Component: () => <NewfeedComponent />,
+  //   title: 'Sản phẩm hot trong tháng',
+  //   permissions: [],
+  //   exact: true,
+  // },
+
 ]
 
 const DEFINE_ROUTER_ADMIN = [
@@ -648,6 +656,7 @@ const AUTH_ROUTER = [
     permissions: [],
     exact: true,
   },
+ 
 
   //admin
   {
