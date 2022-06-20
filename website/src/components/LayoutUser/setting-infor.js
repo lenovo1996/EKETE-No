@@ -60,7 +60,7 @@ export default function SettingInfor() {
         >
           <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
             <Tabs centered>
-              <Tabs.TabPane tab="Thiết lập thông tin" key="1">
+              <Tabs.TabPane tab="Thiết lập thông tin" key="1" >
                 <div style={{ width: '100%', overflowY: 'scroll' }}>
                   <div className={styles['container']}>
                     <List.Item>

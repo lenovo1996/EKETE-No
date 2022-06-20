@@ -13,14 +13,20 @@ import { compare, formatCash, compareCustom } from 'utils'
 import moment from 'moment'
 
 import Newfeed from '../newfeed'
-import { HeartOutlined, WechatOutlined, ShareAltOutlined } from '@ant-design/icons'
+import {
+  HeartOutlined,
+  WechatOutlined,
+  ShareAltOutlined,
+  DiffOutlined,
+  HistoryOutlined,
+} from '@ant-design/icons'
 
 // import ModalUpdateUser from './modal-user'
 import { getuserEKT } from 'apis/user-ekt'
 import { getshopping, getshoppingone } from 'apis/shopping-dairy'
 import { ROUTES_USER } from 'consts'
 import autoMergeLevel1 from 'redux-persist/es/stateReconciler/autoMergeLevel1'
-import { forEach } from 'lodash'
+import { forEach, values } from 'lodash'
 // import data from 'views/import-report-file/datatest'
 const { Meta } = Card
 
@@ -53,17 +59,23 @@ function App() {
 
       if (resShoppingDari.status === 200) setorderEKT(resShoppingDari.data.data)
       //    console.log("danh sách", resShoppingDari.data.data);
-
-      // console.log("danh sach", orderekt);
+      // console.log("danh sach", resShoppingDari);
     } catch (e) {
       console.log(e)
     }
   }
-  // console.log("danh sach", orderekt);
+  console.log('danh sach', orderekt)
 
   const getone = async (business_prefix, orderId) => {
     try {
-      // console.log(detailshopping);
+      // orderekt.forEach(async(index)=>{
+      //   const res =  getshoppingone(index.business_id,index.orderId)
+
+      //   if (res.status === 200) {
+      //     setDetaishopping(res.data.data)
+      //   }
+      //   console.log('aaaa', res);
+      // })
       const res = await getshoppingone(business_prefix, orderId)
 
       if (res.status === 200) {
@@ -87,28 +99,26 @@ function App() {
     <div className={styles['container-layout']}>
       <div className={styles['container-content']}>
         <Row>
-          {/* <Col xs={24} sm={24} md={24} lg={14} xl={14}> */}
-          <div
-            style={{
-              marginLeft: 0,
-              marginTop: 0,
-              width: 750,
-              height: '100%',
-              marginBottom: 15,
-            }}
-            className={styles['card-overview']}
-          >
+          <div className={styles['card-overview']}>
             <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
-              <Tabs centered>
-                <Tabs.TabPane tab="Feed" key="1">
-                  <div style={{ width: '100%', overflowY: 'scroll' }}>
+              <Tabs defaultActiveKey="2">
+                <Tabs.TabPane
+                  key="1"
+                  tab={
+                    <span>
+                      <DiffOutlined />
+                      Feed
+                    </span>
+                  }
+                >
+                  <div style={{ width: '100%', paddingTop: 10 }}>
                     <div className={styles['container']}>
                       <Row>
                         <Col>
                           <Meta
                             className={styles['content']}
-                            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                            title="@hadudu"
+                            avatar={<Avatar size={50} src="https://joeschmoe.io/api/v1/random" />}
+                            title={<p className={styles['text-name']}>@hadudu</p>}
                             title1="kandksja"
                             description="12:00 ngày 26/4/2022"
                           />
@@ -118,13 +128,13 @@ function App() {
                         </Col>
                       </Row>
                       <div className={styles['container-item']}>
-                        <Row>
+                        <div >
                           <img
                             className={styles['image']}
                             alt="example"
                             src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
                           />
-                        </Row>
+                        </div>
                         <div className={styles['container-content']}>
                           <Row style={{ display: 'inline-block', width: '70%' }}>
                             <h1> 100.000 - 200.000 VND</h1>
@@ -168,8 +178,252 @@ function App() {
                     </div>
                   </div>
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Shopping history" key="2">
-                  <div style={{ width: '100%', overflowY: 'scroll', paddingTop: 10 }}>
+                <Tabs.TabPane
+                  key="2"
+                  tab={
+                    <span>
+                      <HistoryOutlined />
+                      Shopping history
+                    </span>
+                  }
+                >
+                  <div style={{ width: '100%',  paddingTop: 10 }}>
+                    <div className={styles['container']}>
+                      <Row>
+                        <Col>
+                          <Meta
+                            className={styles['content']}
+                            avatar={<Avatar size={50} src="https://joeschmoe.io/api/v1/random" />}
+                            title="@hadudu"
+                            title1="kandksja"
+                            description="12:00 ngày 26/4/2022"
+                          />
+                        </Col>
+
+                        <Col className={styles['button']}>
+                          <Button>Theo dõi</Button>
+                        </Col>
+                      </Row>
+                      <div>
+                        <h3>Đơn hàng: #123456</h3>
+                        <h3>Mã vận chuyển: #12314-UKIOU</h3>
+                      </div>
+                      <div>
+                        <List>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                        </List>
+                      </div>
+                      <div className={styles['dashboard_manager_bottom_row_col_parent_top']}></div>
+                    </div>
                     <div className={styles['container']}>
                       <Row>
                         <Col>
@@ -276,20 +530,155 @@ function App() {
                               </AssessOders>
                             </div>
                           </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
+                          <div className={styles['container-product']}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                              }
+                              title="#Q-N123"
+                              description="Quaanf xer goois"
+                            />
+                            <div className={styles['container-center']}>
+                              <h3>220.000 vnd</h3>
+                            </div>
+                            <div className={styles['button']}>
+                              <AssessOders key="index">
+                                <Button>Đánh giá</Button>
+                              </AssessOders>
+                            </div>
+                          </div>
                         </List>
                       </div>
-
                       <div className={styles['dashboard_manager_bottom_row_col_parent_top']}></div>
                     </div>
                   </div>
+                  
                 </Tabs.TabPane>
               </Tabs>
 
-              {orderekt &&
+              {/* {
+                orderekt.forEach((values, index)=>{
+                  //  getone(values.business_id, values.orderId)
+
+                })
+                
+                
+              } */}
+
+              {/* {orderekt &&
                 orderekt.map((Item, index) => {
                   console.log(Item.orderId)
                   //  getone(Item.business_prefix, Item.orderId)
-                  console.log('chi tiet', detailshopping)
+                  // console.log('chi tiet', detailshopping)
                   // console.log(getshoppingone(Item.business_prefix, Item.orderId));
                   // if(res.status === 200) setDetaishopping(res.data.data)
                   {
@@ -302,23 +691,22 @@ function App() {
                   // console.log(Item.orderId);
                   // getone(Item.business_prefix, Item.orderId)
                   // console.log("chitiet", detailshopping);
-                })}
+                })} */}
             </div>
           </div>
-          {/* </Col> */}
           <div
-            style={{
-              // marginLeft: 80,
-              top: 80,
-              right: 0,
-              marginTop: 0,
-              width: 400,
-              // height: 500,
-              marginBottom: 15,
-              position: 'fixed',
-              backgroundColor: '#fff',
-            }}
-            className={styles['card-overview']}
+            // style={{
+            //   // marginLeft: 80,
+            //   top: 80,
+            //   right: 0,
+            //   marginTop: 0,
+            //   width: 400,
+            //   // height: 500,
+            //   marginBottom: 15,
+            //   position: 'fixed',
+            //   backgroundColor: '#fff',
+            // }}
+            className={styles['container-top10']}
           >
             <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
               <div>TOP CỬA HÀNG </div>

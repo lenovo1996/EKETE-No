@@ -27,6 +27,7 @@ let removeUnicode = (text, removeSpace) => {
 
 module.exports._get = async (req, res, next) => {
     try {
+
         let aggregateQuery = [];
         // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
         if (req.query.phone) {
@@ -40,6 +41,7 @@ module.exports._get = async (req, res, next) => {
             aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
         }
         // lấy data từ database
+        // let orderss = await client.db(SDB).collection(`Shopping`).aggregate(aggregateQuery).toArray();
         let [orders, counts] = await Promise.all([
             client.db(SDB).collection(`Shopping`).aggregate(aggregateQuery).toArray(),
             client
@@ -48,6 +50,33 @@ module.exports._get = async (req, res, next) => {
                 .aggregate([...countQuery, { $count: 'counts' }])
                 .toArray(),
         ]);
+        // console.log("orders", orders);
+        // orders.find().forEach( function(myDoc) { print( "user: " + myDoc.business_id ); } );
+        // orders.find()
+        // orders.forEach( async function(element)  {
+            // let order_id = element.orderId;
+            // let aggregateQueryBusiness = [];
+            // console.log("id", element.business_id);
+            //     if (Number(element.business_id )) {
+                    
+            //         aggregateQueryBusiness.push({ $match: { business_id: Number(element.business_id )} });
+            //     }
+            //     // console.log("id", aggregateQueryBusiness);
+            // let business = client.db(SDB).collection('Business').aggregate(aggregateQueryBusiness).toArray()
+            
+           
+        // });
+        let business =  client 
+                .db(SDB)
+                .collection('Business')
+                // .findOne({ business_id: Number(orders.business_id) });
+                // (console.log(element.business_id))
+                .find({
+                    business_id: { $ne: Number(orders.business_id) },
+                });
+            // console.log('business', element.business_id);
+            console.log('businerss', business);
+       
         res.send({
             success: true,
             count: counts[0] ? counts[0].counts : 0,
@@ -67,53 +96,58 @@ module.exports._update = async (req, res, next) => {
     }
 };
 module.exports._getOne = async (req, res, next) => {
+
+    let business = await client
+        .db(SDB)
+        .collection('Business')
+        .findOne({ business_id: Number(req.params.business_id) });
+    let order_id = req.params.order_id;
     try {
         let aggregateQuery = [];
-        // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
-
-        if (req.query.business_id) {
-            aggregateQuery.push({ $match: { business_id: Number(req.query.business_id) } });
+        //     // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
+        if (req.params.order_id) {
+            aggregateQuery.push({ $match: { order_id: Number(req.params.order_id) } });
         }
-        let countQuery = [...aggregateQuery];
-        aggregateQuery.push({ $sort: { create_date: -1 } });
-        if (req.query.page && req.query.page_size) {
-            let page = Number(req.query.page) || 1;
-            let page_size = Number(req.query.page_size) || 50;
-            aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
-        }
-        let [business, counts] = await Promise.all([
-            client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray(),
-            client
-                .db(SDB)
-                .collection(`Business`)
-                .aggregate([...countQuery, { $count: 'counts' }])
-                .toArray(),
-        ]);
+        let [order] = await client.db(business.database_name).collection(`Orders`).aggregate(aggregateQuery).toArray();
+        console.log('order', order);
         res.send({
             success: true,
-            count: counts[0] ? counts[0].counts : 0,
-            data: business,
+            data: order,
         });
-    } catch (error) {
-        next(error)
+    } catch (err) {
+        next(err);
     }
-
-    // let SDB = `${req.params.name}DB`;
-    // let order_id = req.params.order_id;
     // try {
     //     let aggregateQuery = [];
     //     // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
-    //     if (req.params.order_id) {
-    //         aggregateQuery.push({ $match: { order_id: Number(req.params.order_id) } });
+
+    //     if (req.query.business_id) {
+    //         aggregateQuery.push({ $match: { business_id: Number(req.query.business_id) } });
     //     }
-    //     // lấy data từ database
-    //     let orders = await client.db(SDB).collection(`Orders`).aggregate(aggregateQuery).toArray();
+    //     let countQuery = [...aggregateQuery];
+    //     aggregateQuery.push({ $sort: { create_date: -1 } });
+    //     if (req.query.page && req.query.page_size) {
+    //         let page = Number(req.query.page) || 1;
+    //         let page_size = Number(req.query.page_size) || 50;
+    //         aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
+    //     }
+    //     let [business, counts] = await Promise.all([
+    //         client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray(),
+    //         client
+    //             .db(SDB)
+    //             .collection(`Business`)
+    //             .aggregate([...countQuery, { $count: 'counts' }])
+    //             .toArray(),
+    //     ]);
 
     //     res.send({
     //         success: true,
-    //         data: orders,
+    //         count: counts[0] ? counts[0].counts : 0,
+    //         data: business,
     //     });
-    // } catch (err) {
-    //     next(err);
+    // } catch (error) {
+    //     next(error)
     // }
+
+
 };
