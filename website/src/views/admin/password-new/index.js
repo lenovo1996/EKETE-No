@@ -94,7 +94,14 @@ export default function PasswordNew() {
             <Form.Item
               label={<div style={{ color: 'white' }}>Nhập mật khẩu mới</div>}
               name="password"
-              rules={[{ required: true, message: 'Vui lòng nhập mật khẩu mới' }]}
+              rules={[{ required: true, message: 'Vui lòng nhập mật khẩu mới' },
+              {
+                pattern: new RegExp(
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/
+                ),
+                message: 'Vui lòng nhập mật khẩu đúng định dạng',
+              },
+            ]}
             >
               <Input.Password
                 className={styles['input']}

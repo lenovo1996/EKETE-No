@@ -1,4 +1,4 @@
-    const moment = require(`moment-timezone`);
+const moment = require(`moment-timezone`);
 const TIMEZONE = process.env.TIMEZONE;
 const DB = process.env.DATABASE;
 const client = require(`../config/mongodb`);

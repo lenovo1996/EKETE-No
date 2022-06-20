@@ -1,0 +1,119 @@
+.display-flex {
+  display: flex;
+}
+
+.container-layout-setting {
+  width: 80%;
+  width: 1000px;
+  // padding: 20px;
+
+  margin-left: auto;
+  margin-right: auto;
+  height: 947px;
+  // position: absolute;
+  // background: #FFFFFF;
+  border-radius: 7px;
+}
+.dashboard_manager_bottom_row_col_parent_top {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgb(197, 184, 184);
+}
+.font-bold {
+  margin-bottom: 43px;
+  margin-top: 62px;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+}
+.card-overview {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  border-radius: 10px;
+  border: 0 solid transparent;
+  overflow: hidden;
+  background-color: white;
+  margin: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+.container-accuracy {
+  // background-color: #ccc;
+  // margin-top: 30px;
+  width: 1000px;
+  // height: 650px;
+  margin-left: 55px;
+  // margin-right: auto;
+  margin-bottom: 30px;
+}
+.container {
+  // background-color: #ccc;
+  // margin-top: 30px;
+  width: 650px;
+  // height: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 30px;
+  margin-top: 72px;
+}
+.width-input {
+  width: 321px;
+  // display: inline-block,;
+  //  margin-bottom: 0;
+}
+.note {
+  margin-left: 16%;
+}
+.button-push {
+  margin: 0px 8px;
+  width: 120px;
+}
+.container-guide {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.container-item {
+  width: 448px;
+  padding: 4px;
+}
+.title-item {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+  margin-bottom: 7px;
+}
+.content-item {
+  // font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  margin-bottom: 0.3em !important;
+}
+.width-input-xt {
+  width: 400px;
+}
+.width-input-xt >span {
+  background: #ccc;
+}
+.meta-name{
+  font-weight: 600;
+font-size: 18px;
+line-height: 22px;
+margin-bottom: 8px !important;
+// margin-top: 80px;
+}
+//antd
+.margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+.content {
+  width: 321px;
+
+  margin-left: 18%;
+  margin-top: -16px;
+}

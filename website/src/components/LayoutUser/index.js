@@ -22,6 +22,7 @@ import {
   Popover,
   Col,
   Input,
+  Space,
 } from 'antd'
 
 import {
@@ -37,7 +38,7 @@ import {
 import Permission from 'components/permission'
 import ModalUpdateUser from './modal-user'
 import DropdownLanguage from 'components/dropdown-language'
-
+import { getMenu } from 'apis/menu-user'
 //apis
 import { getuserEKT } from 'apis/user-ekt'
 
@@ -54,10 +55,10 @@ const BaseLayout = (props) => {
   const WIDTH_MENU_OPEN = 230
   const WIDTH_MENU_CLOSE = 60
 
-  const [business, setBusiness] = useState([])
-
+  const [branches, setBranches] = useState([])
   const [user, setUser] = useState({})
-
+  const [loading, setLoading] = useState(false)
+  const [menu, setMenu] = useState([])
 
   const login = useSelector((state) => state.login)
 
@@ -76,6 +77,7 @@ const BaseLayout = (props) => {
   const getInfoUser = async (params) => {
     try {
       const res = await getuserEKT(params)
+      console.log(res)
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
       }
@@ -101,6 +103,21 @@ const BaseLayout = (props) => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
+  const _getMenu = async () => {
+    try {
+      setLoading(true)
+      const res = await getMenu()
+      console.log(res)
+      if (res.status === 200) {
+        setMenu(res.data.data)
+        console.log('res.data.data', res.data.data)
+      }
+      setLoading(false)
+    } catch (e) {
+      setLoading(false)
+      console.log(e)
+    }
+  }
 
   const linkto = (menu) => {
     if (menu.status === 'public') {
@@ -114,18 +131,15 @@ const BaseLayout = (props) => {
           style={{
             width: '100%',
             height: collapsed ? 40 : '',
-            display: 'block',
 
-            // fontSize: '0.9rem',
+            display: 'block',
           }}
           title={
             <Link
               style={{
                 fontSize: '0.9rem',
-                color: 'black',
               }}
-              // to={_menu.url}
-              to={linkto(_menu)}
+              to={_menu.url}
             >
               {_menu.name}
             </Link>
@@ -150,16 +164,7 @@ const BaseLayout = (props) => {
                   fontSize: '0.9rem',
                 }}
               >
-                <svg
-                  style={{ marginRight: 10 }}
-                  width="1.1rem"
-                  height="1.1rem"
-                  fill="currentColor"
-                  viewBox="0 0 1024 1024"
-                >
-                  <path d={_menu.icon} />
-                </svg>
-                <Link to={linkto(e)}>{e.name}</Link>
+                <Link to={e.url}>{e.name}</Link>
               </Menu.Item>
             </>
           ))}
@@ -168,10 +173,7 @@ const BaseLayout = (props) => {
         <Menu.Item
           key={_menu.url}
           style={{
-            // fontSize: '0.9rem',
-            width: '100%',
-            height: collapsed ? 40 : '',
-            display: 'block',
+            fontSize: '0.9rem',
           }}
 
           // onClick={_menu.url === ROUTES.SELL && toggle}
@@ -185,7 +187,7 @@ const BaseLayout = (props) => {
           >
             <path d={_menu.icon} />
           </svg>
-          <Link to={linkto(_menu)}>{_menu.name}</Link>
+          <Link to={_menu.url}>{_menu.name}</Link>
         </Menu.Item>
       )}
     </>
@@ -234,7 +236,8 @@ const BaseLayout = (props) => {
             Tài khoản của tôi
           </div>
         </div>
-      </ModalUpdateUser>
+      </div>
+      {/* </ModalUpdateUser> */}
 
       <div>
         <a onClick={onSignOut} style={{ color: '#565656', paddingLeft: 10 }}>
@@ -275,6 +278,7 @@ const BaseLayout = (props) => {
       setCollapsed(true)
     } else setIsMobile(false)
   }, [])
+
 
   return (
     <Layout style={{ backgroundColor: 'white', height: '100%' }}>
@@ -377,29 +381,142 @@ const BaseLayout = (props) => {
                   to={{ pathname: ROUTES_USER.BRANCH, state: 'show-modal-create-branch' }}
                   style={{ marginRight: '1rem', cursor: 'pointer' }}
                 >
-                  <Button
-                    type="primary"
-                    size="large"
+                  <Row
+                    justify="center"
                     style={{
-                      backgroundColor: '#FFAB2D',
-                      borderColor: '#FFAB2D',
-                      fontSize: 18,
-                      marginLeft: 10,
-                      display: login.role === 'EMPLOYEE' && 'none',
+                      display: collapsed ? 'none' : 'flex',
+                      paddingTop: 10,
+                      // paddingBottom: 20,
                     }}
                   >
-                    <Plus />
-                  </Button>
-                </Link>
-              </Permission>
-              {/* <Row align="middle">
-                <div style={{ color: 'white', marginRight: 8 }}>Chi nhánh:</div>
-                <Select
-                  // disabled={user && user.role_id === 1 ? false : true}
-                  placeholder="Chi nhánh"
-                  style={{ width: isMobile ? '90%' : 250 }}
-                  onChange={(value) => dispatch({ type: 'SET_BRANCH_ID', data: value })}
-                  value={branchIdApp}
+                    {/* <Avatar
+                                  src={user && (user.avatar || '')}
+                                  style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
+                              /> */}
+                    <div style={{ width: 80, height: 80, fontSize: 24, fontWeight: 600 }}>
+                      <h3>EKETE</h3>
+                    </div>
+                  </Row>
+                  <Menu
+                    style={{
+                      height: `calc(100vh - ${collapsed ? 4 : 96}px)`,
+                      overflowY: 'auto',
+                      overflowX: 'hidden',
+                    }}
+                    theme="light"
+                    onClick={(e) => {
+                      if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
+                    }}
+                    // onOpenChange={onOpenChange}
+                    openKeys={openKeys}
+                    selectedKeys={routeMatch.path}
+                    mode="inline"
+                  >
+                    {menu.map(renderMenuItem)}
+                    <Menu.Item
+                      key={ROUTES_USER.OVERVIEW}
+                      // onClick={onSignOut}
+                      icon={<DashboardOutlined />}
+                    >
+                      <Link to={ROUTES_USER.OVERVIEW}>Tổng quan</Link>
+                    </Menu.Item>
+                    {/* <Menu.Item
+                                  key={ROUTES_USER.BUSINESS}
+                                  // onClick={onSignOut}
+                                  icon={<DashboardOutlined />}
+                              >
+                                  <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
+                              </Menu.Item> */}
+                    <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
+                      <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
+                    </Menu.Item>
+                  </Menu>
+                </Sider>
+                <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
+                  <Affix offsetTop={0}>
+                    <Row
+                      wrap={isMobile}
+                      justify="space-between"
+                      align="middle"
+                      style={{ backgroundColor: '#5b6be8' }}
+                    >
+                      <Row
+                        align="middle"
+                        wrap={false}
+                        style={{
+                          width: '100%',
+                          paddingLeft: 5,
+                          paddingRight: 5,
+                          paddingTop: 12,
+                          paddingBottom: 12,
+                        }}
+                        justify={isMobile && 'space-between'}
+                      >
+                        <MenuOutlined
+                          onClick={toggle}
+                          style={{ fontSize: 20, marginRight: 18, color: 'white' }}
+                        />
+                        <Permission permissions={[PERMISSIONS.them_cua_hang]}>
+                          <Link
+                            to={{ pathname: ROUTES_USER.BRANCH, state: 'show-modal-create-branch' }}
+                            style={{ marginRight: '1rem', cursor: 'pointer' }}
+                          >
+                            <Button
+                              type="primary"
+                              size="large"
+                              style={{
+                                backgroundColor: '#FFAB2D',
+                                borderColor: '#FFAB2D',
+                                fontSize: 18,
+                                marginLeft: 10,
+                                display: login.role === 'EMPLOYEE' && 'none',
+                              }}
+                            >
+                              <Plus />
+                            </Button>
+                          </Link>
+                        </Permission>
+                      </Row>
+                      <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
+                        <DropdownLanguage />
+                        <div style={{ marginTop: 8, marginRight: 15 }}>
+                          <Dropdown overlay={<NotifyContent />} placement="bottomCenter" trigger="click">
+                            <Badge count={0} showZero size="small" offset={[-3, 3]}>
+                              <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
+                            </Badge>
+                          </Dropdown>
+                        </div>
+                        <Dropdown overlay={content} trigger="click">
+                          <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
+                            <Button>Đăng ký</Button>
+                            <Button>Đăng nhập</Button>
+                          </Row>
+                        </Dropdown>
+                      </Row>
+                    </Row>
+                  </Affix>
+                  <div style={{ backgroundColor: '#F9F9F9', width: '100%' }}>{props.children}</div>
+                </Layout>
+              </Layout>
+               
+            </div>
+          ) : (
+            <div>
+                    <Layout style={{ backgroundColor: '#F9F9F9', height: '100%' }}>
+                 <BackTop style={{ right: 10, bottom: 15 }} />
+            
+                 <Sider
+                  trigger={null}
+                  collapsible
+                  width={isMobile ? '100%' : WIDTH_MENU_OPEN}
+                  collapsedWidth={isMobile ? 0 : WIDTH_MENU_CLOSE}
+                  style={{
+                    backgroundColor: 'white',
+                    zIndex: isMobile && 6000,
+                    height: '100vh',
+                    position: 'fixed',
+                  }}
+                  collapsed={collapsed}
                 >
                   {branches.map((e, index) => (
                     <Select.Option value={e.branch_id} key={index}>
@@ -437,24 +554,146 @@ const BaseLayout = (props) => {
                   />
                   <span
                     style={{
-                      textTransform: 'capitalize',
-                      marginLeft: 5,
-                      color: 'white',
-                      fontWeight: 600,
-                      whiteSpace: 'nowrap',
+                      display: collapsed ? 'none' : 'flex',
+                      paddingTop: 10,
+                      // paddingBottom: 20,
                     }}
                   >
-                    {user && (user.fullname || '...')}
-                  </span>
-                </Row>
-              </Dropdown>
-            </Row>
-          </Row>
-        </Affix>
-        <div style={{ backgroundColor: '#f0f2f5', width: '100%' }}>{props.children}</div>
-      </Layout>
-    </Layout>
-  )
+                    {/* <Avatar
+                                  src={user && (user.avatar || '')}
+                                  style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
+                              /> */}
+                    <div style={{ width: 80, height: 80, fontSize: 24, fontWeight: 600 }}>
+                      <h3>EKETE</h3>
+                    </div>
+                  </Row>
+                  <Menu
+                    style={{
+                      height: `calc(100vh - ${collapsed ? 4 : 96}px)`,
+                      overflowY: 'auto',
+                      overflowX: 'hidden',
+                    }}
+                    theme="light"
+                    onClick={(e) => {
+                      if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
+                    }}
+                    // onOpenChange={onOpenChange}
+                    openKeys={openKeys}
+                    selectedKeys={routeMatch.path}
+                    mode="inline"
+                  >
+                    {menu.map(renderMenuItem)}
+                    <Menu.Item
+                      key={ROUTES_USER.OVERVIEW}
+                      // onClick={onSignOut}
+                      icon={<DashboardOutlined />}
+                    >
+                      <Link to={ROUTES_USER.OVERVIEW}>Tổng quan</Link>
+                    </Menu.Item>
+                    {/* <Menu.Item
+                                  key={ROUTES_USER.BUSINESS}
+                                  // onClick={onSignOut}
+                                  icon={<DashboardOutlined />}
+                              >
+                                  <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
+                              </Menu.Item> */}
+                    <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
+                      <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
+                    </Menu.Item>
+                  </Menu>
+                </Sider>
+                <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
+                  <Affix offsetTop={0}>
+                    <Row
+                      wrap={isMobile}
+                      justify="space-between"
+                      align="middle"
+                      style={{ backgroundColor: '#5b6be8' }}
+                    >
+                      <Row
+                        align="middle"
+                        wrap={false}
+                        style={{
+                          width: '100%',
+                          paddingLeft: 5,
+                          paddingRight: 5,
+                          paddingTop: 12,
+                          paddingBottom: 12,
+                        }}
+                        justify={isMobile && 'space-between'}
+                      >
+                        <MenuOutlined
+                          onClick={toggle}
+                          style={{ fontSize: 20, marginRight: 18, color: 'white' }}
+                        />
+                        <Permission permissions={[PERMISSIONS.them_cua_hang]}>
+                          <Link
+                            to={{ pathname: ROUTES_USER.BRANCH, state: 'show-modal-create-branch' }}
+                            style={{ marginRight: '1rem', cursor: 'pointer' }}
+                          >
+                            <Button
+                              type="primary"
+                              size="large"
+                              style={{
+                                backgroundColor: '#FFAB2D',
+                                borderColor: '#FFAB2D',
+                                fontSize: 18,
+                                marginLeft: 10,
+                                display: login.role === 'EMPLOYEE' && 'none',
+                              }}
+                            >
+                              <Plus />
+                            </Button>
+                          </Link>
+                        </Permission>
+                      </Row>
+                      <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
+                        <DropdownLanguage />
+                        <div style={{ marginTop: 8, marginRight: 15 }}>
+                          <Dropdown overlay={<NotifyContent />} placement="bottomCenter" trigger="click">
+                            <Badge count={0} showZero size="small" offset={[-3, 3]}>
+                              <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
+                            </Badge>
+                          </Dropdown>
+                        </div>
+                        <Dropdown overlay={content} trigger="click">
+                          <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
+                            <Avatar
+                              src={user && (user.avatar || '')}
+                              style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 35, height: 35 }}
+                            />
+                            <span
+                              style={{
+                                textTransform: 'capitalize',
+                                marginLeft: 5,
+                                color: 'white',
+                                fontWeight: 600,
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              {user && (user.fullname || '...')}
+                            </span>
+                          </Row>
+                        </Dropdown>
+                      </Row>
+                    </Row>
+                  </Affix>
+                  <div style={{ backgroundColor: '#F9F9F9', width: '100%' }}>{props.children}</div>
+                </Layout>
+              </Layout>
+              </div>
+          )}
+        </div>
+</div>
+</>
+
+    
+
+
+
+
+)
+
 }
 
 export default React.memo(BaseLayout)

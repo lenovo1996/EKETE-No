@@ -160,7 +160,6 @@ module.exports._get = async (req, res, next) => {
 
 module.exports._getOne = async (req, res, next) => {
     try {
-        
         let business = await 
             // client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray();
             client.db(SDB).collection('Business').findOne({business_id: Number(req.params.business_id)})
