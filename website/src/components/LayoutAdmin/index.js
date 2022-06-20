@@ -6,6 +6,7 @@ import { ACTION, ROUTES, PERMISSIONS, LOGO_DEFAULT } from 'consts'
 import { Link, useLocation, useRouteMatch, useHistory } from 'react-router-dom'
 import { Bell, Plus } from 'utils/icon'
 import jwt_decode from 'jwt-decode'
+import Icon from '../icons'
 
 import {
   Layout,
@@ -144,15 +145,7 @@ const BaseLayout = (props) => {
             </Link>
           }
           icon={
-            <svg
-              marginRight={20}
-              width="1rem"
-              height="1rem"
-              fill="currentColor"
-              viewBox="0 0 1024 1024"
-            >
-              <path d={_menu.icon} />
-            </svg>
+            Icon(_menu.icon)
           }
         >
           {_menu.menuCon.map((e) => (
@@ -163,15 +156,7 @@ const BaseLayout = (props) => {
                   fontSize: '0.9rem',
                 }}
               >
-                <svg
-                  style={{ marginRight: 10 }}
-                  width="1.1rem"
-                  height="1.1rem"
-                  fill="currentColor"
-                  viewBox="0 0 1024 1024"
-                >
-                  <path d={_menu.icon} />
-                </svg>
+                 {Icon(_menu.icon)}
                 <Link to={linkto(e)}>{e.name}</Link>
               </Menu.Item>
             </>
@@ -189,15 +174,7 @@ const BaseLayout = (props) => {
 
           // onClick={_menu.url === ROUTES.SELL && toggle}
         >
-          <svg
-            style={{ marginRight: 10 }}
-            width="1.1rem"
-            height="1.1rem"
-            fill="currentColor"
-            viewBox="0 0 1024 1024"
-          >
-            <path d={_menu.icon} />
-          </svg>
+          {Icon(_menu.icon)}
           <Link to={linkto(_menu)}>{_menu.name}</Link>
         </Menu.Item>
       )}

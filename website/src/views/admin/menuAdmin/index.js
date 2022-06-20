@@ -217,7 +217,7 @@ export default function Employee() {
             return { ...column, render: (text, record) => record.description }
           if (column.key === 'url') return { ...column, render: (text, record) => record.url }
           if (column.key === 'view_position')
-            return { ...column, render: (text, record) => record.view_position }
+            return { ...column, render: (text, record) => (record.view_position, (<Button style={{background: '#4db8ff', color: 'white'}}>{record.view_position}</Button>))}
           if (column.key === 'status') {
             return {
               ...column,

@@ -47,6 +47,7 @@ import Overview from './user/overview'
 import DetailBusiness from './user/business_user/detail_business'
 import UpdateBusiness from './user/business_user/Update_business'
 import Message1 from './user/message1'
+import RegisterBusiness from './user/business_user/registerbusiness'
 
 //apis
 
@@ -85,6 +86,13 @@ const DEFINE_ROUTER = [
     path: ROUTES_USER.MESSIAGE1,
     Component: () => <Message1 />,
     title: 'thông báo ',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.REGISTERBUSINESS,
+    Component: () => <RegisterBusiness />,
+    title: 'Đăng ký cửa hàng ',
     permissions: [],
     exact: true,
   },

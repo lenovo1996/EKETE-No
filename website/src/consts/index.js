@@ -132,7 +132,8 @@ export const ROUTES_USER = {
   BUSINESS: '/business',
   DETAIL_BUSINESS: `/detail-business/:id`,
   UPDATE_BUSINESS: `/update-business/:id`,
-  MESSIAGE1: '/message1'
+  MESSIAGE1: '/message1',
+  REGISTERBUSINESS: '/registerbusiness'
 }
 
 export const ROUTES_ADMIN = {

@@ -22,8 +22,6 @@ import {
   Popover,
   Col,
   Input,
-  Space
-
 } from 'antd'
 
 import {
@@ -32,6 +30,7 @@ import {
   LogoutOutlined,
   UserOutlined,
   ExportOutlined,
+  PlusSquareOutlined,
 } from '@ant-design/icons'
 
 //components
@@ -42,33 +41,25 @@ import DropdownLanguage from 'components/dropdown-language'
 //apis
 import { getuserEKT } from 'apis/user-ekt'
 
+import { getBusinesses } from 'apis/business'
 
-
-const { Search } = Input;
+const { Search } = Input
 const { Sider } = Layout
 const BaseLayout = (props) => {
-  let menu = useSelector(state => state.menuUser) 
+  let menu = useSelector((state) => state.menuUser)
   const history = useHistory()
-  const location = useLocation()
+
   const routeMatch = useRouteMatch()
   const dispatch = useDispatch()
   const WIDTH_MENU_OPEN = 230
   const WIDTH_MENU_CLOSE = 60
 
+  const [business, setBusiness] = useState([])
 
-  const [branches, setBranches] = useState([])
   const [user, setUser] = useState({})
-  const [loading, setLoading] = useState(false)
 
 
   const login = useSelector((state) => state.login)
-  const branchIdApp = useSelector((state) => state.branch.branchId)
-  const triggerReloadBranch = useSelector((state) => state.branch.trigger)
-  const setting = useSelector((state) => state.setting)
-
-  // const dataUser = localStorage.getItem('accessToken')
-  //   ? jwt_decode(localStorage.getItem('accessToken'))
-  //   : {}
 
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
@@ -77,7 +68,6 @@ const BaseLayout = (props) => {
   const [isMobile, setIsMobile] = useState(false)
 
   const [openKeys, setOpenKeys] = useState([])
-
 
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
@@ -93,17 +83,29 @@ const BaseLayout = (props) => {
       console.log(error)
     }
   }
+  const _getBusinesses = async (params) => {
+    try {
+      const res = await getBusinesses(params)
+      console.log('resShop', res)
+      if (res.status === 200) setBusiness(res.data.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    _getBusinesses({ user_phone: dataUser.data.phone })
+  }, [dataUser.data.phone])
 
   var toggle = () => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
     setCollapsed(!collapsed)
   }
 
-
-  const linkto =(menu)=>{;
-    if(menu.status === 'public'){
+  const linkto = (menu) => {
+    if (menu.status === 'public') {
       return menu.url
-    }else return '/message1'
+    } else return '/message1'
   }
   const renderMenuItem = (_menu) => (
     <>
@@ -188,7 +190,26 @@ const BaseLayout = (props) => {
       )}
     </>
   )
+  const renderBusinessItem = (_business) => (
+    <>
+      <Menu.Item
+        key={_business.business_name}
+        style={{
+          // fontSize: '0.9rem',
+          width: '100%',
+          height: collapsed ? 40 : '',
+          display: 'block',
+        }}
 
+      >
+        <div className={styles['avatar']} style={{backgroundImage: `url(${_business.logo  })`}} >
+        <Link  style={{marginLeft:50 }}>{_business.business_name}</Link>
+
+        </div>
+
+      </Menu.Item>
+    </>
+  )
 
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
@@ -203,9 +224,7 @@ const BaseLayout = (props) => {
 
   const content = (
     <div className={styles['user_information']}>
-      <ModalUpdateUser user={user} 
-      reload={getInfoUser}
-      >
+      <ModalUpdateUser user={user} reload={getInfoUser}>
         <div>
           <div
             style={{ color: '#565656', paddingLeft: 10 }}
@@ -244,9 +263,6 @@ const BaseLayout = (props) => {
     </div>
   )
 
-  // useEffect(() => {
-  //   _getBranches()
-  // }, [triggerReloadBranch])
 
   useEffect(() => {
     getInfoUser({ user_id: dataUser.data.user_id })
@@ -285,12 +301,6 @@ const BaseLayout = (props) => {
             paddingBottom: 20,
           }}
         >
-          {/* <img
-            // src={setting && setting.company_logo ? setting.company_logo : LOGO_DEFAULT}
-            style={{ objectFit: 'contain', maxHeight: 70, width: '100%' }}
-            src={user && (user.avatar || '')}
-            alt=""
-          /> */}
           <Avatar
             src={user && (user.avatar || '')}
             style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
@@ -311,13 +321,33 @@ const BaseLayout = (props) => {
           selectedKeys={routeMatch.path}
           mode="inline"
         >
+          <h2 style={{ margin: 20, color: 'gray' }}> MAIN MENU</h2>
+
           {menu.map(renderMenuItem)}
-          
+
+          <h3 style={{ marginTop: 40, margin: 20, color: 'gray' }}> DANH SÁCH CỬA HÀNG</h3>
+          {business.map(renderBusinessItem)}
+          <Link to="/registerbusiness">
+            <Button
+              style={{
+                marginLeft: 20,
+                width: 200,
+                height: 50,
+                background: '#4dc3ff',
+                fontFamily: 'revert-layer',
+                fontSize: 20,
+                color: 'white',
+              }}
+            >
+              Tạo cửa hàng mới
+            </Button>
+          </Link>
+
           <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
             <Link>Đăng xuất</Link>
           </Menu.Item>
         </Menu>
-      </Sider>  
+      </Sider>
       <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
         <Affix offsetTop={0}>
           <Row
@@ -387,8 +417,8 @@ const BaseLayout = (props) => {
                 style={{ width: 240 }}
                 onSearch={onSearch}
               /> */}
-              
-               {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
+
+              {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />
@@ -398,7 +428,6 @@ const BaseLayout = (props) => {
                     <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
                   </Badge>
                 </Dropdown>
-
               </div>
               <Dropdown overlay={content} trigger="click">
                 <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
@@ -429,5 +458,3 @@ const BaseLayout = (props) => {
 }
 
 export default React.memo(BaseLayout)
-
-
