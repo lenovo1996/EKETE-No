@@ -25,63 +25,44 @@ let removeUnicode = (text, removeSpace) => {
     return text;
 };
 
+
 module.exports._get = async (req, res, next) => {
     try {
         let aggregateQuery = [];
-        // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
         if (req.query.phone) {
             aggregateQuery.push({ $match: { user_phone: req.query.phone } });
         }
-        let countQuery = [...aggregateQuery];
         aggregateQuery.push({ $sort: { create_date: -1 } });
         if (req.query.page && req.query.page_size) {
-            let page = Number(req.query.page) || 1;
-            let page_size = Number(req.query.page_size) || 50;
+            let page = Number(req.query.page)  ;
+            let page_size = Number(req.query.page_size);
             aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
         }
-        // lấy data từ database
-        let [orders, counts] = await Promise.all([
-            client.db(SDB).collection(`Shopping`).aggregate(aggregateQuery).toArray(),
-            client
-                .db(SDB)
-                .collection(`Shopping`)
-                .aggregate([...countQuery, { $count: 'counts' }])
-                .toArray(),
-        ]);
-        orders.forEach(async function (element) {
-            let business = client
-                .db(SDB)
-                .collection('Business')
-                .find({
-                    business_id: { $ne: Number(element.business_id) },
-                });
-            await business.forEach((busines) => {
-
-                let order = client
-                    .db(busines.database_name)
-                    .collection(`Orders`)
-                    .find({ orderId: { $ne: Number(element.orderId) } });
-   
-                order.forEach((orderDetail) => {
-                    console.log('123', orderDetail);
-                    res.send({
-                        success: true,
-                        count: counts[0] ? counts[0].counts : 0,
-                        data: orderDetail,
-                    });
-                });
-            });
+        // l?y data t? database
+        const orders = await client.db(SDB).collection('Shopping').aggregate(aggregateQuery).toArray();
+  
+        let orderInfos = [];
+        for (const order of orders) {
+            let business = await client.db(SDB).collection('Business')
+              .findOne({
+                  business_id: Number(order.business_id)
+              });
+              let orderInfo = await client.db(business.database_name)
+                .collection('Orders')
+                .findOne({ order_id: Number(order.orderId) });
+                // console.log(orderInfo);
+                orderInfos.push(orderInfo);
+        }
+        res.send({
+            success: true,
+            count: orderInfos.length,
+            data: orderInfos,
         });
-        // res.send({
-        //     success: true,
-        //     count: counts[0] ? counts[0].counts : 0,
-        //     data: orders,
-        // });
+  
     } catch (err) {
         next(err);
     }
-};
-
+  };
 module.exports._update = async (req, res, next) => {
     try {
         await client.db(DB).collection(`ShoppingDairy`).updateOne(req.params, { $set: req.body });
