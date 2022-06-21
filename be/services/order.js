@@ -26,9 +26,9 @@ let removeUnicode = (text, removeSpace) => {
     return text;
 };
 
-module.exports._get = async (req, res, next) => {
-    try {
-        let aggregateQuery = [];
+const buildOrderAggregateQuery = (req) => {
+
+    let aggregateQuery = [];
         // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
         if (req.query.order_id) {
             aggregateQuery.push({ $match: { order_id: Number(req.query.order_id) } });
@@ -269,8 +269,15 @@ module.exports._get = async (req, res, next) => {
             let page_size = Number(req.query.page_size) || 50;
             aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
         }
-        // lấy data từ database
-        console.log(req.user.database);
+
+        return {aggregateQuery,countQuery}
+}
+module.exports.buildOrderAggregateQuery = buildOrderAggregateQuery;
+
+module.exports._get = async (req, res, next) => {
+    try {
+        let {countQuery, aggregateQuery} = buildOrderAggregateQuery(req);
+        
         let [orders, counts] = await Promise.all([
             client.db(req.user.database).collection(`Orders`).aggregate(aggregateQuery).toArray(),
             client

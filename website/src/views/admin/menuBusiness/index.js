@@ -211,7 +211,7 @@ export default function Employee() {
           if (column.key === 'parent_menu_id') return { ...column, render: (text, record) => record.parent_menu_id }
           if (column.key === 'description') return { ...column, render: (text, record) => record.description }
           if (column.key === 'url') return { ...column, render: (text, record) => record.url }
-          if (column.key === 'view_position') return { ...column, render: (text, record) => record.view_position }
+          if (column.key === 'view_position') return { ...column, render: (text, record) => (record.view_position, (<Button style={{background: '#4db8ff', color: 'white'}}>{record.view_position}</Button>)) }
           if (column.key === 'status') {
             return { ...column, render: (text, record) => (record.status ,      
              <Select defaultValue={record.status}  style={{ width: 120 }} 

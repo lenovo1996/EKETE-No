@@ -1,33 +1,59 @@
-.header {
+.body {
+  margin: 20px;
+  display: flex;
+  height: auto;
+}
+
+
+.profile {
   box-shadow: 0 12px 23px 0 #5c37990a;
   // border-radius: 10px;
-  border: 0 solid transparent;
+  // border: 1px solid black;
   overflow: hidden;
   background-color: hwb(0 100% 0%);
   display: flex;
-  flex-direction: row;
-  height: 300px;
-  width: 100%;
+  flex-direction: column;
+  height: 850px;
+  width: 600px;
+  margin: 5px;
+  border-radius: 10px;
+  align-items: center;
+
 }
 
 .card {
   position: relative;
-  width: 600px;
-  height: 250px;
-  border-radius: 10px;
-  margin: 10px;
+  width: 367px;
+  height: 218px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  margin-top: 20px;
+  // display: flex;
+  // align-items: center;
+  // flex-direction: column-reverse;
   background-image: url(http://cosp.com.vn/uploaded/Shop-thoi-trang-nam-PenViet-1.jpg);
-  
+
 }
 
-.card_opacity{
+.card_opacity {
   position: absolute;
- 
   background-color: gray;
-  width: 600px;
-  height: 250px;
- 
+  width: 368px;
+  height: 218px;
+  border-radius: 10px;
   opacity: 0.5;
+}
+
+.setting {
+  position: absolute;
+  background-color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  margin-top: 10px;
+  margin-left: 322px;
+  display: inline-grid;
+  align-content: center;
 }
 
 .icon {
@@ -35,38 +61,24 @@
   margin-right: 20px;
 }
 
-.col {
-  float: left;
-  margin-left: 100px;
-  margin-top: 20px;
-}
-
-.row {
-  margin-top: 40px;
-}
-
-.menu {
-  box-shadow: 0 12px 23px 0 #5c37990a;
-  border: 0 solid transparent;
-  overflow: hidden;
-  background-color: hwb(0 100% 0%);
+.follow {
   display: flex;
-  flex-direction: column;
-  height: 300;
-  display: inline-block;
-  width: 100%;
-  text-size-adjust: 100px;
-  align-items: center;
-
 }
 
-.container1 {
-  margin-top: 0px;
+.list {
+  width: 81%;
+  margin-top: 20px !important;
+  font-weight: bold;
+}
+
+.container {
+  margin: 10px;
   background-color: hwb(0 100% 0%);
   width: 100%;
 
 }
-.container {
+
+.list_product {
   border: 0 solid transparent;
   overflow: hidden;
   background-color: hwb(0 100% 0%);
@@ -78,3 +90,72 @@
   align-items: center;
 }
 
+.Card_item{
+  width: 230px;
+  height: 420px;
+  margin: 10px;
+  border-radius: 10px;
+  
+  .body{
+    padding: 10px;
+  }
+}
+
+.sale{
+  background-color: #fcac12;
+  line-height: 1rem;
+    height: 1rem;
+    margin: 0 0.1875rem;
+    padding: 0 0.0625rem;
+    padding: 0 calc(var(--ns-a, .25rem) - 0.1875rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    z-index: 1;
+    color: white;
+    font-family: var(--nt-font-medium-f,-apple-system,'HelveticaNeue-Medium','Helvetica Neue','Roboto','Droid Sans',Arial,sans-serif);
+    font-weight: var(--nt-font-medium-w,500);
+
+}
+.sale::before{
+  background-color: #fcac12;
+  width: 0.25rem;
+    height: 1rem;
+    position: absolute;
+    top: 0;
+    // -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.deal{
+  border: 1px solid;
+  color: red;
+  margin-left: 8px;
+ 
+  padding: 0.125rem 0.25rem;
+  height: 1rem;
+  white-space: nowrap;
+  display: inline-block;
+  align-items: center;
+  cursor: default;
+  box-sizing: border-box;
+  font-size: .625rem;
+  line-height: 100%;
+}
+
+.name_product{
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+  font-size: 16px;
+  word-wrap: break-word;
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.2;
+  margin-bottom: 5px;
+}

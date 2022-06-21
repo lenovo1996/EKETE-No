@@ -32,6 +32,7 @@ export default function Update_business() {
   const [loading, setLoading] = useState(false)
   const [listImage, setList_image] = useState([])
   const [coverImage, setCoverImage] = useState('')
+  const [avatar, setAvatar] = useState('')
   const [visible, setVisible] = useState(false)
   const toggle = () => setVisible(!visible)
 
@@ -71,7 +72,16 @@ export default function Update_business() {
       setLoading(false)
     }
   }
-
+  const _uploadAvatar = async (file) => {
+    try {
+      setLoading(true)
+      const url = await uploadFile(file)
+      setAvatar(url)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+    }
+  }
   const [form] = Form.useForm()
   const _editBusiness = async () => {
     try {
@@ -82,13 +92,15 @@ export default function Update_business() {
       const body = {
         ...dataForm,
         business_name: dataForm.business_name || '',
-        logo: dataForm.logo || '',
         business_desiption: dataForm.business_desiption || '',
         list_image: listImage || '',
       }
 
       if (coverImage) {
         body['business_cover_image'] = coverImage
+      }
+      if (avatar) {
+        body['logo'] = avatar
       }
 
       let res = await updateBusiness(body, id)
@@ -119,12 +131,7 @@ export default function Update_business() {
   const log1 = () => {
     console.log(1111111111)
   }
-  const _coverImage =()=>{
-    let coverImage1 = business.business_cover_image;
-    console.log(coverImage1);
-    return coverImage1
-      
-  }
+
  
   return (
     <div>
@@ -147,22 +154,22 @@ export default function Update_business() {
 
       <Form form={form} className={styles['form']}>
         <div className={styles['container']}>
-          <div>
+          <div id='update'>
             <div className={styles['card']}  style={{backgroundImage: `url(${business.business_cover_image})`}}>
               <Meta
                 avatar={
-                  <Avatar
-                    name="logo"
-                    size={90}
-                    style={{ border: '2px solid white' }}
-                    src={business.logo}
-                    onClick={_upload}
+                  <div    
+                    className={styles['avatar']} style={{backgroundImage: `url(${business.logo})`}}
                   >
-                    <div className={styles['edit_avatar']} onClick={log1}>
+                    <Upload
+                    showUploadList={false}
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    data={_uploadAvatar}>
+                    <div className={styles['edit_avatar']} >
                       Sửa
                     </div>
-                    {/* <Avatar size={100} src={business.logo}/> */}
-                  </Avatar>
+                    </Upload>
+                  </div>
                 }
                 title={
                   <Title level={2} style={{ color: 'white' }}>
@@ -190,7 +197,7 @@ export default function Update_business() {
               </Upload>
             </div>
             <List
-              style={{ marginLeft: 50 }}
+          //  className={styles['list']}
               dataSource={[
                 {
                   id: 1,
@@ -214,7 +221,7 @@ export default function Update_business() {
                   id: 4,
                   name: 'Thời gian phản hồi',
                   src: 'https://www.iconpacks.net/icons/1/free-time-icon-968-thumb.png',
-                  a: 'Trong vòng 10 tiếng',
+                  a: 'Vài tiếng',
                 },
                 {
                   id: 5,

@@ -50,6 +50,9 @@ export const ROUTES_USER = {
   OVERVIEW: '/overview',
   BUSINESS: '/business',
   NEWFEED: '/newfeed',
+  DETAILBUSINESS:`/detail-business/:id`,
+  UPDATEBUSINESS:`/update-business/:id`,
+  REGISTERBUSINESS:'/register-business'
 }
 
 export const ROUTES_ADMIN = {
@@ -63,6 +66,8 @@ export const ROUTES_ADMIN = {
   REGISTERADMIN: '/registeradmin',
   BUSINESSADMIN: '/businessadmin',
   MENU_USER: '/menu-user',
+  MENU_ADMIN: '/menu-admin',
+  MENU_BUSINESS: '/menu-business'
 }
 
 export const PERMISSIONS_ADMIN = {
@@ -71,7 +76,7 @@ export const PERMISSIONS_ADMIN = {
 export const ROUTES = {
   CHECK_SUBDOMAIN: '/business-login',
   LOGIN: '/login',
-  REGISTER: '/register',
+  // REGISTER: '/register',
   IMPORT_REPORT_FILE: '/import-report-file',
   PRODUCT_CHECK: '/product-check',
   ORDER_LIST: '/order-list',
