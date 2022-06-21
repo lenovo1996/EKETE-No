@@ -27,7 +27,6 @@ let removeUnicode = (text, removeSpace) => {
 
 module.exports._get = async (req, res, next) => {
     try {
-
         let aggregateQuery = [];
         // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
         if (req.query.phone) {
@@ -41,7 +40,6 @@ module.exports._get = async (req, res, next) => {
             aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
         }
         // lấy data từ database
-        // let orderss = await client.db(SDB).collection(`Shopping`).aggregate(aggregateQuery).toArray();
         let [orders, counts] = await Promise.all([
             client.db(SDB).collection(`Shopping`).aggregate(aggregateQuery).toArray(),
             client
@@ -50,38 +48,35 @@ module.exports._get = async (req, res, next) => {
                 .aggregate([...countQuery, { $count: 'counts' }])
                 .toArray(),
         ]);
-        // console.log("orders", orders);
-        // orders.find().forEach( function(myDoc) { print( "user: " + myDoc.business_id ); } );
-        // orders.find()
-        // orders.forEach( async function(element)  {
-            // let order_id = element.orderId;
-            // let aggregateQueryBusiness = [];
-            // console.log("id", element.business_id);
-            //     if (Number(element.business_id )) {
-                    
-            //         aggregateQueryBusiness.push({ $match: { business_id: Number(element.business_id )} });
-            //     }
-            //     // console.log("id", aggregateQueryBusiness);
-            // let business = client.db(SDB).collection('Business').aggregate(aggregateQueryBusiness).toArray()
-            
-           
-        // });
-        let business =  client 
+        orders.forEach(async function (element) {
+            let business = client
                 .db(SDB)
                 .collection('Business')
-                // .findOne({ business_id: Number(orders.business_id) });
-                // (console.log(element.business_id))
                 .find({
-                    business_id: { $ne: Number(orders.business_id) },
+                    business_id: { $ne: Number(element.business_id) },
                 });
-            // console.log('business', element.business_id);
-            console.log('businerss', business);
-       
-        res.send({
-            success: true,
-            count: counts[0] ? counts[0].counts : 0,
-            data: orders,
+            await business.forEach((busines) => {
+
+                let order = client
+                    .db(busines.database_name)
+                    .collection(`Orders`)
+                    .find({ orderId: { $ne: Number(element.orderId) } });
+   
+                order.forEach((orderDetail) => {
+                    console.log('123', orderDetail);
+                    res.send({
+                        success: true,
+                        count: counts[0] ? counts[0].counts : 0,
+                        data: orderDetail,
+                    });
+                });
+            });
         });
+        // res.send({
+        //     success: true,
+        //     count: counts[0] ? counts[0].counts : 0,
+        //     data: orders,
+        // });
     } catch (err) {
         next(err);
     }
@@ -96,7 +91,6 @@ module.exports._update = async (req, res, next) => {
     }
 };
 module.exports._getOne = async (req, res, next) => {
-
     let business = await client
         .db(SDB)
         .collection('Business')
@@ -108,8 +102,8 @@ module.exports._getOne = async (req, res, next) => {
         if (req.params.order_id) {
             aggregateQuery.push({ $match: { order_id: Number(req.params.order_id) } });
         }
-        let [order] = await client.db(business.database_name).collection(`Orders`).aggregate(aggregateQuery).toArray();
-        console.log('order', order);
+        let order = await client.db(business.database_name).collection(`Orders`).aggregate(aggregateQuery).toArray();
+        // console.log('order', order);
         res.send({
             success: true,
             data: order,
@@ -148,6 +142,4 @@ module.exports._getOne = async (req, res, next) => {
     // } catch (error) {
     //     next(error)
     // }
-
-
 };
