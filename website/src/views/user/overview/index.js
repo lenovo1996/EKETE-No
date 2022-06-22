@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-// import { PAGE_SIZE } from 'consts'
 import React, { useState, useEffect } from 'react'
 import styles from './styles/overview.module.scss'
 import styleshopping from './styles/historyshopping.module.scss'
