@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react'
 import jwt_decode from 'jwt-decode'
 import { useHistory, useLocation } from 'react-router-dom'
 import styles from './infor.module.scss'
+import styleshopping from '../../views/user/overview/styles/historyshopping.module.scss'
+import AssessOders from '../../views/user/overview/assess'
+
 import { compare, formatCash, compareCustom } from 'utils'
 import moment from 'moment'
 // import AssessOders from './assess'
 
-import { Avatar, Button, Table, Tabs, List } from 'antd'
+import { Avatar, Button, Table, Tabs, List, Rate } from 'antd'
 import { Row, Col, Timeline, Modal, Card, Image } from 'antd'
 import {
   HeartOutlined,
@@ -146,7 +149,7 @@ useEffect(() => {
                 width: 690,
                 height: '100%',
                 marginBottom: 15,
-                background: '#F9F9F9',
+                background: '#F5F5F5',
               }}
               className={styles['card-overview']}
             >
@@ -154,7 +157,7 @@ useEffect(() => {
                 <Tabs centered>
                   <Tabs.TabPane
                     tab={
-                      <span>
+                      <span className={styles['tabpane']}>
                         <CalendarOutlined />
                         Feed
                       </span>
@@ -169,138 +172,131 @@ useEffect(() => {
                         <div>
                           <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
                         </div>
-                        <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                        </div>
-                        <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                        </div>
-                        <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                        </div>
-                        <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                        </div>
-                        <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                        </div>
-                        <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                        </div>
-                        <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                        </div>
-                        <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                        </div>
+                    
                       </div>
                     </div>
                   </Tabs.TabPane>
                   <Tabs.TabPane
                     tab={
-                      <span>
+                      <span 
+                      className={styles['tabpane']}
+                      >
                         <HistoryOutlined />
                         Shopping history
                       </span>
                     }
                     key="2"
                   >
+                     <div>
                     {orderekt &&
-                    orderekt.map((Item, index) => {
-                      return (
-                        <div style={{ width: '100%', paddingTop: 10 }}>
-                          <div className={styles['container']}>
-                            <Row>
-                              <Col>
-                                <Meta
-                                  className={styles['content']}
-                                  avatar={
-                                    <Avatar size={50} src="https://joeschmoe.io/api/v1/random" />
-                                  }
-                                  title={
-                                    <p className={styles['text-name']}>
-                                      @{Item.customer_info.slug_name}
+                      orderekt.map((Item, index) => {
+                        return (
+                          <div style={{ width: 682 }}>
+                            <div className={styleshopping['container']}>
+                              <Row>
+                                <Col style={{ width: '70%' }}>
+                                  <Meta
+                                    className={styleshopping['content']}
+                                    avatar={
+                                      <Avatar size={50} src="https://joeschmoe.io/api/v1/random" />
+                                    }
+                                    title={
+                                      <p className={styleshopping['text-name']}>
+                                        @{Item.customer_info.slug_name}
+                                      </p>
+                                    }
+                                    description={moment(Item.create_date).format(
+                                      'DD/MM/YYYY HH:mm'
+                                    )}
+                                  />
+                                </Col>
+                                <Col className={styleshopping['button']}>
+                                  <Button>Theo dõi</Button>
+                                </Col>
+                              </Row>
+                              <div>
+                                <div className={styleshopping['display-flex']}>
+                                  <p className={styleshopping['text']}>Đơn hàng: &nbsp; </p>
+                                  {<p className={styleshopping['text-blue']}> #{Item.code}</p>}
+                                </div>
+                                <div className={styleshopping['display-flex']}>
+                                  <p className={styleshopping['text']}>Mã vận chuyển: &nbsp; </p>
+                                  {
+                                    <p className={styleshopping['text-blue']}>
+                                      {' '}
+                                      #
+                                      {Item.shipping_info.tracking_number ||
+                                        'Đơn hàng mua trực tiếp'}
                                     </p>
                                   }
-                                  description={moment(Item.create_date).format('DD/MM/YYYY HH:mm')}
-                                />
-                              </Col>
-                              <Col className={styles['button']}>
-                                <Button>Theo dõi</Button>
-                              </Col>
-                            </Row>
-                            <div>
-                              <div className={styles['display-flex']}>
-                                <p className={styles['text']}>Đơn hàng: &nbsp; </p>
-                                {<p className={styles['text-blue']}> #{Item.code}</p>}
+                                </div>
                               </div>
-                              {/* <h3>
-                                Mã vận chuyển:{' '}
-                                {Item.shipping_info.tracking_number || 'Đơn hàng mua trực tiếp'}{' '}
-                              </h3> */}
-                              <div className={styles['display-flex']}>
-                                <p className={styles['text']}>Mã vận chuyển: &nbsp; </p>
-                                {
-                                  <p className={styles['text-blue']}>
-                                    {' '}
-                                    #
-                                    {Item.shipping_info.tracking_number || 'Đơn hàng mua trực tiếp'}
-                                  </p>
-                                }
-                              </div>
-                            </div>
-                            <div>
-                              <List>
-                                {Item.order_details.map((Item, index) => {
-                                  return (
-                                    <div>
-                                      <div className={styles['container-product']}>
-                                        <List.Item.Meta
-                                          avatar={
-                                            <Avatar
-                                              style={{
-                                                width: '47px',
-                                                height: '50px',
-                                                borderRadius: '6px ',
-                                              }}
-                                              shape="square"
-                                              size="large"
-                                              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                            />
-                                          }
-                                          title={<p className={styles['text-sku']}>#{Item.sku}</p>}
-                                          description={
-                                            <p className={styles['text-name-product']}>
-                                              {Item.name}
-                                            </p>
-                                          }
-                                        />
-                                        <div className={styles['container-center']}>
-                                          <h3 className={styles['text-blue']}>
-                                            {' '}
-                                            {Item.price ? formatCash(+Item.price || 0) : 0}Đ
-                                          </h3>
+                              <div>
+                                <List>
+                                  {Item.order_details.map((Item, index) => {
+                                    return (
+                                      <div>
+                                        <div className={styleshopping['container-product']}>
+                                          <List.Item.Meta
+                                            avatar={
+                                              <Avatar
+                                                style={{
+                                                  width: '47px',
+                                                  height: '50px',
+                                                  borderRadius: '6px ',
+                                                }}
+                                                shape="square"
+                                                size="large"
+                                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                              />
+                                            }
+                                            title={
+                                              <p className={styleshopping['text-sku']}>
+                                                #{Item.sku}
+                                              </p>
+                                            }
+                                            description={
+                                              <p className={styleshopping['text-name-product']}>
+                                                {Item.name}
+                                              </p>
+                                            }
+                                          />
+                                          <div className={styleshopping['container-center']}>
+                                            <h3 className={styleshopping['text-blue']}>
+                                              {' '}
+                                              {Item.price ? formatCash(+Item.price || 0) : 0}Đ
+                                            </h3>
+                                          </div>
+                                          <Rate
+                                            className={styleshopping['rate']}
+                                            allowHalf
+                                            defaultValue={2.5}
+                                          />
+                                          <div className={styleshopping['margin-center']}>
+                                            <AssessOders key="index">
+                                              <Button className={styleshopping['button-cta']}>
+                                                Đánh giá
+                                              </Button>
+                                            </AssessOders>
+                                          </div>
                                         </div>
-                                        <div className={styles['button']}>
-                                          {/* <AssessOders key="index"> */}
-                                            <Button>Đánh giá</Button>
-                                          {/* </AssessOders> */}
-                                        </div>
+                                        <div
+                                          className={
+                                            styleshopping[
+                                              'dashboard_manager_bottom_row_col_parent_top'
+                                            ]
+                                          }
+                                        ></div>
                                       </div>
-                                      <div
-                                        className={
-                                          styles['dashboard_manager_bottom_row_col_parent_top']
-                                        }
-                                      ></div>
-                                    </div>
-                                  )
-                                })}
-                              </List>
+                                    )
+                                  })}
+                                </List>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
+                  </div>
                   </Tabs.TabPane>
                 </Tabs>
               </div>
