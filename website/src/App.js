@@ -59,7 +59,7 @@ function App() {
     subDomain &&
     subDomain.length === 1
   )
-    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.LOGIN}`
+    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.REGISTER}`
 
   const checkSubdomain = async () => {
     let router = ''

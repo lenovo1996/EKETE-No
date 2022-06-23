@@ -3,7 +3,7 @@ import { get, patch, post, destroy } from './httpClient'
 export const addBusiness = (body) => post('/business/create', body)
 export const updateBusiness = (body, id) => patch(`/business/update/${id}`, body)
 export const getBusinesses = (query) => get('/business', query)
-export const deleteBusinesses = (body) => get('/business/delete', body)
+export const deleteBusinesses = (id) => patch('/business/delete',  { business_id: [id] })
 export const getOtp = (company_phone) => patch('/business/getotp', { company_phone })
 export const verifyOtp = (body) => post('/business/verifyotp', body)
 

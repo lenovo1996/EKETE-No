@@ -12,22 +12,16 @@ import Icon from '../icons'
 import {
     Layout,
     Menu,
-    Select,
-    Button,
     Dropdown,
     BackTop,
     Affix,
     Avatar,
     Badge,
-    Empty,
     Row,
-    Popover,
-    Col,
     Input,
-    Space,
 } from 'antd'
 
-import { MenuOutlined, DashboardOutlined, LogoutOutlined, UserOutlined, ExportOutlined } from '@ant-design/icons'
+import { LogoutOutlined, UserOutlined, ExportOutlined } from '@ant-design/icons'
 
 //components
 import Permission from 'components/permission'
@@ -38,7 +32,6 @@ import DropdownLanguage from 'components/dropdown-language'
 import { getuserAdmin } from 'apis/admin'
 
 
-const { Search } = Input
 const { Sider } = Layout
 const BaseLayout = (props) => {
   let menu = useSelector((state) => state.menuAdmin)
@@ -50,11 +43,10 @@ const BaseLayout = (props) => {
     const WIDTH_MENU_OPEN = 230
     const WIDTH_MENU_CLOSE = 60
 
-    const [user, setUser] = useState({})
+    const [userAdmin, setUserAdmin] = useState({})
 
 
-    const dataUser = localStorage.getItem('accessToken') ? jwt_decode(localStorage.getItem('accessToken')) : {}
-    const [loading, setLoading] = useState(false)
+    const dataUserAdmin = localStorage.getItem('accessToken') ? jwt_decode(localStorage.getItem('accessToken')) : {}
 
     const isCollapsed = localStorage.getItem('collapsed') ? JSON.parse(localStorage.getItem('collapsed')) : false
 
@@ -63,23 +55,14 @@ const BaseLayout = (props) => {
 
     const [openKeys, setOpenKeys] = useState([])
 
-    const rootSubmenuKeys = ['store', 'warehouse', 'offer', 'report', 'transport', 'commerce', ROUTES.PRODUCT]
-    const onOpenChange = (keys) => {
-        const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1)
-        if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-            setOpenKeys(keys)
-        } else {
-            localStorage.setItem('openKey', latestOpenKey)
-            setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
-        }
-    }
+  
 
     const _getInfoUser = async (params) => {
         try {
             const res = await getuserAdmin(params)
             if (res.status === 200) {
-                if (res.data.data.length) setUser({ ...res.data.data[0] })
-                console.log('infoAdmin', res.data.data)
+                if (res.data.data.length) setUserAdmin({ ...res.data.data[0] })
+                // console.log('infoAdmin', res.data.data)
             }
         } catch (error) {
             console.log(error)
@@ -87,8 +70,8 @@ const BaseLayout = (props) => {
     }
 
     useEffect(() => {
-        _getInfoUser({ user_id: dataUser.data.user_id })
-    }, [dataUser.data.user_id])
+        _getInfoUser({ userAdmin_id: dataUserAdmin.data.userAdmin_id })
+    }, [dataUserAdmin.data.userAdmin_id])
 
     var toggle = () => {
         localStorage.setItem('collapsed', JSON.stringify(!collapsed))
@@ -107,7 +90,7 @@ const BaseLayout = (props) => {
 
     const content = (
         <div className={styles['user_information']}>
-            <ModalUpdateUser user={user} reload={_getInfoUser}>
+            <ModalUpdateUser userAdmin={userAdmin} reload={_getInfoUser}>
                 <div>
                     <div
                         style={{ color: '#565656', paddingLeft: 10 }}
@@ -238,14 +221,9 @@ const BaseLayout = (props) => {
                         paddingBottom: 20,
                     }}
                 >
-                    {/* <img
-            // src={setting && setting.company_logo ? setting.company_logo : LOGO_DEFAULT}
-            style={{ objectFit: 'contain', maxHeight: 70, width: '100%' }}
-            src={user && (user.avatar || '')}
-            alt=""
-          /> */}
+                   
                     <Avatar
-                        src={user && (user.avatar || '')}
+                        src={userAdmin && (userAdmin.avatar || '')}
                         style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
                     />
                 </Row>
@@ -325,7 +303,7 @@ const BaseLayout = (props) => {
                             <Dropdown overlay={content} trigger="click">
                                 <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
                                     <Avatar
-                                        src={user && (user.avatar || '')}
+                                        src={userAdmin && (userAdmin.avatar || '')}
                                         style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 35, height: 35 }}
                                     />
                                     <span
@@ -337,7 +315,7 @@ const BaseLayout = (props) => {
                                             whiteSpace: 'nowrap',
                                         }}
                                     >
-                                        {user && (user.fullname || '...')}
+                                        {userAdmin && (userAdmin.fullname || '...')}
                                     </span>
                                 </Row>
                             </Dropdown>

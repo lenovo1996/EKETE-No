@@ -67,7 +67,9 @@ export const ROUTES_ADMIN = {
   BUSINESSADMIN: '/businessadmin',
   MENU_USER: '/menu-user',
   MENU_ADMIN: '/menu-admin',
-  MENU_BUSINESS: '/menu-business'
+  MENU_BUSINESS: '/menu-business',
+  USER_EKT: '/user-ekt',
+  USER_ADMIN: '/user-admin',
 }
 
 export const PERMISSIONS_ADMIN = {

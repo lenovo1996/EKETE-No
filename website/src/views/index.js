@@ -101,6 +101,8 @@ import Business from './admin/business'
 import MenuUser from './admin/menuEKT'
 import MenuAdmin from './admin/menuAdmin'
 import MenuBussiness from './admin/menuBusiness'
+import UserEKT from './admin/userEKT'
+import UserAdmin from './admin/userAdmin'
 
 //user
 import LoginBusiness from './user/login-business'
@@ -601,6 +603,20 @@ const DEFINE_ROUTER_ADMIN = [
     permissions: 'admin',
     exact: true,
   },
+  {
+    path: ROUTES_ADMIN.USER_ADMIN,
+    Component: () => <UserAdmin />,
+    title: 'Quản lý user admin',
+    permissions: 'admin',
+    exact: true,
+  },
+  // {
+  //   path: ROUTES_ADMIN.USER_EKT,
+  //   Component: () => <UserEKT />,
+  //   title: 'Quản lý user ekt',
+  //   permissions: 'admin',
+  //   exact: true,
+  // },
 ]
 
 const AUTH_ROUTER = [

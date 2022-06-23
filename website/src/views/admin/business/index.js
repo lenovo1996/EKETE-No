@@ -8,38 +8,36 @@ import jwt_decode from 'jwt-decode'
 
 //antd
 import { Popconfirm, Select, Table, Button, notification, Input } from 'antd'
-import { SearchOutlined, ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons'
+import { SearchOutlined,DeleteOutlined } from '@ant-design/icons'
 
 //apis
 
-import { getBusinesses, setstatus, setprofilestatus } from 'apis/business'
+import { getBusinesses, setstatus, setprofilestatus, deleteBusinesses } from 'apis/business'
 
 //components
 import SettingColumns from 'components/setting-columns'
 import columnsBusiness from './columns'
 import BusinessForm from './BusinessForm'
 
-const { Option } = Select
+// const { Option } = Select
 export default function Employee() {
-  const history = useHistory()
   const dispatch = useDispatch()
   const typingTimeoutRef = useRef(null)
   const [columns, setColumns] = useState([])
-  const [countUser, setCountUser] = useState([])
   const [loading, setLoading] = useState(false)
   const [paramsFilter, setParamsFilter] = useState({ page: 1, page_size: 20 })
-  const [isOpenSelect, setIsOpenSelect] = useState(false)
   const [valueSearch, setValueSearch] = useState('')
 
-  const business = useSelector((state) => state.business)
 
+  const business = useSelector((state) => state.business)
   const onSearch = (e) => {
-    const value = e.target.value
-    setValueSearch(value)
+    setValueSearch(e.target.value)
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current)
     }
     typingTimeoutRef.current = setTimeout(() => {
+      const value = e.target.value
+
       if (value) paramsFilter.name = value
       else delete paramsFilter.name
 
@@ -53,12 +51,34 @@ export default function Employee() {
       dispatch({ type: ACTION.LOADING, data: false })
       if (res.status === 200) {
         dispatch({ type: 'SET_BUSINESS', data: res.data.data })
-      }
+      dispatch({ type: ACTION.LOADING, data: false })}
     } catch (e) {
       dispatch({ type: ACTION.LOADING, data: false })
       console.log(e)
     }
+}
+const _deleteBusiness = async (business_id) => {
+  try {
+    dispatch({ type: ACTION.LOADING, data: true })
+    const res = await deleteBusinesses(business_id)
+    dispatch({ type: ACTION.LOADING, data: false })
+    if (res.status === 200) {
+      if (res.data.success) {
+        notification.success({ message: 'Xóa cửa hàng thành công' })
+        _getBusinesses()
+      } else
+        notification.error({
+          message: res.data.message || 'Xóa cửa hàng thất bại, vui lòng thử lại',
+        })
+    } else
+      notification.error({
+        message: res.data.message || 'Xóa cửa hàng thất bại, vui lòng thử lại',
+      })
+  } catch (err) {
+    dispatch({ type: ACTION.LOADING, data: false })
+    console.log(err)
   }
+}
 
   const _setstatus = async (value, business_id) => {
     try {
@@ -108,30 +128,22 @@ export default function Employee() {
 
   useEffect(() => {
     _getBusinesses()
-  }, [])
-  const _getProfileStatus = (e) => {
-    if (e == 1) return 'Chưa xác thực'
-    if (e == 2) return 'Đã xác thực số điện thoại'
-    if (e == 3) return 'Đã gửi hình ảnh xác thực đăng ký kinh doanh'
-    if (e == 4) return 'Chờ xác thực'
-    if (e == 5) return 'Xác thực thành công'
-  }
+  }, [paramsFilter])
 
-  const _getStatus = (e) => {
-    if (e == 1) return 'Waiting for review'
-    if (e == 2) return 'Banned'
-    if (e == 3) return 'Block'
-    if (e == 4) return 'Warnning'
-    if (e == 5) return 'Active'
+  const _setBackgroudProfileStaus = (e) => {
+    if (e === 1) return '#fc4b6c'
+    if (e === 2) return '#0bb2fb'
+    if (e === 3) return '#1e4db7'
+    if (e === 4) return '#fdc90f'
+    if (e === 5) return '#39cb7f'
   }
-  const _setBackgroud = (e) => {
-    if (e === 1) return '#ff6600'
-    if (e === 2) return '#ffff00'
-    if (e === 3) return '#33ccff'
-    if (e === 4) return '#66e0ff'
-    if (e === 5) return '#00ff99'
+  const _setBackgroudStatus = (e) => {
+    if (e === 1) return '#0bb2fb'
+    if (e === 2) return '#fc4b6c'
+    if (e === 3) return '#11142d'
+    if (e === 4) return '#fdc90f'
+    if (e === 5) return '#39cb7f'
   }
-
   return (
     <div className={styles['container']}>
       <div className={styles['title_page']}>
@@ -143,7 +155,7 @@ export default function Employee() {
           <Input
             className={styles['search']}
             allowClear
-            suffix={<SearchOutlined />}
+            suffix={<SearchOutlined style={{ fontSize: 20 }}/>}
             placeholder="Tìm kiếm nhanh"
             onChange={onSearch}
             value={valueSearch}
@@ -172,7 +184,7 @@ export default function Employee() {
           showQuickJumper: true,
           onChange: (page, pageSize) =>
             setParamsFilter({ ...paramsFilter, page: page, page_size: pageSize }),
-          total: countUser,
+          // total: countUser,
         }}
         columns={columns.map((column) => {
           if (column.key === 'stt') return { ...column, render: (text, record, index) => index + 1 }
@@ -196,9 +208,9 @@ export default function Employee() {
               ...column,
               render: (text, record) => (
                 <Select
-                  defaultValue={_getProfileStatus(record.profile_status)}
+                  defaultValue={record.profile_status}
                   bordered={false}
-                  style={{ background: _setBackgroud(record.profile_status),  borderRadius: 3  }}
+                  style={{ background: _setBackgroudProfileStaus(record.profile_status),  borderRadius: 3, width:170, color: 'white' }}
                   onChange={(e) => _setprofilestatus(e, record.business_id)}
                 >
                   <option value={1}>Chưa xác thực</option>
@@ -217,10 +229,9 @@ export default function Employee() {
               ...column,
               render: (text, record) => (
                 <Select
-                  defaultValue={_getStatus(record.status)}
+                  defaultValue={record.status}
                   bordered={false}
-                  // className={styles['select_status']}
-                  style={{ background: _setBackgroud(record.status), borderRadius: 3 }}
+                  style={{ background: _setBackgroudStatus(record.status), borderRadius: 3, width: 120, color: 'white'  }}
                   onChange={(e) => _setstatus(e, record.business_id)}
                 >
                   <option value={5}>Active</option>
@@ -239,7 +250,7 @@ export default function Employee() {
                   title="Bạn có muốn xóa cửa hàng này không?"
                   okText="Đồng ý"
                   cancelText="Từ chối"
-                  //  onConfirm={() => _deleteUser(record.user_id)}
+                   onConfirm={() => _deleteBusiness(record.business_id)}
                 >
                   <Button icon={<DeleteOutlined />} type="primary" danger />
                 </Popconfirm>

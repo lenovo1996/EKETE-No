@@ -198,12 +198,12 @@ export default function MenuForm({
                 rules={[{ required: true, message: 'Vui lòng chọn trạng thái' }]}
               >
                 <Select style={{ width: 300 }}>
-                  <Option value="new">new</Option>
-                  <Option value="testing">testing</Option>
-                  <Option value="ready to public">ready to public</Option>
-                  <Option value="public ">public</Option>
-                  <Option value="waiting for review">waiting for review</Option>
-                  <Option value="pending">pending</Option>
+                <Option value={1}>new</Option>
+                    <Option value={2}>testing</Option>
+                    <Option value={3}>ready to public</Option>
+                    <Option value={4}>public</Option>
+                    <Option value={5}>pending</Option>
+                    <Option value={6}>waiting for review</Option>
                 </Select>
               </Form.Item>
             </Col>

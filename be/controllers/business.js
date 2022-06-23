@@ -265,6 +265,7 @@ module.exports._create = async (req, res, next) => {
             business_desiption: '',
             business_cover_image: '',
             list_image: [],
+            is_delete: false,
         };
 
         let _user = {
@@ -469,6 +470,7 @@ module.exports._create = async (req, res, next) => {
 module.exports._update = async (req, res, next) => {
     try {
         req.params.business_id = Number(req.params.business_id);
+        req.body.prefix = removeUnicode(req.body.business_name, true).toLowerCase();
         let business = await client.db(SDB).collection('Business').findOne(req.params);
         if (!business) {
             throw new Error(`400: Doanh nghiệp không tồn tại!`);
@@ -476,16 +478,15 @@ module.exports._update = async (req, res, next) => {
         delete req.body._id;
         delete req.body.business_id;
         delete req.body.system_user_id;
-        delete req.body.database_name;
         delete req.body.create_date;
         delete req.body.creator_id;
         let _business = { ...business, ...req.body };
         _business = {
             business_id: _business.business_id,
             system_user_id: _business.system_user_id,
-            prefix: _business.prefix,
+            prefix: req.body.prefix,
             business_name: _business.business_name,
-            database_name: _business.database_name,
+            database_name: `${req.body.prefix}DB`,
             company_name: _business.company_name,
             company_email: _business.company_email,
             company_phone: _business.company_phone,
@@ -512,6 +513,7 @@ module.exports._update = async (req, res, next) => {
             business_cover_image: _business.business_cover_image || '',
             list_image: _business.list_image || '',
             logo: _business.logo || '',
+            slug_name: removeUnicode(String(req.body.business_name), true).toLowerCase(),
         };
         req['body'] = _business;
         await businessService._update(req, res, next);
@@ -522,14 +524,7 @@ module.exports._update = async (req, res, next) => {
 
 module.exports._delete = async (req, res, next) => {
     try {
-        // let business = await client
-        //     .db(SDB)
-        //     .collection('Business')
-        //     .find({ business_id:  req.body.business_id  })
-        //     .toArray();
-        // const DBs = business.map((eBusiness) => {
-        //     return eBusiness.database_name;
-        // });
+        
         await client
             .db(SDB)
             .collection('Business')
@@ -543,11 +538,6 @@ module.exports._delete = async (req, res, next) => {
                     },
                 }
             );
-        // await Promise.all(
-        //     DBs.map((DB) => {
-        //         return client.db(DB).dropDatabase();
-        //     })
-        // );
         res.send({
             success: true,
             message: 'Xóa doanh nghiệp thành công!',
@@ -571,7 +561,7 @@ module.exports._Validate = async (req, res, next) => {
                 { $set: {
                     business_registration_image: req.body.business_registration_image,
                       tax_code: req.body.tax_code ,
-                      profile_status: 'Đã gửi hình ảnh xác thực đăng ký kinh doanh'
+                      profile_status: 3
                     } }
             );
 
@@ -638,7 +628,7 @@ module.exports._verifyOTP = async (req, res, next) => {
                     {
                         $set: {
                             active: true,
-                            profile_status: 'Đã xác thực số điện thoại',
+                            profile_status: 2,
                         },
                     }
                 );

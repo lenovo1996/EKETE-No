@@ -3,7 +3,7 @@ import Icon from '@ant-design/icons'
 
 export default function (iconName) {
   const IconItem = IconList[iconName]
-  console.log(IconList);
+  // console.log(IconList);
   return (
     <>
       <Icon component={IconItem}></Icon>
