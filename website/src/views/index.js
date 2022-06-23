@@ -18,7 +18,7 @@ import AuthenticationBusiness from 'components/authenticationBusiness'
 import { getMenu } from 'apis/menu-admin'
 import { getMenuU } from 'apis/menu-user'
 
-//views
+
 //views
 // import Login from './login'
 // import Register from './register'
@@ -90,7 +90,6 @@ import DeliveryControl from './viewsBusiness/delivery-control'
 import ShippingForm from './viewsBusiness/shipping/shipping-form'
 
 //admin
-// import LoginBusinessAdmin from './admin/'
 import LoginAdmin from './admin/login'
 import RegisterAdmin from './admin/register'
 import OTPAdmin from './admin/otp'
@@ -100,6 +99,10 @@ import VerifyAccountAdmin from './admin/verify-account'
 import OverviewAdmin from './admin/overviewadmin'
 import Business from './admin/business'
 import MenuUser from './admin/menuEKT'
+import MenuAdmin from './admin/menuAdmin'
+import MenuBussiness from './admin/menuBusiness'
+import UserEKT from './admin/userEKT'
+import UserAdmin from './admin/userAdmin'
 
 //user
 import LoginBusiness from './user/login-business'
@@ -112,9 +115,16 @@ import VerifyAccountUser from './user/verify-account'
 import NotFoundUser from './user/not-found/404'
 import BusinessUser from './user/business_user'
 import OverviewUser from './user/overview'
+
 import NewfeedComponent from './user/newfeed'
 import Infor from '../components/LayoutUser/infor'
 import SettingInfor from '../components/LayoutUser/setting-infor'
+
+import DetailBusiness from './user/business_user/detail_business'
+import UpdateBusiness from './user/business_user/Update_business'
+import Message1 from './user/message1'
+import RegisterBusiness from './user/business_user/registerbusiness'
+
 
 //apis
 
@@ -535,6 +545,8 @@ const DEFINE_ROUTER = [
     permissions: [],
     exact: true,
   },
+  
+  
 ]
 const DEFINE_ROUTER_USER = [
   {
@@ -562,6 +574,27 @@ const DEFINE_ROUTER_USER = [
     path: ROUTES_USER.SETTINGINFOR,
     Component: () => <SettingInfor />,
     title: 'Thiết lập thông tin cá nhân',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.DETAILBUSINESS,
+    Component: () => <DetailBusiness />,
+    title: 'Chi tiết cửa hàng',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.UPDATEBUSINESS,
+    Component: () => <UpdateBusiness />,
+    title: 'Thiết lập thông tin cửa hàng',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.REGISTERBUSINESS,
+    Component: () => <RegisterBusiness />,
+    title: 'Đăng ký cửa hàng ',
     permissions: [],
     exact: true,
   },
@@ -597,6 +630,34 @@ const DEFINE_ROUTER_ADMIN = [
     permissions: 'admin',
     exact: true,
   },
+  {
+    path: ROUTES_ADMIN.MENU_ADMIN,
+    Component: () => <MenuAdmin />,
+    title: 'Menu admin',
+    permissions: 'admin',
+    exact: true,
+  },
+  {
+    path: ROUTES_ADMIN.MENU_BUSINESS,
+    Component: () => <MenuBussiness />,
+    title: 'Menu business',
+    permissions: 'admin',
+    exact: true,
+  },
+  {
+    path: ROUTES_ADMIN.USER_ADMIN,
+    Component: () => <UserAdmin />,
+    title: 'Quản lý user admin',
+    permissions: 'admin',
+    exact: true,
+  },
+  // {
+  //   path: ROUTES_ADMIN.USER_EKT,
+  //   Component: () => <UserEKT />,
+  //   title: 'Quản lý user ekt',
+  //   permissions: 'admin',
+  //   exact: true,
+  // },
 ]
 
 const AUTH_ROUTER = [
@@ -649,13 +710,13 @@ const AUTH_ROUTER = [
     title: 'Forget password',
     permissions: [],
   },
-  {
-    path: ROUTES_USER.NEWFEED,
-    Component: () => <NewfeedComponent />,
-    title: 'Sản phẩm hot trong tháng',
-    permissions: [],
-    exact: true,
-  },
+  // {
+  //   path: ROUTES_USER.NEWFEED,
+  //   Component: () => <NewfeedComponent />,
+  //   title: 'Sản phẩm hot trong tháng',
+  //   permissions: [],
+  //   exact: true,
+  // },
  
 
   //admin

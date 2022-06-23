@@ -10,7 +10,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { updateuserAdmin, getuserAdmin } from 'apis/admin'
 import { uploadFile } from 'apis/upload'
 
-export default function ModalUpdateUser({ user, children, reload }) {
+export default function ModalUpdateUser({ userAdmin, children, reload }) {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [avatar, setAvatar] = useState('')
@@ -25,14 +25,14 @@ export default function ModalUpdateUser({ user, children, reload }) {
                 avatar: avatar,
             }
             setLoading(true)
-            const res = await updateuserAdmin(body, user && user.user_id)
+            const res = await updateuserAdmin(body, userAdmin && userAdmin.userAdmin_id)
             console.log(res)
             if (res.status === 200) {
                 if (res.data.success) {
                     toggle()
                     reload()
                     notification.success({ message: 'Cập nhật thông tin cá nhân thành công' })
-                    reload({ user_id: res.data.data.user_id })
+                    reload({ userAdmin_id: res.data.data.userAdmin_id })
                 } else
                     notification.error({
                         message: res.data.message || 'Cập nhật thông tin cá nhân thành công',
@@ -71,9 +71,9 @@ export default function ModalUpdateUser({ user, children, reload }) {
 
     useEffect(() => {
         if (visible)
-            if (user) {
-                form.setFieldsValue({ ...user })
-                setAvatar(user.avatar || '')
+            if (userAdmin) {
+                form.setFieldsValue({ ...userAdmin })
+                setAvatar(userAdmin.avatar || '')
             }
     }, [visible])
 

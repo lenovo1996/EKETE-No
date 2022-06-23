@@ -31,39 +31,30 @@ import {
   LogoutOutlined,
   UserOutlined,
   ExportOutlined,
+  PlusSquareOutlined,
 } from '@ant-design/icons'
 
 //components
-import Permission from 'components/permission'
 import ModalUpdateUser from './modal-user'
 import DropdownLanguage from 'components/dropdown-language'
-import { getMenu } from 'apis/menu-user'
 //apis
 import { getuserEKT } from 'apis/user-ekt'
+
+import { getBusinesses } from 'apis/business'
 
 const { Search } = Input
 const { Sider } = Layout
 const BaseLayout = (props) => {
+  let menu = useSelector((state) => state.menuUser)
   const history = useHistory()
-  const location = useLocation()
+
   const routeMatch = useRouteMatch()
   const dispatch = useDispatch()
   const WIDTH_MENU_OPEN = 230
   const WIDTH_MENU_CLOSE = 60
 
-  const [branches, setBranches] = useState([])
   const [user, setUser] = useState({})
-  const [loading, setLoading] = useState(false)
-  const [menu, setMenu] = useState([])
-
-  const login = useSelector((state) => state.login)
-  const branchIdApp = useSelector((state) => state.branch.branchId)
-  const triggerReloadBranch = useSelector((state) => state.branch.trigger)
-  const setting = useSelector((state) => state.setting)
-
-  // const dataUser = localStorage.getItem('accessToken')
-  //   ? jwt_decode(localStorage.getItem('accessToken'))
-  //   : {}
+  const [business, setBusiness] = useState([])
 
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
@@ -88,31 +79,30 @@ const BaseLayout = (props) => {
       console.log(error)
     }
   }
-
-  var toggle = () => {
-    localStorage.setItem('collapsed', JSON.stringify(!collapsed))
-    setCollapsed(!collapsed)
-  }
-  const _getMenu = async () => {
+  const _getBusinesses = async (params) => {
     try {
-      setLoading(true)
-      const res = await getMenu()
-      console.log(res)
-      if (res.status === 200) {
-        setMenu(res.data.data)
-        console.log('res.data.data', res.data.data)
-      }
-      setLoading(false)
+      const res = await getBusinesses(params)
+      if (res.status === 200) setBusiness(res.data.data)
+      console.log(business);
     } catch (e) {
-      setLoading(false)
       console.log(e)
     }
   }
 
   useEffect(() => {
-    _getMenu()
-  }, [])
+    _getBusinesses({ user_phone: dataUser.data.phone })
+  }, [dataUser.data.phone])
 
+  var toggle = () => {
+    localStorage.setItem('collapsed', JSON.stringify(!collapsed))
+    setCollapsed(!collapsed)
+  }
+
+  const linkto = (menu) => {
+    if (menu.status === 'public') {
+      return menu.url
+    } else return '/message1'
+  }
   const renderMenuItem = (_menu) => (
     <>
       {_menu.menuCon ? (
@@ -181,8 +171,25 @@ const BaseLayout = (props) => {
       )}
     </>
   )
-
-  const onSearch = (value) => console.log(value)
+  const renderBusinessItem = (_business) => (
+    <>
+      <Menu.Item
+        key={_business.business_name}
+        style={{
+          // fontSize: '0.9rem',
+          width: '100%',
+          height: collapsed ? 40 : '',
+          display: 'block',
+        }}
+      >
+        <div className={styles['avatar']} style={{ backgroundImage: `url(${_business.logo})` }}>
+          <Link to={'/detail-business/' + _business.business_id} style={{ marginLeft: 50 }} >
+            {_business.business_name}
+          </Link>
+        </div>
+      </Menu.Item>
+    </>
+  )
 
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
@@ -195,7 +202,7 @@ const BaseLayout = (props) => {
     if (localStorage.getItem('openKey')) setOpenKeys([localStorage.getItem('openKey')])
   }, [])
 
-  const content = (
+    const content = (
     <div className={styles['user_information']}>
       {/* <ModalUpdateUser user={user} reload={getInfoUser}> */}
       <div>
@@ -224,18 +231,6 @@ const BaseLayout = (props) => {
       </div> */}
     </div>
   )
-  const SettingOutlined = () => (
-    <div className={styles['notificationBox']}>
-      {/* <div className={styles['title']}></div> */}
-      {/* <div className={styles['content']}>
-        <Empty />
-      </div> */}
-    </div>
-  )
-
-  // useEffect(() => {
-  //   _getBranches()
-  // }, [triggerReloadBranch])
 
   useEffect(() => {
     getInfoUser({ user_id: dataUser.data.user_id })
@@ -250,319 +245,131 @@ const BaseLayout = (props) => {
   }, [])
 
   return (
-    <>
-      <div>
-        <div>
-          {user === [] || user === null ? (
-            <div>
-              <Layout style={{ backgroundColor: '#F9F9F9', height: '100%' }}>
-                <BackTop style={{ right: 10, bottom: 15 }} />
+    <Layout style={{ backgroundColor: 'white', height: '100%' }}>
+      <BackTop style={{ right: 10, bottom: 15 }} />
 
-                <Sider
-                  trigger={null}
-                  collapsible
-                  width={isMobile ? '100%' : WIDTH_MENU_OPEN}
-                  collapsedWidth={isMobile ? 0 : WIDTH_MENU_CLOSE}
-                  style={{
-                    backgroundColor: 'white',
-                    zIndex: isMobile && 6000,
-                    height: '100vh',
-                    position: 'fixed',
-                  }}
-                  collapsed={collapsed}
-                >
-                  <Row
-                    justify="center"
-                    style={{
-                      display: collapsed ? 'none' : 'flex',
-                      paddingTop: 10,
-                      // paddingBottom: 20,
-                    }}
-                  >
-                    {/* <Avatar
-                                  src={user && (user.avatar || '')}
-                                  style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
-                              /> */}
-                    <div style={{ width: 80, height: 80, fontSize: 24, fontWeight: 600 }}>
-                      <h3>EKETE</h3>
-                    </div>
-                  </Row>
-                  <Menu
-                    style={{
-                      height: `calc(100vh - ${collapsed ? 4 : 96}px)`,
-                      overflowY: 'auto',
-                      overflowX: 'hidden',
-                    }}
-                    theme="light"
-                    onClick={(e) => {
-                      if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
-                    }}
-                    // onOpenChange={onOpenChange}
-                    openKeys={openKeys}
-                    selectedKeys={routeMatch.path}
-                    mode="inline"
-                  >
-                    {menu.map(renderMenuItem)}
-                    <Menu.Item
-                      key={ROUTES_USER.OVERVIEW}
-                      // onClick={onSignOut}
-                      icon={<DashboardOutlined />}
-                    >
-                      <Link to={ROUTES_USER.OVERVIEW}>Tổng quan</Link>
-                    </Menu.Item>
-                    {/* <Menu.Item
-                                  key={ROUTES_USER.BUSINESS}
-                                  // onClick={onSignOut}
-                                  icon={<DashboardOutlined />}
-                              >
-                                  <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
-                              </Menu.Item> */}
-                    <Menu.Item
-                      key={ROUTES_USER.LOGIN}
-                      onClick={onSignOut}
-                      icon={<LogoutOutlined />}
-                    >
-                      <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
-                    </Menu.Item>
-                  </Menu>
-                </Sider>
-                <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
-                  <Affix offsetTop={0}>
-                    <Row
-                      wrap={isMobile}
-                      justify="space-between"
-                      align="middle"
-                      style={{ backgroundColor: '#5b6be8' }}
-                    >
-                      <Row
-                        align="middle"
-                        wrap={false}
-                        style={{
-                          width: '100%',
-                          paddingLeft: 5,
-                          paddingRight: 5,
-                          paddingTop: 12,
-                          paddingBottom: 12,
-                        }}
-                        justify={isMobile && 'space-between'}
-                      >
-                        <MenuOutlined
-                          onClick={toggle}
-                          style={{ fontSize: 20, marginRight: 18, color: 'white' }}
-                        />
-                        <Permission permissions={[PERMISSIONS.them_cua_hang]}>
-                          <Link
-                            to={{ pathname: ROUTES_USER.BRANCH, state: 'show-modal-create-branch' }}
-                            style={{ marginRight: '1rem', cursor: 'pointer' }}
-                          >
-                            <Button
-                              type="primary"
-                              size="large"
-                              style={{
-                                backgroundColor: '#FFAB2D',
-                                borderColor: '#FFAB2D',
-                                fontSize: 18,
-                                marginLeft: 10,
-                                display: login.role === 'EMPLOYEE' && 'none',
-                              }}
-                            >
-                              <Plus />
-                            </Button>
-                          </Link>
-                        </Permission>
-                      </Row>
-                      <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
-                        <DropdownLanguage />
-                        <div style={{ marginTop: 8, marginRight: 15 }}>
-                          <Dropdown
-                            overlay={<NotifyContent />}
-                            placement="bottomCenter"
-                            trigger="click"
-                          >
-                            <Badge count={0} showZero size="small" offset={[-3, 3]}>
-                              <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
-                            </Badge>
-                          </Dropdown>
-                        </div>
-                        <Dropdown overlay={content} trigger="click">
-                          <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
-                            <Button>Đăng ký</Button>
-                            <Button>Đăng nhập</Button>
-                          </Row>
-                        </Dropdown>
-                      </Row>
-                    </Row>
-                  </Affix>
-                  <div style={{ backgroundColor: '#F9F9F9', width: '100%' }}>{props.children}</div>
-                </Layout>
-              </Layout>
-            </div>
-          ) : (
-            <div>
-              <Layout style={{ backgroundColor: '#F9F9F9', height: '100%' }}>
-                <BackTop style={{ right: 10, bottom: 15 }} />
+      <Sider
+        trigger={null}
+        collapsible
+        width={isMobile ? '100%' : WIDTH_MENU_OPEN}
+        collapsedWidth={isMobile ? 0 : WIDTH_MENU_CLOSE}
+        style={{
+          backgroundColor: 'white',
+          zIndex: isMobile && 6000,
+          height: '100vh',
+          position: 'fixed',
+        }}
+        collapsed={collapsed}
+      >
+        <Row
+          justify="center"
+          style={{
+            display: collapsed ? 'none' : 'flex',
+            paddingTop: 10,
+            paddingBottom: 20,
+          }}
+        >
+          <Avatar
+            src={user && (user.avatar || '')}
+            style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
+          />
+        </Row>
+        <Menu
+          style={{
+            height: `calc(100vh - ${collapsed ? 4 : 96}px)`,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+          }}
+          theme="light"
+          onClick={(e) => {
+            if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
+          }}
+          // onOpenChange={onOpenChange}
+          openKeys={openKeys}
+          selectedKeys={routeMatch.path}
+          mode="inline"
+        >
+          <h2 style={{ margin: 20, color: 'gray' }}> MAIN MENU</h2>
 
-                <Sider
-                  trigger={null}
-                  collapsible
-                  width={isMobile ? '100%' : WIDTH_MENU_OPEN}
-                  collapsedWidth={isMobile ? 0 : WIDTH_MENU_CLOSE}
-                  style={{
-                    backgroundColor: 'white',
-                    zIndex: isMobile && 6000,
-                    height: '100vh',
-                    position: 'fixed',
-                  }}
-                  collapsed={collapsed}
-                >
-                  <Row
-                    justify="center"
+          {menu.map(renderMenuItem)}
+
+          <h3 style={{ marginTop: 40, margin: 20, color: 'gray' }}> DANH SÁCH CỬA HÀNG</h3>
+          {business.map(renderBusinessItem)}
+          <Link to="/register-business">
+            <Button
+              style={{
+                marginLeft: 20,
+                width: 200,
+                height: 50,
+                background: '#4dc3ff',
+                fontFamily: 'revert-layer',
+                fontSize: 20,
+                color: 'white',
+              }}
+            >
+              Tạo cửa hàng mới
+            </Button>
+          </Link>
+
+          <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
+            <Link>Đăng xuất</Link>
+          </Menu.Item>
+        </Menu>
+      </Sider>
+      <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
+        <Affix offsetTop={0}>
+          <Row
+            wrap={isMobile}
+            justify="space-between"
+            align="middle"
+            style={{ backgroundColor: '#5b6be8' }}
+          >
+            <Row
+              align="middle"
+              wrap={false}
+              style={{
+                width: '100%',
+                paddingLeft: 5,
+                paddingRight: 5,
+                paddingTop: 12,
+                paddingBottom: 12,
+              }}
+              justify={isMobile && 'space-between'}
+            ></Row>
+            <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
+              <DropdownLanguage />
+              <div style={{ marginTop: 8, marginRight: 15 }}>
+                <Dropdown overlay={<NotifyContent />} placement="bottomCenter" trigger="click">
+                  <Badge count={0} showZero size="small" offset={[-3, 3]}>
+                    <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
+                  </Badge>
+                </Dropdown>
+              </div>
+              <Dropdown overlay={content} trigger="click">
+                <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
+                  <Avatar
+                    src={user && (user.avatar || '')}
+                    style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 35, height: 35 }}
+                  />
+                  <span
                     style={{
-                      display: collapsed ? 'none' : 'flex',
-                      paddingTop: 10,
-                      // paddingBottom: 20,
+                      textTransform: 'capitalize',
+                      marginLeft: 5,
+                      color: 'white',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
                     }}
                   >
-                    {/* <Avatar
-                                  src={user && (user.avatar || '')}
-                                  style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
-                              /> */}
-                    <div style={{ width: 80, height: 80, fontSize: 24, fontWeight: 600 }}>
-                      <h3>EKETE</h3>
-                    </div>
-                  </Row>
-                  <Menu
-                    style={{
-                      height: `calc(100vh - ${collapsed ? 4 : 96}px)`,
-                      overflowY: 'auto',
-                      overflowX: 'hidden',
-                    }}
-                    theme="light"
-                    onClick={(e) => {
-                      if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
-                    }}
-                    // onOpenChange={onOpenChange}
-                    openKeys={openKeys}
-                    selectedKeys={routeMatch.path}
-                    mode="inline"
-                  >
-                    {menu.map(renderMenuItem)}
-                    <Menu.Item
-                      key={ROUTES_USER.OVERVIEW}
-                      // onClick={onSignOut}
-                      icon={<DashboardOutlined />}
-                    >
-                      <Link to={ROUTES_USER.OVERVIEW}>Tổng quan</Link>
-                    </Menu.Item>
-                    {/* <Menu.Item
-                                  key={ROUTES_USER.BUSINESS}
-                                  // onClick={onSignOut}
-                                  icon={<DashboardOutlined />}
-                              >
-                                  <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
-                              </Menu.Item> */}
-                    <Menu.Item
-                      key={ROUTES_USER.LOGIN}
-                      onClick={onSignOut}
-                      icon={<LogoutOutlined />}
-                    >
-                      <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
-                    </Menu.Item>
-                  </Menu>
-                </Sider>
-                <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
-                  <Affix offsetTop={0}>
-                    <Row
-                      wrap={isMobile}
-                      justify="space-between"
-                      align="middle"
-                      style={{ backgroundColor: '#5b6be8' }}
-                    >
-                      <Row
-                        align="middle"
-                        wrap={false}
-                        style={{
-                          width: '100%',
-                          paddingLeft: 5,
-                          paddingRight: 5,
-                          paddingTop: 12,
-                          paddingBottom: 12,
-                        }}
-                        justify={isMobile && 'space-between'}
-                      >
-                        <MenuOutlined
-                          onClick={toggle}
-                          style={{ fontSize: 20, marginRight: 18, color: 'white' }}
-                        />
-                        <Permission permissions={[PERMISSIONS.them_cua_hang]}>
-                          <Link
-                            to={{ pathname: ROUTES_USER.BRANCH, state: 'show-modal-create-branch' }}
-                            style={{ marginRight: '1rem', cursor: 'pointer' }}
-                          >
-                            <Button
-                              type="primary"
-                              size="large"
-                              style={{
-                                backgroundColor: '#FFAB2D',
-                                borderColor: '#FFAB2D',
-                                fontSize: 18,
-                                marginLeft: 10,
-                                display: login.role === 'EMPLOYEE' && 'none',
-                              }}
-                            >
-                              <Plus />
-                            </Button>
-                          </Link>
-                        </Permission>
-                      </Row>
-                      <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
-                        <DropdownLanguage />
-                        <div style={{ marginTop: 8, marginRight: 15 }}>
-                          <Dropdown
-                            overlay={<NotifyContent />}
-                            placement="bottomCenter"
-                            trigger="click"
-                          >
-                            <Badge count={0} showZero size="small" offset={[-3, 3]}>
-                              <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
-                            </Badge>
-                          </Dropdown>
-                        </div>
-                        <Dropdown overlay={content} trigger="click">
-                          <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
-                            <Avatar
-                              src={user && (user.avatar || '')}
-                              style={{
-                                color: '#FFF',
-                                backgroundColor: '#FDAA3E',
-                                width: 35,
-                                height: 35,
-                              }}
-                            />
-                            <span
-                              style={{
-                                textTransform: 'capitalize',
-                                marginLeft: 5,
-                                color: 'white',
-                                fontWeight: 600,
-                                whiteSpace: 'nowrap',
-                              }}
-                            >
-                              {user && (user.fullname || '...')}
-                            </span>
-                          </Row>
-                        </Dropdown>
-                      </Row>
-                    </Row>
-                  </Affix>
-                  <div style={{ backgroundColor: '#F9F9F9', width: '100%' }}>{props.children}</div>
-                </Layout>
-              </Layout>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+                    {user && (user.fullname || '...')}
+                  </span>
+                </Row>
+              </Dropdown>
+            </Row>
+          </Row>
+        </Affix>
+        <div style={{ backgroundColor: '#f0f2f5', width: '100%' }}>{props.children}</div>
+      </Layout>
+    </Layout>
   )
 }
 
