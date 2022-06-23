@@ -31,7 +31,6 @@ import {
   LogoutOutlined,
   UserOutlined,
   ExportOutlined,
-  PlusSquareOutlined,
 } from '@ant-design/icons'
 
 //components
@@ -42,14 +41,11 @@ import { getMenu } from 'apis/menu-user'
 //apis
 import { getuserEKT } from 'apis/user-ekt'
 
-import { getBusinesses } from 'apis/business'
-
 const { Search } = Input
 const { Sider } = Layout
 const BaseLayout = (props) => {
-  let menu = useSelector((state) => state.menuUser)
   const history = useHistory()
-
+  const location = useLocation()
   const routeMatch = useRouteMatch()
   const dispatch = useDispatch()
   const WIDTH_MENU_OPEN = 230
@@ -61,6 +57,13 @@ const BaseLayout = (props) => {
   const [menu, setMenu] = useState([])
 
   const login = useSelector((state) => state.login)
+  const branchIdApp = useSelector((state) => state.branch.branchId)
+  const triggerReloadBranch = useSelector((state) => state.branch.trigger)
+  const setting = useSelector((state) => state.setting)
+
+  // const dataUser = localStorage.getItem('accessToken')
+  //   ? jwt_decode(localStorage.getItem('accessToken'))
+  //   : {}
 
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
@@ -85,19 +88,6 @@ const BaseLayout = (props) => {
       console.log(error)
     }
   }
-  const _getBusinesses = async (params) => {
-    try {
-      const res = await getBusinesses(params)
-      console.log('resShop', res)
-      if (res.status === 200) setBusiness(res.data.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  useEffect(() => {
-    _getBusinesses({ user_phone: dataUser.data.phone })
-  }, [dataUser.data.phone])
 
   var toggle = () => {
     localStorage.setItem('collapsed', JSON.stringify(!collapsed))
@@ -119,11 +109,10 @@ const BaseLayout = (props) => {
     }
   }
 
-  const linkto = (menu) => {
-    if (menu.status === 'public') {
-      return menu.url
-    } else return '/message1'
-  }
+  useEffect(() => {
+    _getMenu()
+  }, [])
+
   const renderMenuItem = (_menu) => (
     <>
       {_menu.menuCon ? (
@@ -192,26 +181,8 @@ const BaseLayout = (props) => {
       )}
     </>
   )
-  const renderBusinessItem = (_business) => (
-    <>
-      <Menu.Item
-        key={_business.business_name}
-        style={{
-          // fontSize: '0.9rem',
-          width: '100%',
-          height: collapsed ? 40 : '',
-          display: 'block',
-        }}
 
-      >
-        <div className={styles['avatar']} style={{backgroundImage: `url(${_business.logo  })`}} >
-        <Link  style={{marginLeft:50 }}>{_business.business_name}</Link>
-
-        </div>
-
-      </Menu.Item>
-    </>
-  )
+  const onSearch = (value) => console.log(value)
 
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
@@ -226,15 +197,11 @@ const BaseLayout = (props) => {
 
   const content = (
     <div className={styles['user_information']}>
-      <ModalUpdateUser user={user} reload={getInfoUser}>
-        <div>
-          <div
-            style={{ color: '#565656', paddingLeft: 10 }}
-            // onClick={getInfoUser}
-          >
-            <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
-            Tài khoản của tôi
-          </div>
+      {/* <ModalUpdateUser user={user} reload={getInfoUser}> */}
+      <div>
+        <div style={{ color: '#565656', paddingLeft: 10 }}>
+          <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
+          <Link to={ROUTES_USER.INFOR}> Tài khoản của tôi</Link>
         </div>
       </div>
       {/* </ModalUpdateUser> */}
@@ -266,6 +233,9 @@ const BaseLayout = (props) => {
     </div>
   )
 
+  // useEffect(() => {
+  //   _getBranches()
+  // }, [triggerReloadBranch])
 
   useEffect(() => {
     getInfoUser({ user_id: dataUser.data.user_id })
@@ -279,107 +249,27 @@ const BaseLayout = (props) => {
     } else setIsMobile(false)
   }, [])
 
-
   return (
-    <Layout style={{ backgroundColor: 'white', height: '100%' }}>
-      <BackTop style={{ right: 10, bottom: 15 }} />
+    <>
+      <div>
+        <div>
+          {user === [] || user === null ? (
+            <div>
+              <Layout style={{ backgroundColor: '#F9F9F9', height: '100%' }}>
+                <BackTop style={{ right: 10, bottom: 15 }} />
 
-      <Sider
-        trigger={null}
-        collapsible
-        width={isMobile ? '100%' : WIDTH_MENU_OPEN}
-        collapsedWidth={isMobile ? 0 : WIDTH_MENU_CLOSE}
-        style={{
-          backgroundColor: 'white',
-          zIndex: isMobile && 6000,
-          height: '100vh',
-          position: 'fixed',
-        }}
-        collapsed={collapsed}
-      >
-        <Row
-          justify="center"
-          style={{
-            display: collapsed ? 'none' : 'flex',
-            paddingTop: 10,
-            paddingBottom: 20,
-          }}
-        >
-          <Avatar
-            src={user && (user.avatar || '')}
-            style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
-          />
-        </Row>
-        <Menu
-          style={{
-            height: `calc(100vh - ${collapsed ? 4 : 96}px)`,
-            overflowY: 'auto',
-            overflowX: 'hidden',
-          }}
-          theme="light"
-          onClick={(e) => {
-            if (e.keyPath && e.keyPath.length === 1) localStorage.removeItem('openKey')
-          }}
-          // onOpenChange={onOpenChange}
-          openKeys={openKeys}
-          selectedKeys={routeMatch.path}
-          mode="inline"
-        >
-          <h2 style={{ margin: 20, color: 'gray' }}> MAIN MENU</h2>
-
-          {menu.map(renderMenuItem)}
-
-          <h3 style={{ marginTop: 40, margin: 20, color: 'gray' }}> DANH SÁCH CỬA HÀNG</h3>
-          {business.map(renderBusinessItem)}
-          <Link to="/registerbusiness">
-            <Button
-              style={{
-                marginLeft: 20,
-                width: 200,
-                height: 50,
-                background: '#4dc3ff',
-                fontFamily: 'revert-layer',
-                fontSize: 20,
-                color: 'white',
-              }}
-            >
-              Tạo cửa hàng mới
-            </Button>
-          </Link>
-
-          <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
-            <Link>Đăng xuất</Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
-        <Affix offsetTop={0}>
-          <Row
-            wrap={isMobile}
-            justify="space-between"
-            align="middle"
-            style={{ backgroundColor: '#5b6be8' }}
-          >
-            <Row
-              align="middle"
-              wrap={false}
-              style={{
-                width: '100%',
-                paddingLeft: 5,
-                paddingRight: 5,
-                paddingTop: 12,
-                paddingBottom: 12,
-              }}
-              justify={isMobile && 'space-between'}
-            >
-              <MenuOutlined
-                onClick={toggle}
-                style={{ fontSize: 20, marginRight: 18, color: 'white' }}
-              />
-              <Permission permissions={[PERMISSIONS.them_cua_hang]}>
-                <Link
-                  to={{ pathname: ROUTES_USER.BRANCH, state: 'show-modal-create-branch' }}
-                  style={{ marginRight: '1rem', cursor: 'pointer' }}
+                <Sider
+                  trigger={null}
+                  collapsible
+                  width={isMobile ? '100%' : WIDTH_MENU_OPEN}
+                  collapsedWidth={isMobile ? 0 : WIDTH_MENU_CLOSE}
+                  style={{
+                    backgroundColor: 'white',
+                    zIndex: isMobile && 6000,
+                    height: '100vh',
+                    position: 'fixed',
+                  }}
+                  collapsed={collapsed}
                 >
                   <Row
                     justify="center"
@@ -427,7 +317,11 @@ const BaseLayout = (props) => {
                               >
                                   <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
                               </Menu.Item> */}
-                    <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
+                    <Menu.Item
+                      key={ROUTES_USER.LOGIN}
+                      onClick={onSignOut}
+                      icon={<LogoutOutlined />}
+                    >
                       <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
                     </Menu.Item>
                   </Menu>
@@ -480,7 +374,11 @@ const BaseLayout = (props) => {
                       <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
                         <DropdownLanguage />
                         <div style={{ marginTop: 8, marginRight: 15 }}>
-                          <Dropdown overlay={<NotifyContent />} placement="bottomCenter" trigger="click">
+                          <Dropdown
+                            overlay={<NotifyContent />}
+                            placement="bottomCenter"
+                            trigger="click"
+                          >
                             <Badge count={0} showZero size="small" offset={[-3, 3]}>
                               <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
                             </Badge>
@@ -498,14 +396,13 @@ const BaseLayout = (props) => {
                   <div style={{ backgroundColor: '#F9F9F9', width: '100%' }}>{props.children}</div>
                 </Layout>
               </Layout>
-               
             </div>
           ) : (
             <div>
-                    <Layout style={{ backgroundColor: '#F9F9F9', height: '100%' }}>
-                 <BackTop style={{ right: 10, bottom: 15 }} />
-            
-                 <Sider
+              <Layout style={{ backgroundColor: '#F9F9F9', height: '100%' }}>
+                <BackTop style={{ right: 10, bottom: 15 }} />
+
+                <Sider
                   trigger={null}
                   collapsible
                   width={isMobile ? '100%' : WIDTH_MENU_OPEN}
@@ -518,41 +415,8 @@ const BaseLayout = (props) => {
                   }}
                   collapsed={collapsed}
                 >
-                  {branches.map((e, index) => (
-                    <Select.Option value={e.branch_id} key={index}>
-                      {e.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Row> */}
-              {/* <Search
-              // className={'ant-input-group-addon'}
-                placeholder="Tìm kiếm"
-                allowClear
-                enterButton="Search"
-                size="large"
-                style={{ width: 240 }}
-                onSearch={onSearch}
-              /> */}
-
-              {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
-            </Row>
-            <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
-              <DropdownLanguage />
-              <div style={{ marginTop: 8, marginRight: 15 }}>
-                <Dropdown overlay={<NotifyContent />} placement="bottomCenter" trigger="click">
-                  <Badge count={0} showZero size="small" offset={[-3, 3]}>
-                    <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
-                  </Badge>
-                </Dropdown>
-              </div>
-              <Dropdown overlay={content} trigger="click">
-                <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
-                  <Avatar
-                    src={user && (user.avatar || '')}
-                    style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 35, height: 35 }}
-                  />
-                  <span
+                  <Row
+                    justify="center"
                     style={{
                       display: collapsed ? 'none' : 'flex',
                       paddingTop: 10,
@@ -597,7 +461,11 @@ const BaseLayout = (props) => {
                               >
                                   <Link to={ROUTES_USER.BUSINESS}>Cửa hàng</Link>
                               </Menu.Item> */}
-                    <Menu.Item key={ROUTES_USER.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
+                    <Menu.Item
+                      key={ROUTES_USER.LOGIN}
+                      onClick={onSignOut}
+                      icon={<LogoutOutlined />}
+                    >
                       <Link to={ROUTES_USER.LOGIN}>Đăng xuất</Link>
                     </Menu.Item>
                   </Menu>
@@ -650,7 +518,11 @@ const BaseLayout = (props) => {
                       <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
                         <DropdownLanguage />
                         <div style={{ marginTop: 8, marginRight: 15 }}>
-                          <Dropdown overlay={<NotifyContent />} placement="bottomCenter" trigger="click">
+                          <Dropdown
+                            overlay={<NotifyContent />}
+                            placement="bottomCenter"
+                            trigger="click"
+                          >
                             <Badge count={0} showZero size="small" offset={[-3, 3]}>
                               <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
                             </Badge>
@@ -660,7 +532,12 @@ const BaseLayout = (props) => {
                           <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
                             <Avatar
                               src={user && (user.avatar || '')}
-                              style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 35, height: 35 }}
+                              style={{
+                                color: '#FFF',
+                                backgroundColor: '#FDAA3E',
+                                width: 35,
+                                height: 35,
+                              }}
                             />
                             <span
                               style={{
@@ -681,19 +558,12 @@ const BaseLayout = (props) => {
                   <div style={{ backgroundColor: '#F9F9F9', width: '100%' }}>{props.children}</div>
                 </Layout>
               </Layout>
-              </div>
+            </div>
           )}
         </div>
-</div>
-</>
-
-    
-
-
-
-
-)
-
+      </div>
+    </>
+  )
 }
 
 export default React.memo(BaseLayout)

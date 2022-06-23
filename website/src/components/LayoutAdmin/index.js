@@ -7,7 +7,6 @@ import { ACTION, ROUTES, ROUTES_ADMIN, PERMISSIONS, LOGO_DEFAULT } from 'consts'
 import { Link, useLocation, useRouteMatch, useHistory } from 'react-router-dom'
 import { Bell, Plus } from 'utils/icon'
 import jwt_decode from 'jwt-decode'
-import Icon from '../icons'
 
 import {
     Layout,
@@ -109,56 +108,11 @@ const BaseLayout = (props) => {
         }
     }
 
-            // fontSize: '0.9rem',
-          }}
-          title={
-            <Link
-              style={{
-                fontSize: '0.9rem',
-                color: 'black',
-              }}
-              // to={_menu.url}
-              to={linkto(_menu)}
-            >
-              {_menu.name}
-            </Link>
-          }
-          icon={
-            Icon(_menu.icon)
-          }
-        >
-          {_menu.menuCon.map((e) => (
-            <>
-              <Menu.Item
-                key={e.url}
-                style={{
-                  fontSize: '0.9rem',
-                }}
-              >
-                 {Icon(_menu.icon)}
-                <Link to={linkto(e)}>{e.name}</Link>
-              </Menu.Item>
-            </>
-          ))}
-        </Menu.SubMenu>
-      ) : (
-        <Menu.Item
-          key={_menu.url}
-          style={{
-            // fontSize: '0.9rem',
-            width: '100%',
-            height: collapsed ? 40 : '',
-            display: 'block',
-          }}
+    useEffect(() => {
+        _getMenu()
+    }, [])
 
-          // onClick={_menu.url === ROUTES.SELL && toggle}
-        >
-          {Icon(_menu.icon)}
-          <Link to={linkto(_menu)}>{_menu.name}</Link>
-        </Menu.Item>
-      )}
-    </>
-  )
+    const onSearch = (value) => console.log(value)
 
     const onSignOut = () => {
         dispatch({ type: ACTION.LOGOUT })

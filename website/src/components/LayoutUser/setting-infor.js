@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './settinginfor.module.scss'
-
-import { Avatar, Button, Table, Tabs, List } from 'antd'
+import jwt_decode from 'jwt-decode'
+import { useHistory } from 'react-router-dom'
+import { Avatar, Button, Table, Tabs, List, notification } from 'antd'
 import {
   Row,
   Col,
@@ -26,28 +27,97 @@ import {
 } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import { ACTION, ROUTES_USER, PERMISSIONS, LOGO_DEFAULT } from 'consts'
+import { updateuserEKT, getuserEKT } from 'apis/user-ekt'
+import { uploadFile } from 'apis/upload'
 
 const { Meta } = Card
 const { Option } = Select
 const { Dragger } = Upload
-export default function SettingInfor() {
-  const suffixSelector = (
-    <Form.Item name="suffix" noStyle>
-      <Select style={{ width: 100 }} placeholder="Trạng thái">
-        <Option value="1">Công khai</Option>
-        <Option value="2">Riêng tư</Option>
-      </Select>
-    </Form.Item>
-  )
+
+export default function SettingInfor({reload}) {
+
   const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   }
+  const [form] = Form.useForm()
+  const [loading, setLoading] = useState(false)
+  const [avatar, setAvatar] = useState('')
+  const [visible, setVisible] = useState(false)
+  const toggle = () => setVisible(!visible)
+
+  const history = useHistory()
+
+
+
+
+  console.log("usser nef", history.location.state);
+  // const _updateUser = async () => {
+  //     try {
+  //         await form.validateFields()
+  //         const dataForm = form.getFieldsValue()
+  //         const body = {
+  //             ...dataForm,
+  //             avatar: avatar,
+  //         }
+  //         setLoading(true)
+  //         const res = await updateuserEKT(body, user && user.user_id)
+  //         console.log(res)
+  //         if (res.status === 200) {
+  //             if (res.data.success) {
+  //                 toggle()
+  //                 reload()
+  //                 notification.success({ message: 'Cập nhật thông tin cá nhân thành công' })
+  //                 reload({ user_id: res.data.data.user_id })
+  //             } else
+  //                 notification.error({
+  //                     message: res.data.message || 'Cập nhật thông tin cá nhân thành công',
+  //                 })
+  //         } else notification.error({ message: res.data.message || 'Cập nhật thông tin cá nhân thành công' })
+  //         setLoading(false)
+  //     } catch (error) {
+  //         setLoading(false)
+  //     }
+  // }
+
+  const beforeUpload = (file) => {
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+      if (!isJpgOrPng) {
+          notification.warning({ message: 'Bạn chỉ có thể tải lên tệp JPG / PNG / JPEG!' })
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+          notification.warning({ message: 'Hình ảnh phải có kích thước nhỏ hơn 2MB!' })
+      }
+      return isJpgOrPng && isLt2M
+  }
+
+  const _upload = async (file) => {
+      try {
+          setLoading(true)
+          const url = await uploadFile(file)
+          console.log(url)
+          setAvatar(url || '')
+          setLoading(false)
+      } catch (error) {
+          setLoading(false)
+          console.log(error)
+      }
+  }
+
+  // useEffect(() => {
+  //     if (visible)
+  //         if (user) {
+  //             form.setFieldsValue({ ...user })
+  //             setAvatar(user.avatar || '')
+  //         }
+  // }, [visible])
 
   return (
     <div className={styles['container-layout-setting']}>
       <div className={styles['font-bold']}>Thiết lập thông tin cá nhân </div>
 
       <div>
+      {/* <div onClick={toggle}>{children}</div> */}
         <div
           style={{
             marginLeft: 0,
@@ -80,6 +150,7 @@ export default function SettingInfor() {
                         description={<a>Thay đổi ảnh đại diện</a>}
                       />
                     </List.Item>
+                    {/* <p>{user.email}</p> */}
                     <Form layout="horizontal" labelCol={{ span: 4 }} wrapperCol={{ span: 24 }} style={{marginTop: 20}}>
                       <Form.Item
                         label="Tên hiển thị"
@@ -135,9 +206,9 @@ export default function SettingInfor() {
                           </Form.Item>
                         </Input.Group>
                       </Form.Item>
-                      <Form.Item label="Email" className={styles['margin-bottom']}>
+                      <Form.Item label="Email" name="email" className={styles['margin-bottom']}>
                         <Input.Group compact>
-                          <Form.Item className={styles['width-input']}>
+                          <Form.Item name="email"  className={styles['width-input']}>
                             <Input placeholder="Nhập email " />
                           </Form.Item>
                           <Form.Item
@@ -151,9 +222,10 @@ export default function SettingInfor() {
                           </Form.Item>
                         </Input.Group>
                       </Form.Item>
-                      <Form.Item label="Số điện thoại" className={styles['margin-bottom']}>
+                      <Form.Item label="Số điện thoại" name="phone" className={styles['margin-bottom']}>
                         <Input.Group compact>
-                          <Form.Item className={styles['width-input']}>
+                          <Form.Item name="phone"
+                           className={styles['width-input']}>
                             <Input placeholder="Nhập số điện thoại " />
                           </Form.Item>
                           <Form.Item
