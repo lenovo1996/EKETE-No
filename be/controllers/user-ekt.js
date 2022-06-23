@@ -126,7 +126,6 @@ module.exports._register = async (req, res, next) => {
         user_id++;
         let _user = {
             user_id: user_id,
-            code: String(user_id).padStart(6, '0'),
             prefix: req.body.prefix,
             phone: req.body.phone,
             password: req.body.password,
@@ -134,9 +133,21 @@ module.exports._register = async (req, res, next) => {
             fullname: req.body.fullname,
             address: req.body.address,
             job: req.body.job,
+            nam_identification: req.body.nameIdentification,
+            name_display: req.body.nameDissplay,
+            web: req.body.web,
+            bio: req.body.bio,
+            gender: req.body.gender,
+            birthday: req.body.birthday,
+            card_type: req.body.cardType,
+            id_card: req.body.idCard,
+            name_card: req.body.nameCard,
+            birthday_card: req.body.birthdayCard,
+            date_card: req.body.dateCard,
+            location_card: req.body.locationCard,
             avatar: req.body.avatar || 'https://images.hdqwalls.com/download/doctor-strange-comic-hero-z5-2560x1600.jpg',
-            // phone: req.body.phone,
             active: false,
+            code: String(user_id).padStart(6, '0'),
             otp_code: otpCode,
             otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
    
@@ -207,10 +218,6 @@ module.exports._update = async (req, res, next) => {
         delete req.body.code;
         delete req.body.phone;
         delete req.body.password;
-        // delete req.body.fullname;
-        // delete req.body.address;
-        // delete req.body.job;
-        
 
         let _user = { ...user, ...req.body };
         _user = {
@@ -223,6 +230,18 @@ module.exports._update = async (req, res, next) => {
             fullname: _user.fullname,
             address: _user.address,
             job: _user.job,
+            nam_identification: _user.nam_identification,
+            name_display: _user.name_display,
+            web: _user.web,
+            bio: _user.bio,
+            gender: _user.gender,
+            birthday: _user.birthday,
+            card_type: _user.card_type,
+            id_card: _user.id_card,
+            name_card: _user.name_card,
+            birthday_card: _user.birthday_card,
+            date_card: _user.date_card,
+            location_card: _user.location_card,
 
         };
         req['body'] = _user;
@@ -257,6 +276,7 @@ module.exports._getUser = async(req,res,next)=>{
 module.exports._getOne = async(req,res,next)=>{
     try {
         await UserEKTService._getOne(req, res, next);
+    
     } catch (err) {
         next(err);
     }
@@ -279,11 +299,6 @@ module.exports._getOTP = async (req, res, next) => {
             let result = client.db(SDB).collection('UsersEKT').findOne({ prefix: prefix });
             return result;
         })();
-        // const DB =
-        //     (business && business.database_name) ||
-        //     (() => {
-        //         throw new Error('400: Doanh nghiệp chưa được đăng ký!');
-        //     })();
 
         let user = await client.db(SDB).collection('UsersEKT').findOne({ phone: req.body.phone });
         if (!user) {

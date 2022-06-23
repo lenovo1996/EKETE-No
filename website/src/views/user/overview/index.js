@@ -72,7 +72,7 @@ function App() {
         <Row>
           <div className={styles['card-overview']}>
             <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto', padding: '0' }}>
-              <Tabs defaultActiveKey="2">
+              <Tabs defaultActiveKey="2" className={styles['container-tabs']} >
                 <Tabs.TabPane
                   key="1"
                   tab={
