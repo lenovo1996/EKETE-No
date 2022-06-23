@@ -1,0 +1,38 @@
+
+.container{
+    background-color: white;
+    margin: 20px ;
+    border-radius: 20px;
+}
+.title_page{
+    height: 112px;
+    padding-top: 10px;
+    padding-left: 10px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 117px;
+    margin-bottom: 24px;
+}
+.title{
+    margin: 15px 32px 5px 49px;
+    font-weight: bold;
+    font-size: 27px;
+}
+.title1{
+    font-size: 15px;
+    color: #abb3bb;
+    margin-left: 52px;
+    font-family: initial;
+}
+.table{
+    margin-left: 50px;
+    width: 90%;
+}
+.search{
+    height: 42px;
+    width: 353px!important;
+    margin-left: 424px;
+}

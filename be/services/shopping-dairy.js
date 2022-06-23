@@ -8,22 +8,22 @@ let removeUnicode = (text, removeSpace) => {
         string là chuỗi cần remove unicode
         trả về chuỗi ko dấu tiếng việt ko khoảng trắng
     */
-    if (typeof text != 'string') {
-        return '';
-    }
-    if (removeSpace && typeof removeSpace != 'boolean') {
-        throw new Error('Type of removeSpace input must be boolean!');
-    }
-    text = text
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd')
-        .replace(/Đ/g, 'D');
-    if (removeSpace) {
-        text = text.replace(/\s/g, '');
-    }
-    return text;
-};
+  if (typeof text != 'string') {
+    return ''
+  }
+  if (removeSpace && typeof removeSpace != 'boolean') {
+    throw new Error('Type of removeSpace input must be boolean!')
+  }
+  text = text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+  if (removeSpace) {
+    text = text.replace(/\s/g, '')
+  }
+  return text
+}
 
 
 module.exports._get = async (req, res, next) => {
@@ -92,4 +92,45 @@ module.exports._getOne = async (req, res, next) => {
         next(err);
     }
 
+};
+
+module.exports._get = async (req, res, next) => {
+  try {
+      let aggregateQuery = [];
+      if (req.query.phone) {
+          aggregateQuery.push({ $match: { user_phone: req.query.phone } });
+      }
+      aggregateQuery.push({ $sort: { create_date: -1 } });
+      if (req.query.page && req.query.page_size) {
+          let page = Number(req.query.page)  ;
+          let page_size = Number(req.query.page_size);
+          aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
+      }
+      // lấy data từ database
+      const orders = await client.db(SDB).collection('Shopping').aggregate(aggregateQuery).toArray();
+
+      let orderInfos = [];
+      // sử dụng for thay vì foreach (vì for sẽ await được)
+      for (const order of orders) {
+          let business = await client.db(SDB).collection('Business')
+            .findOne({
+                business_id: Number(order.business_id)
+            });
+            let orderInfo = await client.db(business.database_name)
+              .collection('Orders')
+              .findOne({ order_id: Number(order.orderId) });
+
+              console.log(orderInfo);
+              orderInfos.push(orderInfo);
+      }
+
+      res.send({
+          success: true,
+          count: orderInfos.length,
+          data: orderInfos,
+      });
+
+  } catch (err) {
+      next(err);
+  }
 };

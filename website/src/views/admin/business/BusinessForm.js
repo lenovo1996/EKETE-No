@@ -32,7 +32,6 @@ export default function MenuForm({
   reloadData,
   record,
 
-  // status = ['new', 'tetting', 'ready to public','public','waiting for review','pending']
 }) {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
@@ -47,7 +46,6 @@ export default function MenuForm({
   const [provinces, setProvinces] = useState([])
   const [districtMain, setDistrictMain] = useState([])
   const [districtsDefault, setDistrictsDefault] = useState([])
-  
 
   const _uploadImage = async (file) => {
     try {
@@ -74,18 +72,24 @@ export default function MenuForm({
         company_district: dataForm.company_district || '',
         company_province: dataForm.company_province || '',
         company_phone: dataForm.company_phone ||'',
-        logo: dataForm.logo || '',
         career_id: dataForm.career_id,
       }
-      console.log(body)
-
+      if (image) {
+        body['logo'] = image
+      }
       let res
       if (record) res = await updateBusiness(body, record.business_id)
      
       if (res.status === 200) {
         if (res.data.success) {
           toggle()
-          reloadData()
+
+          
+          dispatch({ type: 'UPDATE_BUSINESS', data: {
+            business_id: record.business_id, 
+            ...body
+          } })
+
           notification.success({
             message: `Cập nhật chức năng thành công`,
           })
@@ -110,10 +114,11 @@ export default function MenuForm({
 
   const _getProvinces = async () => {
     try {
+      dispatch({ type: ACTION.LOADING, data: true })
       const res = await getProvinces()
+      dispatch({ type: ACTION.LOADING, data: false })
       if (res.status === 200) setProvinces(res.data.data)
 
-      dispatch({ type: ACTION.LOADING, data: false })
     } catch (error) {
       dispatch({ type: ACTION.LOADING, data: false })
     }
@@ -155,11 +160,11 @@ export default function MenuForm({
     try {
       setLoading(true)
       const res = await getBusinesses({ ...paramsFilter })
+      setLoading(false)
       console.log(res)
       if (res.status === 200) {
         setBusiness(res.data.data)
       }
-      setLoading(false)
     } catch (e) {
       setLoading(false)
       console.log(e)

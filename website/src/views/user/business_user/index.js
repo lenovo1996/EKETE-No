@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 // style
 import styles from './business_user.module.scss'
-import FormBusiness from './registerbusiness'
-// moment
-// import { uploadFile } from 'apis/upload'
 import { ACTION, ROUTES, ROUTES_USER } from 'consts'
 import { useDispatch } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -13,23 +10,18 @@ import jwt_decode from 'jwt-decode'
 
 // antd
 
-import { Button, Modal, Card, Avatar } from 'antd'
-// import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
+import { Card, Avatar } from 'antd'
 // api
-import { getBusinesses,detailBusiness } from 'apis/business'
+import { getBusinesses} from 'apis/business'
 
 
 // html react parser
 
 export default function Business() {
-  const dispatch = useDispatch()
-  const history = useHistory()
   const location = useLocation()
 
   const [business, setBusiness] = useState([])
   const { Meta } = Card
-  // const [user, setUser] = useState([])
-  const [detailBusiness1, setDetailBusiness] = useState([])
 
   const dataUser = localStorage.getItem('accessToken')
     ? jwt_decode(localStorage.getItem('accessToken'))
@@ -46,13 +38,7 @@ export default function Business() {
   }
 
   const _loginWithQuery = async (token) => {
-    // dispatch({ type: ACTION.LOGIN, data: token })
-
-    //luu branch id len redux
-    // const dataUser = jwt_decode(token.accessToken)
-
-    // dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
-
+  
     const intervalPushRouter = setInterval(() => {
       if (localStorage.getItem('accessToken')) window.open(ROUTES.OVERVIEW)
       clearInterval(intervalPushRouter)
@@ -61,9 +47,7 @@ export default function Business() {
   }
   useEffect(() => {
     const query = new URLSearchParams(location.search)
-    // const username = query.get('username')
     const token = query.get('token')
-    // if (username) formLogin.setFieldsValue({ username: username })
     if (token) {
       const tokenParser = JSON.parse(token)
       _loginWithQuery(tokenParser)
@@ -75,44 +59,11 @@ export default function Business() {
 
  
 
-  const ModalCustomer = ({ children, record }) => {
-    const [visible, setVisible] = useState(false)
-    const toggle = () => setVisible(!visible)
-
-    return (
-      <>
-        <div onClick={toggle}>{children}</div>
-        <Modal
-          width="75%"
-          style={{ top: 20 }}
-          onCancel={toggle}
-          // width={800}
-          footer={null}
-          title={`Tạo cửa hàng`}
-          visible={visible}
-        >
-          <FormBusiness
-            record={record}
-            close={toggle}
-            text={record ? 'Lưu' : 'Tạo'}
-            reload={_getBusinesses}
-          />
-        </Modal>
-      </>
-    )
-  }
-
   return (
     <div className={styles['body_brand']}>
       <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
         <div>Danh sách cửa hàng của bạn</div>
-        <ModalCustomer
-        // width="100px"
-        >
-          <Button type="primary">Đăng ký tạo cửa hàng</Button>
-        </ModalCustomer>
       </div>
-
       <div className={styles['containerItem']}>
         {business &&
           business.map((Item, index) => {

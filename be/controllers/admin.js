@@ -87,15 +87,14 @@ module.exports._register = async (req, res, next) => {
         });
         req.body.phone = String(req.body.phone).trim().toLowerCase();
         req.body.password = bcrypt.hash(req.body.password);
-        let userEKT = await client.db(SDB).collection('UsersAdminEKT').findOne({ prefix: req.body.prefix });
 
-        let user = await client
+        let userAdmin = await client
             .db(SDB)
             .collection('UsersAdminEKT')
             .findOne({
                 $or: [{ phone: req.body.phone }],
             });
-        if (user) {
+        if (userAdmin) {
             throw new Error('400: Số điện thoại hoặc email đã được sử dụng!');
         }
         let otpCode = String(Math.random()).substr(2, 6);
@@ -111,11 +110,11 @@ module.exports._register = async (req, res, next) => {
         let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
         sendSMS([req.body.phone], verifyMessage, 2, 'VIESOFTWARE');
         
-        let [user_id] = await Promise.all([
+        let [userAdmin_id] = await Promise.all([
             client
                 .db(SDB)
                 .collection('AppSetting')
-                .findOne({ name: 'Users' })
+                .findOne({ name: 'UsersAdmin' })
                 .then((doc) => {
                     if (doc) {
                         if (doc.value) {
@@ -125,10 +124,10 @@ module.exports._register = async (req, res, next) => {
                     return 0;
                 })
             ])
-        user_id++;
-        let _user = {
-            user_id: user_id,
-            code: String(user_id).padStart(6, '0'),
+        userAdmin_id++;
+        let _userAdmin = {
+            userAdmin_id: userAdmin_id,
+            code: String(userAdmin_id).padStart(6, '0'),
             prefix: req.body.prefix,
             phone: req.body.phone,
             password: req.body.password,
@@ -140,23 +139,86 @@ module.exports._register = async (req, res, next) => {
             active: false,
             otp_code: otpCode,
             otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
-   
+            last_login: moment().tz(TIMEZONE).format(),
+            create_date: moment().tz(TIMEZONE).format(),
+            last_update: moment().tz(TIMEZONE).format(),
+            active: true,
+            slug_name: removeUnicode(`${req.body.fullname}`, true).toLowerCase(),
+            slug_address: removeUnicode(`${req.body.address}`, true).toLowerCase(),
         };
         await client
             .db(SDB)
             .collection('UsersAdminEKT')
-            .insertOne(_user),
+            .insertOne(_userAdmin),
         await client
         .db(SDB)
         .collection('AppSetting')
-        .updateOne({ name: 'Users' }, { $set: { name: 'Users', value: user_id } }, { upsert: true })
-        res.send({success: true,data: _user});
+        .updateOne({ name: 'UsersAdmin' }, { $set: { name: 'UsersAdmin', value: userAdmin_id } }, { upsert: true })
+        res.send({success: true,data: _userAdmin});
 
     }catch (err) {
         next(err);
     }
 
 };
+
+module.exports._create = async (req,res, next)=> {
+    try {
+        req.body.phone = String(req.body.phone).trim().toLocaleLowerCase()
+        req.body.password = bcrypt.hash(req.body.password);
+        let userAdmin = await client
+            .db(SDB)
+            .collection('UsersAdminEKT')
+            .findOne({
+                $or: [{ phone: req.body.phone }],
+            });
+        if (userAdmin) {
+            throw new Error('400: Số điện thoại đã được sử dụng!');
+        }
+        let userAdmin_id = await client
+            .db(SDB)
+            .collection('AppSetting')
+            .findOne({ name: 'UsersAdmin' })
+            .then((doc) => {
+                if (doc) {
+                    if (doc.value) {
+                        return Number(doc.value);
+                    }
+                }
+                return 0;
+            });
+        userAdmin_id++;
+        let _userAdmin = {
+            userAdmin_id: userAdmin_id,
+            code: String(userAdmin_id).padStart(6, '0'),
+            prefix: req.body.prefix,
+            phone: req.body.phone,
+            password: req.body.password,
+            fullname: req.body.fullname,
+            email: req.body.email,
+            address: req.body.address,
+            birthday: req.body.birthday,
+            role: req.body.role,
+            department: req.body.department,
+            job: req.body.job,
+            last_login: moment().tz(TIMEZONE).format(),
+            create_date: moment().tz(TIMEZONE).format(),
+            last_update: moment().tz(TIMEZONE).format(),
+            active: true,
+            slug_name: removeUnicode(`${req.body.fullname}`, true).toLowerCase(),
+            slug_address: removeUnicode(`${req.body.address}`, true).toLowerCase(),
+        };
+        await client
+            .db(SDB)
+            .collection('AppSetting')
+            .updateOne({ name: 'UsersAdmin' }, { $set: { name: 'UsersAdmin', value: userAdmin_id } }, { upsert: true });
+        req[`body`] = _userAdmin;
+        await UserAdminService._create(req, res, next);
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports._login = async (req, res, next) => {
     try {
 
@@ -165,30 +227,28 @@ module.exports._login = async (req, res, next) => {
                 throw new Error(`400: Thiếu thuộc tính ${e}!`);
             }
         });
-        // let [prefix, phone] = req.body.phone.split("_");
         var phone = req.body.phone;
-        let user = await client.db(SDB).collection('UsersAdminEKT').findOne({phone})
-        // let user = await client.db(SDB).collection('UsersEKT').findOne({ prefix: shop.toLowerCase() });
+        let userAdmin = await client.db(SDB).collection('UsersAdminEKT').findOne({phone})
 
 
-        if (!user) {
+        if (!userAdmin) {
             throw new Error(`404: Tài khoản không chính xác!`);
         }
-        if (user.active == false) {
+        if (userAdmin.active == false) {
             throw new Error(`403: Tài khoản chưa được xác thực!`);
         }
         if (!bcrypt.compare(req.body.password, user.password)) {
             res.send({ success: false, message: `Mật khẩu không chính xác!` });
             return;
         }
-        delete user.password;
-        user.isadmin = true;
+        delete userAdmin.password;
+        userAdmin.isadmin = true;
         let [accessToken, _update] = await Promise.all([
-            jwt.createToken({ ...user, database: SDB, _user: user }, 30 * 24 * 60 * 60),
+            jwt.createToken({ ...userAdmin, database: SDB, _userAdmin: userAdmin }, 30 * 24 * 60 * 60),
             client
                 .db(SDB)
                 .collection(`UsersAdminEKT`)
-                .updateOne({ user_id: Number(user.user_id) }, { $set: { last_login: moment().tz(TIMEZONE).format() } }),
+                .updateOne({ userAdmin_id: Number(userAdmin.userAdmin_id) }, { $set: { last_login: moment().tz(TIMEZONE).format() } }),
         ]);
         res.send({ success: true, data: { accessToken } });
     } catch (err) {
@@ -199,37 +259,35 @@ module.exports._login = async (req, res, next) => {
 module.exports._update = async (req, res, next) => {
     try {
         
-        req.params.user_id = Number(req.params.user_id);
-        let user = await client.db(req.user.database).collection('UsersAdminEKT').findOne(req.params);
-        console.log(1);
+        req.params.userAdmin_id = Number(req.params.userAdmin_id);
+        let userAdmin = await client.db(SDB).collection('UsersAdminEKT').findOne(req.params);
         
-        if (!user) {
+        if (!userAdmin) {
             throw new Error(`400: Người dùng không tồn tại!`);
         }
         delete req.body._id;
-        delete req.body.user_id;
+        delete req.body.userAdmin_id;
         delete req.body.code;
         delete req.body.phone;
-        delete req.body.password;
-        // delete req.body.fullname;
-        // delete req.body.address;
-        // delete req.body.job;
-        
 
-        let _user = { ...user, ...req.body };
-        _user = {
-            user_id: _user.user_id,
-            code: _user.code,
-            phone: _user.phone,
-            password: _user.password,
-            email: _user.email,
-            avatar: _user.avatar,
-            fullname: _user.fullname,
-            address: _user.address,
-            job: _user.job,
 
+        let _userAdmin = { ...userAdmin, ...req.body };
+        _userAdmin = {
+            userAdmin_id: _userAdmin.userAdmin_id,
+            code: _userAdmin.code,
+            phone: _userAdmin.phone,
+            password: _userAdmin.password,
+            email: _userAdmin.email,
+            avatar: _userAdmin.avatar,
+            fullname: _userAdmin.fullname,
+            address: _userAdmin.address,
+            birthday: _userAdmin.birthday,
+            role: _userAdmin.role,
+            department: _userAdmin.department,
+            job: _userAdmin.job,
+            last_update: moment().tz(TIMEZONE).format(),
         };
-        req['body'] = _user;
+        req['body'] = _userAdmin;
         await UserAdminService._update(req, res, next);
     } catch (err) {
         next(err);
@@ -241,7 +299,7 @@ module.exports._delete = async (req, res, next) => {
         await client
             .db(SDB)
             .collection(`UsersAdminEKT`)
-            .deleteMany({ user_id: { $in: req.params.user_id } });
+            .deleteOne({userAdmin_id: Number(req.params.userAdmin_id)});
         res.send({
             success: true,
             message: 'Xóa người dùng thành công!',
@@ -274,24 +332,8 @@ module.exports._getOTP = async (req, res, next) => {
                 throw new Error(`400: Thiếu thuộc tính ${e}`);
             }
         });
-
-        const prefix = (req.headers && req.headers.shop) || false;
-        let business = await (async () => {
-            if (!prefix) {
-                let result = client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
-                return result;
-            }
-            let result = client.db(SDB).collection('UsersAdminEKT').findOne({ prefix: prefix });
-            return result;
-        })();
-        // const DB =
-        //     (business && business.database_name) ||
-        //     (() => {
-        //         throw new Error('400: Doanh nghiệp chưa được đăng ký!');
-        //     })();
-
-        let user = await client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
-        if (!user) {
+        let userAdmin = await client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
+        if (!userAdmin) {
             throw new Error('400: Tài khoản người dùng không tồn tại!');
         }
         let otpCode = String(Math.random()).substr(2, 6);
@@ -326,20 +368,19 @@ module.exports._loginAdmin = async (req, res, next) => {
         });
 
         var phone = req.body.phone;
-        let user = await client.db(SDB).collection('UsersAdminEKT').findOne({phone})
-        // let user = await client.db(SDB).collection('UsersEKT').findOne({ prefix: shop.toLowerCase() });
-        if (!user) {
+        let userAdmin = await client.db(SDB).collection('UsersAdminEKT').findOne({phone})
+        if (!userAdmin) {
             throw new Error(`404: Tài khoản không chính xác!`);
         }
-        if (user.active == false) {
+        if (userAdmin.active == false) {
             throw new Error(`403: Tài khoản chưa được xác thực!`);
         }
-        if (!bcrypt.compare(req.body.password, user.password)) {
+        if (!bcrypt.compare(req.body.password, userAdmin.password)) {
             res.send({ success: false, message: `Mật khẩu không chính xác!` });
             return;
         }
-        delete user.password;
-        user.isadmin = true;
+        delete userAdmin.password;
+        userAdmin.isadmin = true;
         let otpCode = String(Math.random()).substr(2, 6);
         let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
         sendSMS([req.body.phone], verifyMessage, 2, 'VIESOFTWARE');
@@ -368,26 +409,17 @@ module.exports._verifyOTP = async (req, res, next) => {
                 throw new Error(`400: Thiếu thuộc tính ${e}!`);
             }
         });
-        const prefix = (req.headers && req.headers.shop) || false;
         
-        let admin = await (async () => {
-            if (!prefix) {
-                let result = client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
-                return result;
-            }
-            let result = client.db(SDB).collection('UsersAdminEKT').findOne({ prefix: prefix });
-            return result;
-        })();
         
-        let user = await client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
-        if (!user) {
+        let userAdmin = await client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
+        if (!userAdmin) {
             throw new Error('400: Tài khoản người dùng không tồn tại!');
         }
-        if (req.body.otp_code != user.otp_code) {
+        if (req.body.otp_code != userAdmin.otp_code) {
             throw new Error('400: Mã xác thực không chính xác!');
         }
-        if (user.active == false) {
-            delete user.password;
+        if (userAdmin.active == false) {
+            delete userAdmin.password;
             await client
                 .db(SDB)
                 .collection('UsersAdminEKT')
@@ -400,16 +432,16 @@ module.exports._verifyOTP = async (req, res, next) => {
                     }
                 );
             
-            let accessToken = await jwt.createToken({  _user: user }, 30 * 24 * 60 * 60);
+            let accessToken = await jwt.createToken({  _userAdmin: userAdmin }, 30 * 24 * 60 * 60);
             res.send({
                 success: true,
                 message: 'Kích hoạt tài khoản thành công!',
                 data: { accessToken: accessToken },
             });
         } else {
-            delete user.password;
-            user.isadmin = true;
-            let accessToken = await jwt.createToken({ ...user, database: SDB, _user: user }, 30 * 24 * 60 * 60);
+            delete userAdmin.password;
+            userAdmin.isadmin = true;
+            let accessToken = await jwt.createToken({ ...userAdmin, database: SDB, _userAdmin: userAdmin }, 30 * 24 * 60 * 60);
             
             await client
                 .db(SDB)
@@ -417,7 +449,7 @@ module.exports._verifyOTP = async (req, res, next) => {
                 .updateOne(
                     { phone: req.body.phone }, 
                     { $set: { otp_code: true, otp_timelife: true,last_login: moment().tz(TIMEZONE).format() },  },
-                    { user_id: Number(user.user_id) },
+                    { userAdmin_id: Number(userAdmin.userAdmin_id) },
                     
                     );
             res.send({
@@ -440,8 +472,8 @@ module.exports._recoveryPassword = async (req, res, next) => {
             }
         });
         
-        let user = await client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
-        if (user.active != true) {
+        let userAdmin = await client.db(SDB).collection('UsersAdminEKT').findOne({ phone: req.body.phone });
+        if (userAdmin.active != true) {
             throw new Error(`400: Tài khoản chưa được xác thực OTP!`);
         }
         await client
@@ -457,13 +489,13 @@ module.exports._recoveryPassword = async (req, res, next) => {
                     },
                 }
             );
-        let _user = await client
+        let _userAdmin = await client
             .db(SDB)
             .collection(`UsersAdminEKT`)
             .findOne({phone: req.body.phone})
                 
-        delete _user.password;
-        let accessToken = await jwt.createToken({ _user: user }, 30 * 24 * 60 * 60);
+        delete _userAdmin.password;
+        let accessToken = await jwt.createToken({ _userAdmin: userAdmin }, 30 * 24 * 60 * 60);
         res.send({
             success: true,
             message: 'Khôi phục mật khẩu thành công!',
