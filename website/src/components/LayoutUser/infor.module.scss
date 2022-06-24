@@ -6,7 +6,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 62px;
-  // background: #F9F9F9;
+  // background: #F5f5f5;
 }
 .font-bold {
   font-size: 24px;
@@ -30,6 +30,7 @@
   height: 216px;
   left: 645.58px;
   top: 182.89px;
+
 }
 .infor-name {
   // position: absolute;
@@ -254,15 +255,21 @@
 
 //@at-root
 .card-overview {
-  box-shadow: 0 12px 23px 0 #5c37990a;
+  // box-shadow: 0 12px 23px 0 #5c37990a;
   border-radius: 10px;
   border: 0 solid transparent;
   overflow: hidden;
-  background-color: white;
+  // background-color: white;
   margin: 12px;
   padding: 12px;
   display: flex;
   flex-direction: column;
+  margin-left: 0;
+  margin-top: 0;
+  width: 690px;
+  height: 100%;
+  margin-bottom: 15px;
+  background: #f1f2f5 !important;
 }
 
 .container-content {
@@ -279,7 +286,7 @@
 }
 
 .card {
-  box-shadow: 0 12px 23px 0 #5c37990a;
+  // box-shadow: 0 12px 23px 0 #5c37990a;
   border-radius: 10px;
   border: 0 solid transparent;
   overflow: hidden;
@@ -324,7 +331,7 @@
 
 .card-overview {
   // height: 500px;
-  box-shadow: 0 12px 23px 0 #5c37990a;
+  // box-shadow: 0 12px 23px 0 #5c37990a;
   border-radius: 10px;
   border: 0 solid transparent;
   overflow: hidden;

@@ -75,7 +75,7 @@ export default function Infor() {
     <div className={styles['container-layout']}>
       <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
         <div className={styles['font-bold']}>Thông tin cá nhân </div>
-        <div  className={styles['container-icon-setting']}>
+        <div className={styles['container-icon-setting']}>
           {/* <Link
             user={user}   to={ROUTES_USER.SETTINGINFOR}
        
@@ -84,87 +84,84 @@ export default function Infor() {
             < SettingOutlined />
 
           </Link> */}
-                   <a className={styles['icon-setting']}
-                  onClick={() =>
-                    history.push({ pathname: ROUTES_USER.SETTINGINFOR, state: user })
-                  }
-                >
-                  < SettingOutlined />
-                </a>
+          <a
+            className={styles['icon-setting']}
+            onClick={() => history.push({ pathname: ROUTES_USER.SETTINGINFOR, state: user })}
+          >
+            <SettingOutlined />
+          </a>
         </div>
       </div>
       <div>
-     
-              <div className={styles['container-account']}>
-                <div className={styles['container-avt']}>
-                  <Avatar size={104} src={user && (user.avatar || '')} />
-                </div>
-                <div className={styles['container-infor']}>
-                  <div className={styles['display-flex']}>
-                    <div className={styles['infor-name']}>
-                      <p>{user.fullname || "..."}</p>
-                    </div>
-                    <div className={styles['container-icon-phone']}>
-                      <PhoneFilled
-                        style={{ color: '#39CB7F' }}
-                        //  className={styles['color-icon-phone']}
-                      />
-                    </div>
-                    <div className={styles['container-icon-id']}>
-                      <BulbFilled
-                        style={{ color: '#91919F' }}
-                        // className={styles['color-icon-id']}
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles['container-status']}>
-                    <p>{user.bio || "..."}</p>
-                  </div>
-                  <div className={styles['container-flex']}>
-                    <div className={styles['container-item']}>{user.birthday || "..."}</div>
-                    <div className={styles['container-item']}>SDT: {user.phone || "..."}</div>
-                    <div className={styles['container-item']}>{user.gender || "..."}</div>
-                  </div>
-                  <div className={styles['container-flex']}>
-                    <div className={styles['container-item']}>
-                      {' '}
-                      <MailFilled /> {user.email || "..."}
-                    </div>
-                    <div className={styles['container-item']}>
-                      <ChromeFilled /> {user.web || "..."}
-                    </div>
-                  </div>
-                  <div className={styles['container-dh']}>
-                    <div className={styles['center']}>
-                      <h1 className={styles['dh-number']}>180k</h1>
-                      <p className={styles['dh-content']}>lượt theo dõi</p>
-                    </div>
-                    <div className={styles['center']}>
-                      <h1 sclassName={styles['dh-number']}>10</h1>
-                      <p className={styles['dh-content']}>đang theo dõi</p>
-                    </div>
-                    <div className={styles['center']}>
-                      <h1 className={styles['dh-number']}>6k</h1>
-                      <p className={styles['dh-content']}>lượt mua sắm</p>
-                    </div>
-                  </div>
-                </div>
+        <div className={styles['container-account']}>
+          <div className={styles['container-avt']}>
+            <Avatar size={104} src={user && (user.avatar || '')} />
+          </div>
+          <div className={styles['container-infor']}>
+            <div className={styles['display-flex']}>
+              <div className={styles['infor-name']}>
+                <p>{user.fullname || '...'}</p>
               </div>
-       
+              <div className={styles['container-icon-phone']}>
+                <PhoneFilled
+                  style={{ color: '#39CB7F' }}
+                  //  className={styles['color-icon-phone']}
+                />
+              </div>
+              <div className={styles['container-icon-id']}>
+                <BulbFilled
+                  style={{ color: '#91919F' }}
+                  // className={styles['color-icon-id']}
+                />
+              </div>
+            </div>
+
+            <div className={styles['container-status']}>
+              <p>{user.bio || '...'}</p>
+            </div>
+            <div className={styles['container-flex']}>
+              <div className={styles['container-item']}>{user.birthday || '...'}</div>
+              <div className={styles['container-item']}>SDT: {user.phone || '...'}</div>
+              <div className={styles['container-item']}>{user.gender || '...'}</div>
+            </div>
+            <div className={styles['container-flex']}>
+              <div className={styles['container-item']}>
+                {' '}
+                <MailFilled /> {user.email || '...'}
+              </div>
+              <div className={styles['container-item']}>
+                <ChromeFilled /> {user.web || '...'}
+              </div>
+            </div>
+            <div className={styles['container-dh']}>
+              <div className={styles['center']}>
+                <h1 className={styles['dh-number']}>180k</h1>
+                <p className={styles['dh-content']}>lượt theo dõi</p>
+              </div>
+              <div className={styles['center']}>
+                <h1 sclassName={styles['dh-number']}>10</h1>
+                <p className={styles['dh-content']}>đang theo dõi</p>
+              </div>
+              <div className={styles['center']}>
+                <h1 className={styles['dh-number']}>6k</h1>
+                <p className={styles['dh-content']}>lượt mua sắm</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div className={styles['container-fe-hi']}>
         <Row>
           <Col xs={24} sm={24} md={24} lg={14} xl={14}>
             <div
-              style={{
-                marginLeft: 0,
-                marginTop: 0,
-                width: 690,
-                height: '100%',
-                marginBottom: 15,
-                background: '#F5F5F5',
-              }}
+              // style={{
+              //   marginLeft: 0,
+              //   marginTop: 0,
+              //   width: 690,
+              //   height: '100%',
+              //   marginBottom: 15,
+              //   background: '#F5F5F5',
+              // }}
               className={styles['card-overview']}
             >
               <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
