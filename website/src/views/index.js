@@ -115,10 +115,16 @@ import VerifyAccountUser from './user/verify-account'
 import NotFoundUser from './user/not-found/404'
 import BusinessUser from './user/business_user'
 import OverviewUser from './user/overview'
+
+import NewfeedComponent from './user/newfeed'
+import Infor from '../components/LayoutUser/infor'
+import SettingInfor from '../components/LayoutUser/setting-infor'
+
 import DetailBusiness from './user/business_user/detail_business'
 import UpdateBusiness from './user/business_user/Update_business'
 import Message1 from './user/message1'
 import RegisterBusiness from './user/business_user/registerbusiness'
+
 
 //apis
 
@@ -504,6 +510,41 @@ const DEFINE_ROUTER = [
     permissions: [],
     exact: true,
   },
+  {
+    path: ROUTES.IMPORT_INVENTORY,
+    Component: () => <ImportInventory />,
+    title: 'Chi tiết đơn hàng nhập kho',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES.RECEIPTS_PAYMENT,
+    Component: () => <ReceiptsAndPayment />,
+    title: 'Báo cáo thu chi',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES.SELL,
+    Component: () => <Sell />,
+    title: 'Bán hàng',
+    permissions: [],
+    exact: true,
+  },
+  // {
+  //   path: ROUTES.REFUND,
+  //   Component: () => <Refund />,
+  //   title: 'Trả hàng',
+  //   permissions: [],
+  //   exact: true,
+  // },
+  {
+    path: ROUTES.SETTING_BILL,
+    Component: () => <SettingBill />,
+    title: 'Cài đặt máy in bill',
+    permissions: [],
+    exact: true,
+  },
   
   
 ]
@@ -522,20 +563,20 @@ const DEFINE_ROUTER_USER = [
     permissions: [],
     exact: true,
   },
-  // {
-  //   path: ROUTES_USER.INFOR,
-  //   Component: () => <Infor />,
-  //   title: 'Thông tin cá nhân',
-  //   permissions: [],
-  //   exact: true,
-  // },
-  // {
-  //   path: ROUTES_USER.SETTINGINFOR,
-  //   Component: () => <SettingInfor />,
-  //   title: 'Thiết lập thông tin cá nhân',
-  //   permissions: [],
-  //   exact: true,
-  // },
+  {
+    path: ROUTES_USER.INFOR,
+    Component: () => <Infor />,
+    title: 'Thông tin cá nhân',
+    permissions: [],
+    exact: true,
+  },
+  {
+    path: ROUTES_USER.SETTINGINFOR,
+    Component: () => <SettingInfor />,
+    title: 'Thiết lập thông tin cá nhân',
+    permissions: [],
+    exact: true,
+  },
   {
     path: ROUTES_USER.DETAILBUSINESS,
     Component: () => <DetailBusiness />,

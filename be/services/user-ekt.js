@@ -281,23 +281,6 @@ module.exports._create = async (req, res, next) => {
             throw new Error(`500: Tạo user thất bại!`);
         }
         delete req.body.password;
-        // try {
-        //     let _action = {
-        //         business_id: req.user?.business_id || req.body.user_id,
-        //         type: 'Tạo',
-        //         properties: 'Tài khoản',
-        //         name: 'Tạo tài khoản',
-        //         data: req.body,
-        //         performer_id: req.user?.user_id || req.body.user_id,
-        //         date: moment().tz(TIMEZONE).format(),
-        //         slug_type: 'tao',
-        //         slug_properties: 'taikhoan',
-        //         name: 'taotaikhoan',
-        //     };
-        //     await Promise.all([client.db(req.user.database).collection(`Actions`).insertOne(_action)]);
-        // } catch (err) {
-        //     console.log(err);
-        // }
         res.send({ success: true, data: req.body });
     } catch (err) {
         next(err);

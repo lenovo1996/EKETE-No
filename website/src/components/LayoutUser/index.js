@@ -200,19 +200,16 @@ const BaseLayout = (props) => {
     if (localStorage.getItem('openKey')) setOpenKeys([localStorage.getItem('openKey')])
   }, [])
 
-  const content = (
+    const content = (
     <div className={styles['user_information']}>
-      <ModalUpdateUser user={user} reload={getInfoUser}>
-        <div>
-          <div
-            style={{ color: '#565656', paddingLeft: 10 }}
-            // onClick={getInfoUser}
-          >
-            <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
-            Tài khoản của tôi
-          </div>
+      {/* <ModalUpdateUser user={user} reload={getInfoUser}> */}
+      <div>
+        <div style={{ color: '#565656', paddingLeft: 10 }}>
+          <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
+          <Link to={ROUTES_USER.INFOR}> Tài khoản của tôi</Link>
         </div>
-      </ModalUpdateUser>
+      </div>
+      {/* </ModalUpdateUser> */}
 
       <div>
         <a onClick={onSignOut} style={{ color: '#565656', paddingLeft: 10 }}>

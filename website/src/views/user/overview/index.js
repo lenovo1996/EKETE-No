@@ -51,7 +51,7 @@ function App() {
     try {
       const resShoppingDari = await getshopping(params)
       if (resShoppingDari.status === 200) setorderEKT(resShoppingDari.data.data)
-      console.log('danh sach', resShoppingDari)
+      // console.log('danh sach', resShoppingDari)
     } catch (e) {
       console.log(e)
     }
@@ -72,7 +72,7 @@ function App() {
         <Row>
           <div className={styles['card-overview']}>
             <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto', padding: '0' }}>
-              <Tabs defaultActiveKey="2">
+              <Tabs defaultActiveKey="2" className={styles['container-tabs']} >
                 <Tabs.TabPane
                   key="1"
                   tab={

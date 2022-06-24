@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { ACTION, ROUTES_USER, ROUTES_ADMIN, ROUTES } from './consts'
+import { ACTION, ROUTES_USER, ROUTES_ADMIN } from './consts'
 import { clearBrowserCache } from 'utils'
 import jwt_decode from 'jwt-decode'
 import { socket } from 'socket'
@@ -12,7 +12,8 @@ import Loading from 'components/loading/Loading'
 import LoadingCheckDomain from 'views/user/loading'
 
 //apis
-import { checkDomain } from 'apis/app'
+// import { checkDomain } from 'apis/app'
+import { getBusinesses } from 'apis/business'
 import { refresh } from 'apis/auth'
 
 function App() {
@@ -59,48 +60,48 @@ function App() {
     subDomain &&
     subDomain.length === 1
   )
-    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.REGISTER}`
+    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES_USER.LOGIN}`
 
-  const checkSubdomain = async () => {
-    let router = ''
+  // const checkSubdomain = async () => {
+  //   let router = ''
 
-    if (domain.includes(`${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`))
-      router = ROUTES.CHECK_SUBDOMAIN
-    if (domain.includes(`${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`)) router = ROUTES.REGISTER
-    if (domain.includes(`${process.env.REACT_APP_HOST}${ROUTES.LOGIN}`)) router = ROUTES.LOGIN
+  //   if (domain.includes(`${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`))
+  //     router = ROUTES.CHECK_SUBDOMAIN
+  //   if (domain.includes(`${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`)) router = ROUTES.REGISTER
+  //   if (domain.includes(`${process.env.REACT_APP_HOST}${ROUTES.LOGIN}`)) router = ROUTES.LOGIN
 
-    if (router === ROUTES.LOGIN) {
-      setLoadingCheckDomain(true)
+  //   if (router === ROUTES.LOGIN) {
+  //     setLoadingCheckDomain(true)
 
-      if (subDomain && subDomain.length === 2) {
-        subDomain = subDomain[0].split('//')
+  //     if (subDomain && subDomain.length === 2) {
+  //       subDomain = subDomain[0].split('//')
 
-        const res = await checkDomain(subDomain[1])
-        if (res.status === 200) {
-          if (!res.data.success) {
-            window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
-            return
-          }
-        } else {
-          window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
-          return
-        }
-      } else {
-        window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
-        return
-      }
-    }
+  //       const res = await checkDomain(subDomain[1])
+  //       if (res.status === 200) {
+  //         if (!res.data.success) {
+  //           window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
+  //           return
+  //         }
+  //       } else {
+  //         window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
+  //         return
+  //       }
+  //     } else {
+  //       window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
+  //       return
+  //     }
+  //   }
 
-    if (router === ROUTES.REGISTER)
-      if (subDomain && subDomain.length === 2)
-        window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
+  //   if (router === ROUTES.REGISTER)
+  //     if (subDomain && subDomain.length === 2)
+  //       window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
 
-    if (router === ROUTES.CHECK_SUBDOMAIN)
-      if (subDomain && subDomain.length === 2)
-        window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
+  //   if (router === ROUTES.CHECK_SUBDOMAIN)
+  //     if (subDomain && subDomain.length === 2)
+  //       window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
 
-    setLoadingCheckDomain(false)
-  }
+  //   setLoadingCheckDomain(false)
+  // }
 
   const checkToken = async () => {
     if (token) {
@@ -129,8 +130,8 @@ function App() {
 
   useEffect(() => {
     checkToken()
-    checkSubdomain()
-    clearBrowserCache()
+    // checkSubdomain()
+    // clearBrowserCache()
   }, [])
 
   return loadingCheckDomain ? (
