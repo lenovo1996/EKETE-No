@@ -165,6 +165,7 @@ const _deleteBusiness = async (business_id) => {
         loading={loading}
         rowKey="business_id"
         size="small"
+        scroll={{ y: 670 }}
         pagination={{
           position: ['bottomLeft'],
           current: paramsFilter.page,

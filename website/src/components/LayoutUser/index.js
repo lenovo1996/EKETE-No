@@ -54,7 +54,7 @@ const BaseLayout = (props) => {
   const WIDTH_MENU_CLOSE = 60
 
   const [user, setUser] = useState({})
-  const [business, setBusiness] = useState([])
+  const business = useSelector((state) => state.business)
 
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
@@ -73,6 +73,7 @@ const BaseLayout = (props) => {
       const res = await getuserEKT(params)
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
+
       }
     } catch (error) {
       console.log(error)
@@ -81,7 +82,9 @@ const BaseLayout = (props) => {
   const _getBusinesses = async (params) => {
     try {
       const res = await getBusinesses(params)
-      if (res.status === 200) setBusiness(res.data.data)
+      if (res.status === 200) {
+        dispatch({ type: 'SET_BUSINESS', data: res.data.data })
+      }
     } catch (e) {
       console.log(e)
     }

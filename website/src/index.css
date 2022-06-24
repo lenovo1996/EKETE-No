@@ -242,13 +242,18 @@ code {
   padding: 8px 0!important;
 }
 #tab_detail .ant-tabs-ink-bar {
-  width: 480px!important;
+  width: 52%!important;
+
 }
 /* CSS update business */
 #update .ant-list{
-  width: 89%;
-    margin-left: 49px!important;
+  width: 87%;
+    margin-left: 50px!important;
     font-weight: bold;
+}
+#update .ant-list-items{
+  padding-left: 24px;
+  padding-right: 24px;
 }
 /* .ant-select:not(.ant-select-customize-input) .ant-select-selector {
   background-color: #1e4db7!important;
@@ -259,3 +264,5 @@ code {
 .ant-rate-star-full{
   margin-right: 3px!important;
 }
+
+  

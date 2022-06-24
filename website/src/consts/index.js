@@ -51,7 +51,6 @@ export const ROUTES_USER = {
   BUSINESS: '/business',
   NEWFEED: '/newfeed',
   DETAILBUSINESS:`/detail-business/:id`,
-  UPDATEBUSINESS:`/update-business/:id`,
   REGISTERBUSINESS:'/register-business'
 }
 

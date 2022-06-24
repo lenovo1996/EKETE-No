@@ -84,14 +84,15 @@
   flex-wrap: wrap;
   flex-direction: row;
   // display: block;
-  width: 100%;
+  width: 87%;
   align-items: center;
+  margin-left: 13px;
 }
 
 .Card_item{
-  width: 208px;
-  height: 360px;
-  margin: 5px!important;
+  width: 240px;
+  height: 370px;
+  margin: 7px!important;
   border-radius: 10px!important;
   .body{
     padding: 10px;
