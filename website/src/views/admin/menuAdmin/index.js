@@ -166,6 +166,7 @@ export default function Menu() {
         loading={loading}
         rowKey="menu_id"
         size="small"
+        
         pagination={{
           position: ['bottomLeft'],
           current: paramsFilter.page,

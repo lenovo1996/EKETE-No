@@ -1,20 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import styles from './detail_business.module.scss'
-import { Card, Avatar, Tabs, List, Modal, Rate } from 'antd'
-//ngôi sao
+import stylefeed from './feed.module.scss'
 
-import { SettingOutlined, DropboxOutlined, LayoutOutlined } from '@ant-design/icons'
+import { Card, Avatar, Tabs, List, Modal, Rate, Row, Col, Button } from 'antd'
+import jwt_decode from 'jwt-decode'
+import {
+  SettingOutlined,
+  DropboxOutlined,
+  LayoutOutlined,
+  ShareAltOutlined,
+  HeartOutlined,
+  WechatOutlined,
+  ShoppingCartOutlined,
+} from '@ant-design/icons'
 //api
 import { detailBusiness, getProductList } from 'apis/business'
-import FormUpdate from '../Update_business' 
+import FormUpdate from '../Update_business'
+import { dropRight } from 'lodash'
 
 export default function Detail_business() {
   const { id } = useParams()
   const { TabPane } = Tabs
+  const [mode, setMode] = useState('top');
   const [business, setBusiness] = useState([])
   const [productList, setProductList] = useState([])
   const [count, setCount] = useState([])
+  const { Meta } = Card
 
   const _getDetailBusinesses = async (id) => {
     try {
@@ -55,6 +67,10 @@ export default function Detail_business() {
   const handleCancel = () => {
     setIsModalVisible(false)
   }
+  const dataUser = localStorage.getItem('accessToken')
+    ? jwt_decode(localStorage.getItem('accessToken'))
+    : {}
+  const user_phone = dataUser.data.phone
 
   return (
     <div className={styles['body']}>
@@ -63,13 +79,14 @@ export default function Detail_business() {
           className={styles['card']}
           style={{ backgroundImage: `url(${business.business_cover_image})` }}
         >
-          <Link to={'/update-business/' + id}>
-          
-            <div className={styles['setting']}>
-              <SettingOutlined style={{ fontSize: 20 }} />
-            </div>
-          
-          </Link>
+          {user_phone === business.user_phone ? (
+            <FormUpdate>
+              <div className={styles['setting']}>
+                <SettingOutlined style={{ fontSize: 20 }} />
+              </div>
+            </FormUpdate>
+          ) : null}
+
           <Avatar
             size={119}
             style={{
@@ -148,17 +165,185 @@ export default function Detail_business() {
         </Modal>
       </div>
       <div className={styles['container']}>
-        <Tabs id='tab_detail' defaultActiveKey="1" style={{ alignItems: 'center', padding: 20, width: '100%' }}>
+        <Tabs
+          id="tab_detail"
+          defaultActiveKey="1"
+          style={{ alignItems: 'center', padding: 20, width: '100%' }}
+          tabPosition={mode}
+        >
           <TabPane
             tab={
-              <span style={{ fontSize: 20, marginLeft: 200, paddingRight: 75   }}>
+              <span style={{ fontSize: 20, marginLeft: 166, paddingRight: 75 }}>
                 <LayoutOutlined style={{ fontSize: 20 }} />
                 Feed
               </span>
             }
             key="1"
           >
-            Content of Tab Pane 1
+            <div style={{width: '100%', height: 700, overflowY: 'scroll'}}>
+            <div style={{ width: '87%', background: '#fff', borderRadius: 14 }}>
+              <div className={stylefeed['container']}>
+                <Row>
+                  <Col style={{ width: '70%' }}>
+                    <Meta
+                      className={stylefeed['content']}
+                      avatar={<Avatar size={50} src={business.logo} />}
+                      title={<p className={stylefeed['text-name']}>{business.business_name}</p>}
+                      title1="kandksja"
+                      description="12:00 ngày 26/4/2022"
+                    />
+                  </Col>
+                  <Col className={stylefeed['button']}>
+                    <Button style={{ color: '#1e4db7', fontWeight: 'bold' }}>+ Theo dõi</Button>
+                  </Col>
+                </Row>
+                <img
+                  className={stylefeed['image']}
+                  alt="example"
+                  src="https://chupanhvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2020/10/25090359/chup-san-pham2.jpg"
+                />
+              </div>
+              <div className={stylefeed['container-item']}>
+                <div>
+                  <Row className={stylefeed['container-content']}>
+                    <Row style={{ display: 'inline-block', width: '70%' }}>
+                      <h2 className={stylefeed['name_feed']}>Bộ compo sản phẩm dầu gội trị gàu 15 trong 1, giúp loại sạch gầu chỉ trong 1 lần gội </h2>
+                      <h1 style={{fontSize: 24, color: '#1e4db7'}}> 100.000 - 200.000 VND</h1>
+                      <Row className={stylefeed['container-icon']}>
+                        <div className={stylefeed['icon']}>
+                          <ShareAltOutlined />
+                        </div>
+                        <div className={stylefeed['icon']}>
+                          <HeartOutlined />
+                        </div>
+                        <div className={stylefeed['icon']}>
+                          <WechatOutlined />
+                        </div>
+                      </Row>
+                      <Row>
+                        <p style={{fontWeight:'bold', color:'#6c757d'}}>
+                          <a style={{color: '#0bb2fc'}}>abc và 200 người khác</a> đã thích sản phẩm này
+                        </p>
+                      </Row>
+                      {/* <p><a>abc và 200 người khác</a> đã thích sản phẩm này</p> */}
+                    </Row>
+                    <Col className={stylefeed['container-button-content']}>
+                      <Rate disabled defaultValue={4} style={{ fontSize: 18, marginLeft: 63 }} />
+                      <div style={{ display: 'flex',   flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <p style={{ marginLeft: 8, color: '#6c757d', fontSize: 21 }}>
+                          Đã bán
+                        </p>
+                        <p style={{ marginLeft: 5, color: '#6c757d',fontSize: 21  }}>
+                          160
+                        </p>
+                      </div>
+                      <div className={stylefeed['container-button-sell']}>
+                        <Button className={stylefeed['button-sell']}>Mua ngay</Button>
+                      </div>
+                      <div className={stylefeed['container-button-sell']}>
+                        <Button
+                          className={stylefeed['button-add-GH']}
+                          icon={<ShoppingCartOutlined style={{ fontSize: 18 }} />}
+                        >
+                          Thêm vào giỏ
+                        </Button>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <p>
+                      We andour partners use cookies to personalize your experience, to show you ads
+                      based on your interests, and for measurement and analytics purposes. By using
+                      our website and services, you agree to our use of cookies as described in
+                      ourCookie Policy.
+                    </p>
+                  </Row>
+                </div>
+                <div className={stylefeed['dashboard_manager_bottom_row_col_parent_top']}></div>
+              </div>
+            </div>
+            <div style={{ width: '87%', background: '#fff', borderRadius: 14 }}>
+              <div className={stylefeed['container']}>
+                <Row>
+                  <Col style={{ width: '70%' }}>
+                    <Meta
+                      className={stylefeed['content']}
+                      avatar={<Avatar size={50} src={business.logo} />}
+                      title={<p className={stylefeed['text-name']}>{business.business_name}</p>}
+                      title1="kandksja"
+                      description="12:00 ngày 26/4/2022"
+                    />
+                  </Col>
+                  <Col className={stylefeed['button']}>
+                    <Button style={{ color: '#1e4db7', fontWeight: 'bold' }}>+ Theo dõi</Button>
+                  </Col>
+                </Row>
+                <img
+                  className={stylefeed['image']}
+                  alt="example"
+                  src="https://chupanhvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2020/10/25090359/chup-san-pham2.jpg"
+                />
+              </div>
+              <div className={stylefeed['container-item']}>
+                <div>
+                  <Row className={stylefeed['container-content']}>
+                    <Row style={{ display: 'inline-block', width: '70%' }}>
+                      <h2 className={stylefeed['name_feed']}>Bộ compo sản phẩm dầu gội trị gàu 15 trong 1, giúp loại sạch gầu chỉ trong 1 lần gội </h2>
+                      <h1 style={{fontSize: 24, color: '#1e4db7'}}> 100.000 - 200.000 VND</h1>
+                      <Row className={stylefeed['container-icon']}>
+                        <div className={stylefeed['icon']}>
+                          <ShareAltOutlined />
+                        </div>
+                        <div className={stylefeed['icon']}>
+                          <HeartOutlined />
+                        </div>
+                        <div className={stylefeed['icon']}>
+                          <WechatOutlined />
+                        </div>
+                      </Row>
+                      <Row>
+                        <p style={{fontWeight:'bold', color:'#6c757d'}}>
+                          <a style={{color: '#0bb2fc'}}>abc và 200 người khác</a> đã thích sản phẩm này
+                        </p>
+                      </Row>
+                      {/* <p><a>abc và 200 người khác</a> đã thích sản phẩm này</p> */}
+                    </Row>
+                    <Col className={stylefeed['container-button-content']}>
+                      <Rate disabled defaultValue={4} style={{ fontSize: 18, marginLeft: 63 }} />
+                      <div style={{ display: 'flex',   flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <p style={{ marginLeft: 8, color: '#6c757d', fontSize: 21 }}>
+                          Đã bán
+                        </p>
+                        <p style={{ marginLeft: 5, color: '#6c757d',fontSize: 21  }}>
+                          160
+                        </p>
+                      </div>
+                      <div className={stylefeed['container-button-sell']}>
+                        <Button className={stylefeed['button-sell']}>Mua ngay</Button>
+                      </div>
+                      <div className={stylefeed['container-button-sell']}>
+                        <Button
+                          className={stylefeed['button-add-GH']}
+                          icon={<ShoppingCartOutlined style={{ fontSize: 18 }} />}
+                        >
+                          Thêm vào giỏ
+                        </Button>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <p>
+                      We andour partners use cookies to personalize your experience, to show you ads
+                      based on your interests, and for measurement and analytics purposes. By using
+                      our website and services, you agree to our use of cookies as described in
+                      ourCookie Policy.
+                    </p>
+                  </Row>
+                </div>
+                <div className={stylefeed['dashboard_manager_bottom_row_col_parent_top']}></div>
+              </div>
+            </div>  
+            </div>
           </TabPane>
           <TabPane
             tab={
@@ -180,8 +365,8 @@ export default function Detail_business() {
                       alt="example"
                       src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
                       style={{
-                        width: 207,
-                        height: 230,
+                        width: 240,
+                        height: 235,
                         borderTopLeftRadius: 10,
                         borderTopRightRadius: 10,
                       }}
@@ -207,7 +392,7 @@ export default function Detail_business() {
                     <span style={{ color: '#1e4db7' }}>₫ </span>
                   </div>
                   <div style={{ display: 'flex' }}>
-                    <Rate disabled defaultValue={4} style={{ fontSize: 14 }} />
+                    <Rate disabled defaultValue={4} style={{ fontSize: 14, marginLeft: '62px!important' }} />
                     <p style={{ marginLeft: 8, color: '#6c757d', fontWeight: 'inherit' }}>Đã bán</p>
                     <p style={{ marginLeft: 5, color: '#6c757d', fontWeight: 'inherit' }}>160</p>
                   </div>

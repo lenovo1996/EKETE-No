@@ -160,6 +160,7 @@ export default function Menu() {
         loading={loading}
         rowKey="menu_id"
         size="small"
+        scroll={{ y: 670 }}
         pagination={{
           position: ['bottomLeft'],
           current: paramsFilter.page,
