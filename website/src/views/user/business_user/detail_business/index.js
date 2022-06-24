@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import styles from './detail_business.module.scss'
-import { Card, Avatar,  Tabs, List, } from 'antd'
+import { Card, Avatar, Tabs, List, Modal, Rate } from 'antd'
 //ngôi sao
-import Rating from './Rating'
 
 import { SettingOutlined, DropboxOutlined, LayoutOutlined } from '@ant-design/icons'
 //api
 import { detailBusiness, getProductList } from 'apis/business'
+import FormUpdate from '../Update_business' 
 
 export default function Detail_business() {
-
   const { id } = useParams()
   const { TabPane } = Tabs
   const [business, setBusiness] = useState([])
   const [productList, setProductList] = useState([])
+  const [count, setCount] = useState([])
 
   const _getDetailBusinesses = async (id) => {
     try {
@@ -27,74 +27,62 @@ export default function Detail_business() {
 
   const _getProductList = async (id) => {
     try {
-      const res = await getProductList(id)
-      if (res.status === 200) setProductList(res.data.data)
+      const res1 = await getProductList(id)
+      if (res1.status === 200) {
+        setProductList(res1.data.products)
+        setCount(res1.data.counts)
+      }
     } catch (e) {
       console.log(e)
     }
   }
-  console.log(productList);
-
-
-  const [rate, setrate] = useState(4)
 
   useEffect(() => {
     _getDetailBusinesses(id)
     _getProductList(id)
   }, [id])
 
-  const renderProduct = (_product) => {
-    <Card
-      hoverable
-      className={styles['Card_item']}
-      cover={
-        <img
-          alt="example"
-          src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-          style={{
-            width: 230,
-            height: 262,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-          }}
-        />
-      }
-    >
-      <div className={styles['name_product']}></div>
-      <div style={{ display: 'flex' }}>
-        <div className={styles['sale']}>Giảm 30%</div>
-        <div className={styles['deal']}>Mua kèm Deal sốc</div>
-      </div>
-      <span style={{ color: '#1e4db7', marginLeft: 20 }}>₫ </span>
-      <span style={{ fontSize: 20, color: '#1e4db7', fontFamily: 'revert-layer' }}> </span>
-      <div style={{ display: 'flex' }}>
-        <Rating rate={rate}></Rating>
-        <p style={{ marginLeft: 8, color: '#6c757d', fontWeight: 'inherit' }}>Đã bán</p>
-        <p style={{ marginLeft: 5, color: '#6c757d', fontWeight: 'inherit' }}>160</p>
-      </div>
-    </Card>
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+  const showModal = () => {
+    setIsModalVisible(true)
+  }
+
+  const handleOk = () => {
+    setIsModalVisible(false)
+  }
+
+  const handleCancel = () => {
+    setIsModalVisible(false)
   }
 
   return (
     <div className={styles['body']}>
       <div className={styles['profile']}>
-        <div className={styles['card']}>
-          <div className={styles['setting']}>
-            <SettingOutlined style={{ fontSize: 20 }} />
-          </div>
+        <div
+          className={styles['card']}
+          style={{ backgroundImage: `url(${business.business_cover_image})` }}
+        >
+          <Link to={'/update-business/' + id}>
+          
+            <div className={styles['setting']}>
+              <SettingOutlined style={{ fontSize: 20 }} />
+            </div>
+          
+          </Link>
           <Avatar
-            size={134}
+            size={119}
             style={{
               position: 'absolute',
               border: '3px solid #0bb2fb',
               marginTop: 149,
-              marginLeft: 115,
+              marginLeft: 123,
               background: 'black',
             }}
           />
           <Avatar
-            size={120}
-            style={{ position: 'relative', marginTop: 156, marginLeft: 122 }}
+            size={107}
+            style={{ position: 'relative', marginTop: 155, marginLeft: 129 }}
             src={business.logo}
           />
         </div>
@@ -103,7 +91,7 @@ export default function Detail_business() {
         </h1>
         <h3 style={{ color: '#6c757d', fontWeight: 'inherit' }}>{business.business_desiption}</h3>
         <div className={styles['follow']}>
-          <div style={{ marginRight: 60 }}>
+          <div style={{ marginRight: 107 }}>
             <p style={{ marginBottom: 0, fontWeight: 'bold', fontSize: 20 }}>110K</p>
             <p style={{ color: '#6c757d', fontWeight: 'inherit' }}>lượt theo dõi</p>
           </div>
@@ -148,17 +136,22 @@ export default function Detail_business() {
             },
           ]}
           renderItem={(item) => (
-            <List.Item key={item.id} actions={[<a>{item.a}</a>]}>
+            <List.Item key={item.id} actions={[<a onClick={showModal}>{item.a}</a>]}>
               <List.Item.Meta avatar={<Avatar src={item.src} />} title={item.name} />
             </List.Item>
           )}
         />
+        <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
       </div>
       <div className={styles['container']}>
-        <Tabs defaultActiveKey="1" style={{ alignItems: 'center', padding: 20, width: '100%' }}>
+        <Tabs id='tab_detail' defaultActiveKey="1" style={{ alignItems: 'center', padding: 20, width: '100%' }}>
           <TabPane
             tab={
-              <span style={{ fontSize: 20, marginLeft: 200, paddingRight: 261 }}>
+              <span style={{ fontSize: 20, marginLeft: 200, paddingRight: 75   }}>
                 <LayoutOutlined style={{ fontSize: 20 }} />
                 Feed
               </span>
@@ -169,14 +162,58 @@ export default function Detail_business() {
           </TabPane>
           <TabPane
             tab={
-              <span style={{ fontSize: 20, marginLeft: 183, marginRight: 185 }}>
+              <span style={{ fontSize: 20, marginLeft: 165, marginRight: 185 }}>
                 <DropboxOutlined tyle={{ fontSize: 20 }} />
                 Sản phẩm
               </span>
             }
             key="2"
           >
-            <div className={styles['list_product']}>{/* map data ra mỗi card */}</div>
+            <div className={styles['list_product']}>
+              {/* map data ra mỗi card */}
+              {productList.map((item, index) => (
+                <Card
+                  hoverable
+                  className={styles['Card_item']}
+                  cover={
+                    <img
+                      alt="example"
+                      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                      style={{
+                        width: 207,
+                        height: 230,
+                        borderTopLeftRadius: 10,
+                        borderTopRightRadius: 10,
+                      }}
+                    />
+                  }
+                >
+                  <div className={styles['name_product']}>{item.name}</div>
+                  <div style={{ display: 'flex' }}>
+                    <div className={styles['sale']}>Giảm 30%</div>
+                    <div className={styles['deal']}>Mua kèm Deal sốc</div>
+                  </div>
+                  <div className={styles['price']}>
+                    <span
+                      style={{
+                        fontSize: 18,
+                        color: '#1e4db7',
+                        fontFamily: ' Helvetica',
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {item.price}
+                    </span>
+                    <span style={{ color: '#1e4db7' }}>₫ </span>
+                  </div>
+                  <div style={{ display: 'flex' }}>
+                    <Rate disabled defaultValue={4} style={{ fontSize: 14 }} />
+                    <p style={{ marginLeft: 8, color: '#6c757d', fontWeight: 'inherit' }}>Đã bán</p>
+                    <p style={{ marginLeft: 5, color: '#6c757d', fontWeight: 'inherit' }}>160</p>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </TabPane>
         </Tabs>
       </div>

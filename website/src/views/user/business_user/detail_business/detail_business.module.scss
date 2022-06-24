@@ -1,5 +1,5 @@
 .body {
-  margin: 20px;
+  margin: 70px 200px 0px 150px;
   display: flex;
   height: auto;
 }
@@ -13,21 +13,20 @@
   background-color: hwb(0 100% 0%);
   display: flex;
   flex-direction: column;
-  height: 850px;
-  width: 600px;
-  margin: 5px;
-  border-radius: 10px;
+  height: 675px;
+  width: 27%;
+  margin: 10px;
+  border-radius: 16px;
   align-items: center;
-
+  // position: fixed;
 }
 
 .card {
   position: relative;
-  width: 367px;
+  width: 100%;
   height: 218px;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
-  margin-top: 20px;
   // display: flex;
   // align-items: center;
   // flex-direction: column-reverse;
@@ -38,7 +37,7 @@
 .card_opacity {
   position: absolute;
   background-color: gray;
-  width: 368px;
+  width: 69%px;
   height: 218px;
   border-radius: 10px;
   opacity: 0.5;
@@ -50,8 +49,8 @@
   width: 32px;
   height: 32px;
   border-radius: 7px;
-  margin-top: 10px;
-  margin-left: 322px;
+  margin-top: 14px;
+  margin-left: 310px;
   display: inline-grid;
   align-content: center;
 }
@@ -66,22 +65,21 @@
 }
 
 .list {
-  width: 81%;
-  margin-top: 20px !important;
-  font-weight: bold;
+  width: 80%;
+  margin-top: 10px !important;
+  font-weight:  bold;
 }
 
 .container {
   margin: 10px;
-  background-color: hwb(0 100% 0%);
-  width: 100%;
-
+  // background-color: hwb(0 100% 0%);
+  width: 70%;
 }
 
 .list_product {
   border: 0 solid transparent;
   overflow: hidden;
-  background-color: hwb(0 100% 0%);
+  // background-color: hwb(0 100% 0%);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -91,11 +89,10 @@
 }
 
 .Card_item{
-  width: 230px;
-  height: 420px;
-  margin: 10px;
-  border-radius: 10px;
-  
+  width: 208px;
+  height: 360px;
+  margin: 5px!important;
+  border-radius: 10px!important;
   .body{
     padding: 10px;
   }
@@ -114,8 +111,7 @@
     position: relative;
     z-index: 1;
     color: white;
-    font-family: var(--nt-font-medium-f,-apple-system,'HelveticaNeue-Medium','Helvetica Neue','Roboto','Droid Sans',Arial,sans-serif);
-    font-weight: var(--nt-font-medium-w,500);
+ 
 
 }
 .sale::before{
@@ -158,4 +154,8 @@
   -webkit-line-clamp: 2;
   line-height: 1.2;
   margin-bottom: 5px;
+ 
+}
+.price{
+  margin: 5px;
 }

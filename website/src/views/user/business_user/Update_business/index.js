@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
+import moment from 'moment'
 import styles from './update_business.module.scss'
 import {
   Card,
@@ -18,7 +18,7 @@ import {
 
 
 //api
-import { uploadFiles, uploadFile } from 'apis/upload'
+import { uploadFile } from 'apis/upload'
 import { detailBusiness, updateBusiness } from 'apis/business'
 
 
@@ -182,7 +182,7 @@ export default function Update_business() {
                       Đã tham gia:
                     </span>
                     <span style={{ color: 'white', fontSize: 15, marginLeft: 3 }}>
-                      {business.create_date}
+                      {business.create_date && moment(business.create_date).format('DD-MM-YYYY HH:mm')}
                     </span>
                   </div>
                 }

@@ -237,6 +237,15 @@ export default function MenuForm({
             </Col>
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>
               <Form.Item
+                name="business_registration_number"
+                label={<div style={{ color: 'black', fontWeight: '600' }}>Đăng ký kinh doanh</div>}
+                rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+              >
+                <Input placeholder="Nhập đăng ký kinh doanh" size="large" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={11} lg={11} xl={11}>
+              <Form.Item
                 name="company_address"
                 label={<div style={{ color: 'black', fontWeight: '600' }}>Địa chỉ</div>}
                 rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}

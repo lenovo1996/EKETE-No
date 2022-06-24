@@ -151,12 +151,12 @@ export default function Employee() {
             return {
               ...column,
               render: (text, record) => (
-                <UserAdminForm
-                  record={record}
-                  reloadData={_getUserAdmin}
-                >
+                // <UserAdminForm
+                //   record={record}
+                //   reloadData={_getUserAdmin}
+                // >
                   <a>{record.fullname}</a>
-                </UserAdminForm>
+                // </UserAdminForm>
               ),
             }
           if (column.key === 'phone') return { ...column, render: (text, record) => record.phone }

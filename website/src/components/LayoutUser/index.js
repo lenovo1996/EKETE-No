@@ -71,7 +71,6 @@ const BaseLayout = (props) => {
   const getInfoUser = async (params) => {
     try {
       const res = await getuserEKT(params)
-      console.log(res)
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
       }
@@ -83,7 +82,6 @@ const BaseLayout = (props) => {
     try {
       const res = await getBusinesses(params)
       if (res.status === 200) setBusiness(res.data.data)
-      console.log(business);
     } catch (e) {
       console.log(e)
     }
@@ -172,7 +170,7 @@ const BaseLayout = (props) => {
     </>
   )
   const renderBusinessItem = (_business) => (
-    <>
+    
       <Menu.Item
         key={_business.business_name}
         style={{
@@ -188,7 +186,7 @@ const BaseLayout = (props) => {
           </Link>
         </div>
       </Menu.Item>
-    </>
+    
   )
 
   const onSignOut = () => {
@@ -249,7 +247,7 @@ const BaseLayout = (props) => {
 
   return (
     <Layout style={{ backgroundColor: 'white', height: '100%' }}>
-      <BackTop style={{ right: 10, bottom: 15 }} />
+      <BackTop style={{ right: 10, bottom: 15}} />
 
       <Sider
         trigger={null}
@@ -269,7 +267,7 @@ const BaseLayout = (props) => {
           style={{
             display: collapsed ? 'none' : 'flex',
             paddingTop: 10,
-            paddingBottom: 20,
+            paddingBottom: 20,  
           }}
         >
           <Avatar

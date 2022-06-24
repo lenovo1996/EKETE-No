@@ -232,6 +232,18 @@ code {
   padding: 10px!important;
 }
 
+.ant-list-item-meta-title{
+  font-size: 12px!important;
+}
+.ant-list-item-meta-avatar {
+  margin-right: 6px!important;
+}
+.ant-list-item{
+  padding: 8px 0!important;
+}
+#tab_detail .ant-tabs-ink-bar {
+  width: 480px!important;
+}
 /* CSS update business */
 #update .ant-list{
   width: 89%;
@@ -243,3 +255,7 @@ code {
 } */
 
 
+/* sao */
+.ant-rate-star-full{
+  margin-right: 3px!important;
+}
