@@ -51,7 +51,7 @@ function App() {
     try {
       const resShoppingDari = await getshopping(params)
       if (resShoppingDari.status === 200) setorderEKT(resShoppingDari.data.data)
-      console.log('danh sach', resShoppingDari)
+      // console.log('danh sach', resShoppingDari)
     } catch (e) {
       console.log(e)
     }
