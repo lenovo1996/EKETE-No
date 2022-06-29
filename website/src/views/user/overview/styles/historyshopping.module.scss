@@ -89,7 +89,12 @@
   flex-direction: row;
   align-items: center;
   background: #fceed4 !important;
-  border-radius: 7px;
+  border-radius: 7px!important;
+  color: #d48c00!important;
+  font-weight: bold!important;
+  border: none!important;
+  width: 110px!important;
+  height: 36px!important;
 }
 .dashboard_manager_bottom_row_col_parent_top {
   display: flex;
@@ -97,5 +102,5 @@
   align-items: center;
   width: 100%;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgb(197, 184, 184);
+  border-bottom: 1px solid  rgb(229 229 229);
 }
