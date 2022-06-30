@@ -15,7 +15,7 @@ import SettingColumns from 'components/setting-columns'
 import { ROUTES, PAGE_SIZE, PAGE_SIZE_OPTIONS } from 'consts'
 //apis
 
-export default function AssessOders({ detailshopping, children, reload, record }) {
+export default function Feedback({ detailshopping, children, reload, record }) {
     const toggle = () => setVisible(!visible)
     const [visible, setVisible] = useState(false)
     // const [form] = Form.useForm()
@@ -26,7 +26,7 @@ export default function AssessOders({ detailshopping, children, reload, record }
             <Modal
                 width="802px"
                 height="628px"
-                title={<h1 className={styles['title-page']}> Đánh giá đơn hàng</h1>}
+                title={<h1 className={styles['title-page']}> Phản hồi riêng</h1>}
                 centered
                 footer={null}
                 visible={visible}
@@ -37,24 +37,14 @@ export default function AssessOders({ detailshopping, children, reload, record }
                 className={styles['center']}
             >
                 <Form layout="vertical" >
-                    <div className={styles['display-flex']}>
-                        <p className={styles['title-input']}>Đánh giá</p>
-                        <Rate allowHalf defaultValue={2.5} />
-
-                    </div>
-                    
-                    {/* <Form.Item label="Đánh giá"></Form.Item> */}
-                    <Form.Item label={<p className={styles['title-input']}> Tiêu đề</p>}>
-                        <Input className={styles['input']} placeholder="Nhập tiêu đề"></Input>
-                    </Form.Item>
-                    <Form.Item label={<p className={styles['title-input']}> Đánh giá</p>}>
-                        <Input.TextArea className={styles['input-big']}  placeholder="Nhập nội dung đánh giá"></Input.TextArea>
+                    <Form.Item label={<p className={styles['title-input']}> Nội dung phản hồi</p>}>
+                        <Input.TextArea className={styles['input-big']}  placeholder="Nhập nội dung phản hồi"></Input.TextArea>
                     </Form.Item>
                     
                     <Row justify="end">
                         <Form.Item>
-                            <Button type="primary" className={styles['button']}>
-                                Đánh giá
+                            <Button type="primary" className={styles['button-feedback']}>
+                                Phản hồi
                             </Button>
                         </Form.Item>
                     </Row>

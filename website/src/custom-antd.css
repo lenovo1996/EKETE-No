@@ -230,20 +230,12 @@
 }
 /* Collapse Panel */
 
-feature/history-shopping
 /* Thiet lap thong tin ca nhan */
 .ant-form-item-label > label{
   font-weight: 600;
 font-size: 14px;
 line-height: 17px;
 }
-/* .ant-input-group.ant-input-group-compact .ant-input {
-  height: 40px;
-}
-
-/* .ant-form-item-control-input-content{
-  
-}  */
 
 /* upload */
 .ant-upload.ant-upload-drag{

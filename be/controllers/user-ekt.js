@@ -145,6 +145,8 @@ module.exports._register = async (req, res, next) => {
             birthday_card: req.body.birthdayCard,
             date_card: req.body.dateCard,
             location_card: req.body.locationCard,
+            image1: req.body.image1,
+            image2: req.body.image2,
             avatar: req.body.avatar || 'https://images.hdqwalls.com/download/doctor-strange-comic-hero-z5-2560x1600.jpg',
             active: false,
             code: String(user_id).padStart(6, '0'),
@@ -242,6 +244,8 @@ module.exports._update = async (req, res, next) => {
             birthday_card: _user.birthday_card,
             date_card: _user.date_card,
             location_card: _user.location_card,
+            image1: _user.image1,
+            image2: _user.image2,
 
         };
         req['body'] = _user;

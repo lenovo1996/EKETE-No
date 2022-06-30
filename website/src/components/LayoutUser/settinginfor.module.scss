@@ -4,15 +4,31 @@
 
 .container-layout-setting {
   width: 80%;
-  width: 1000px;
+  width: 1123px;
   // padding: 20px;
 
   margin-left: auto;
   margin-right: auto;
-  height: 947px;
+  height: 100%;
   // position: absolute;
   // background: #FFFFFF;
   border-radius: 7px;
+}
+
+.ant-upload-select > div {
+  width: 322px !important;
+  height: 186px !important;
+  background: #cdcdcd !important;
+  border-radius: 18px !important;
+}
+.text-upload {
+  font-style: normal;
+  margin-top: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: #ffffff;
 }
 .dashboard_manager_bottom_row_col_parent_top {
   margin-bottom: 12px;
@@ -44,12 +60,14 @@
 .container-accuracy {
   // background-color: #ccc;
   // margin-top: 30px;
-  width: 1000px;
+  width: 1123px;
   // height: 650px;
-  margin-left: 55px;
+  // margin-left: 55px;
+  padding: 36px;
   // margin-right: auto;
   margin-bottom: 30px;
 }
+
 .container {
   // background-color: #ccc;
   // margin-top: 30px;
@@ -96,15 +114,15 @@
 .width-input-xt {
   width: 400px;
 }
-.width-input-xt >span {
+.width-input-xt > span {
   background: #ccc;
 }
-.meta-name{
+.meta-name {
   font-weight: 600;
-font-size: 18px;
-line-height: 22px;
-margin-bottom: 8px !important;
-// margin-top: 80px;
+  font-size: 18px;
+  line-height: 22px;
+  margin-bottom: 8px !important;
+  // margin-top: 80px;
 }
 //antd
 .margin-bottom {
@@ -116,4 +134,39 @@ margin-bottom: 8px !important;
 
   margin-left: 18%;
   margin-top: -16px;
+}
+.container-node {
+  width: 35%;
+  margin-right: 17px;
+}
+.node-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+  margin-bottom: 7px;
+  text-align: right;
+
+  color: #000000;
+}
+.node-describe {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: right;
+
+  /* Base/Light/Light 20 */
+
+  color: #91919f;
+}
+.container-input{
+  margin-left: 74px;
+  margin-top: 24px;
+}
+.container-icon-image{
+  width: 54px !important;
+  height: 38px !important;
+  border-radius: 0 !important;
 }
