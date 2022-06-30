@@ -281,7 +281,7 @@ function App() {
                           </div>
                           <Feedback key="index">
                             <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
-                            </Feedback>
+                          </Feedback>
                         </div>
                         <div className={styleshopping['container-rep-cmt']}>
                           <List.Item className={styleshopping['container-cmt']}>
@@ -319,7 +319,7 @@ function App() {
                               <a className={styleshopping['item-tool']}>Bình luận</a>
                             </div>
                             <Feedback key="index">
-                            <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
+                              <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
                             </Feedback>
                           </div>
                         </div>
@@ -353,7 +353,7 @@ function App() {
                               <a className={styleshopping['item-tool']}>Bình luận</a>
                             </div>
                             <Feedback key="index">
-                            <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
+                              <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
                             </Feedback>
                           </div>
                         </div>
@@ -564,8 +564,8 @@ function App() {
                                         <a className={styleshopping['item-tool']}>Bình luận</a>
                                       </div>
                                       <Feedback key="index">
-                            <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
-                            </Feedback>
+                                        <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
+                                      </Feedback>
                                     </div>
                                   </List>
                                   <List className={styleshopping['container-cmt']}>
@@ -653,9 +653,11 @@ function App() {
                                           <a className={styleshopping['item-tool']}>Bình luận</a>
                                         </div>
                                         <div>
-                                        <Feedback key="index">
-                            <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
-                            </Feedback>
+                                          <Feedback key="index">
+                                            <a className={styleshopping['item-tool']}>
+                                              Phản hồi riêng
+                                            </a>
+                                          </Feedback>
                                         </div>
                                       </div>
                                     </div>
@@ -694,9 +696,11 @@ function App() {
                                           <a className={styleshopping['item-tool']}>Bình luận</a>
                                         </div>
                                         <div>
-                                        <Feedback key="index">
-                            <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
-                            </Feedback>
+                                          <Feedback key="index">
+                                            <a className={styleshopping['item-tool']}>
+                                              Phản hồi riêng
+                                            </a>
+                                          </Feedback>
                                         </div>
                                       </div>
                                     </div>
