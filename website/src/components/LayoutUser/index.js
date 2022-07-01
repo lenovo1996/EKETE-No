@@ -50,8 +50,8 @@ const BaseLayout = (props) => {
 
   const routeMatch = useRouteMatch()
   const dispatch = useDispatch()
-  const WIDTH_MENU_OPEN = '20%'
-  const WIDTH_MENU_CLOSE = '7%'
+  const WIDTH_MENU_OPEN = 260
+  const WIDTH_MENU_CLOSE = 90
 
   const [user, setUser] = useState({})
   const business = useSelector((state) => state.business)

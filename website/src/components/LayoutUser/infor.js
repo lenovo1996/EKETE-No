@@ -1,46 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import jwt_decode from 'jwt-decode'
-import { useHistory, useLocation, Link } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import styles from './infor.module.scss'
-import styleshopping from '../../views/user/overview/styles/historyshopping.module.scss'
-import AssessOders from '../../views/user/overview/assess'
-import Settinginfor from './setting-infor'
-
-import { compare, formatCash, compareCustom } from 'utils'
 import moment from 'moment'
-// import AssessOders from './assess'
+import ShoppingHistory from 'components/newfeed/shopping-history'
 
-import { Avatar, Button, Table, Tabs, List, Rate, Input, Tooltip } from 'antd'
-import { Row, Col, Timeline, Modal, Card, Image } from 'antd'
+import {Avatar, Tabs} from 'antd'
+import {Row, Col, Image} from 'antd'
 import {
-  HeartOutlined,
-  WechatOutlined,
-  ShareAltOutlined,
   SettingOutlined,
-  PhoneOutlined,
-  BulbOutlined,
   PhoneFilled,
   BulbFilled,
-  MailOutlined,
   MailFilled,
   ChromeFilled,
   CalendarOutlined,
   HistoryOutlined,
-  SmileOutlined,
-  CameraOutlined,
-  FileGifOutlined, 
-  FileImageOutlined
 } from '@ant-design/icons'
 import { getuserEKT } from 'apis/user-ekt'
-import { getshopping, getshoppingone } from 'apis/shopping-dairy'
-// import { Link } from 'react-router-dom'
-import { ACTION, ROUTES_USER, PERMISSIONS, LOGO_DEFAULT } from 'consts'
+import { ROUTES_USER } from 'consts'
 
-const { Meta } = Card
 export default function Infor() {
   const [user, setUser] = useState([])
-  const [orderekt, setorderEKT] = useState('')
-  const [detailshopping, setDetaishopping] = useState('')
   const history = useHistory()
 
   const dataUser = localStorage.getItem('accessToken')
@@ -51,57 +31,33 @@ export default function Infor() {
     try {
       const res = await getuserEKT(params)
       if (res.status === 200) {
-        if (res.data.data.length) setUser({ ...res.data.data[0] })
+        if (res.data.data.length) setUser({...res.data.data[0]})
       }
-      // console.log('info layou', res)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const _getShoppingDari = async (params) => {
-    try {
-      const resShoppingDari = await getshopping(params)
-      if (resShoppingDari.status === 200) setorderEKT(resShoppingDari.data.data)
-      // console.log('danh sach', resShoppingDari)
-    } catch (e) {
-      console.log(e)
-    }
-  }
   useEffect(() => {
-    _getShoppingDari({ phone: dataUser.data.phone })
-    // getone()
-  }, [dataUser.data.phone])
-
-  useEffect(() => {
-    getInfoUser({ user_id: dataUser.data.user_id })
+    getInfoUser({user_id: dataUser.data.user_id})
   }, [dataUser.data.user_id])
   return (
     <div className={styles['container-layout']}>
       <div className={styles['dashboard_manager_bottom_row_col_parent_top']}>
-        <div className={styles['font-bold']}>Thông tin cá nhân </div>
+        <div className={styles['font-bold']}>Thông tin cá nhân</div>
         <div className={styles['container-icon-setting']}>
-          {/* <Link
-            user={user}   to={ROUTES_USER.SETTINGINFOR}
-       
-             className={styles['icon-setting']}>
-            {' '}
-            < SettingOutlined />
-
-          </Link> */}
           <a
             className={styles['icon-setting']}
-            onClick={() => history.push({ pathname: ROUTES_USER.SETTINGINFOR, state: user })}
+            onClick={() => history.push({pathname: ROUTES_USER.SETTINGINFOR, state: user})}
           >
-            <SettingOutlined />
+            <SettingOutlined/>
           </a>
-          {/* <Link to={{ pathname: ROUTES_USER.SETTINGINFOR, state: user  }}><SettingOutlined /></Link> */}
         </div>
       </div>
       <div>
         <div className={styles['container-account']}>
           <div className={styles['container-avt']}>
-            <Avatar size={104} src={user && (user.avatar || '')} />
+            <Avatar size={104} src={user && (user.avatar || '')}/>
           </div>
           <div className={styles['container-infor']}>
             <div className={styles['display-flex']}>
@@ -110,14 +66,12 @@ export default function Infor() {
               </div>
               <div className={styles['container-icon-phone']}>
                 <PhoneFilled
-                  style={{ color: '#39CB7F', fontSize: 12 }}
-                  //  className={styles['color-icon-phone']}
+                  style={{color: '#39CB7F', fontSize: 12}}
                 />
               </div>
               <div className={styles['container-icon-id']}>
                 <BulbFilled
-                  style={{ color: '#91919F' }}
-                  // className={styles['color-icon-id']}
+                  style={{color: '#91919F'}}
                 />
               </div>
             </div>
@@ -127,18 +81,18 @@ export default function Infor() {
             </div>
             <div className={styles['container-flex']}>
               <div className={styles['container-item']}>{moment(user.birthday).format(
-                                        'DD/MM/YYYY'
-                                      )}</div>
+                'DD/MM/YYYY'
+              )}</div>
               <div className={styles['container-item']}>SDT: {user.phone || '...'}</div>
               <div className={styles['container-item']}>{user.gender || '...'}</div>
             </div>
             <div className={styles['container-flex']}>
               <div className={styles['container-item']}>
                 {' '}
-                <MailFilled /> {user.email || '...'}
+                <MailFilled/> {user.email || '...'}
               </div>
               <div className={styles['container-item']}>
-                <ChromeFilled /> {user.web || '...'}
+                <ChromeFilled/> {user.web || '...'}
               </div>
             </div>
             <div className={styles['container-dh']}>
@@ -161,53 +115,43 @@ export default function Infor() {
       <div className={styles['container-fe-hi']}>
         <Row>
           <Col xs={24} sm={24} md={24} lg={14} xl={14}>
-            <div
-              // style={{
-              //   marginLeft: 0,
-              //   marginTop: 0,
-              //   width: 690,
-              //   height: '100%',
-              //   marginBottom: 15,
-              //   background: '#F5F5F5',
-              // }}
-              className={styles['card-overview']}
-            >
-              <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
+            <div className={styles['card-overview']}>
+              <div style={{width: '100%', marginLeft: 'auto', marginRight: 'auto'}}>
                 <Tabs centered>
                   <Tabs.TabPane
                     tab={
                       <span className={styles['tabpane']}>
-                        <CalendarOutlined />
+                        <CalendarOutlined/>
                         Feed
                       </span>
                     }
                     key="1"
                   >
-                    <div style={{ width: '100%' }}>
+                    <div style={{width: '100%'}}>
                       <div className={styles['container-feed']}>
                         <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                         </div>
                         <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                         </div>
                         <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                         </div>
                         <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                         </div>
                         <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                         </div>
                         <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                         </div>
                         <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                         </div>
                         <div>
-                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                          <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                         </div>
 
                       </div>
@@ -216,329 +160,13 @@ export default function Infor() {
                   <Tabs.TabPane
                     tab={
                       <span className={styles['tabpane']}>
-                        <HistoryOutlined />
+                        <HistoryOutlined/>
                         Shopping history
                       </span>
                     }
                     key="2"
                   >
-                    <div>
-                      {orderekt &&
-                        orderekt.map((Item, index) => {
-                          return (
-                            <div style={{ width: 682 }}>
-                             <div className={styleshopping['container']}>
-                              <Row>
-                                <Col style={{ width: '70%' }}>
-                                  <Meta
-                                    className={styleshopping['content']}
-                                    avatar={
-                                      <Avatar size={50} src="https://joeschmoe.io/api/v1/random" />
-                                    }
-                                    title={
-                                      <p className={styleshopping['text-name']}>
-                                        @{Item.customer_info.slug_name}
-                                      </p>
-                                    }
-                                    description={moment(Item.create_date).format(
-                                      'DD/MM/YYYY HH:mm'
-                                    )}
-                                  />
-                                </Col>
-                                <Col className={styleshopping['button']}>
-                                  <Button className={styleshopping['text-button']}>
-                                    {' '}
-                                    + Theo dõi
-                                  </Button>
-                                </Col>
-                              </Row>
-                              <div>
-                                <div className={styleshopping['display-flex']}>
-                                  <p className={styleshopping['text']}>Đơn hàng: &nbsp; </p>
-                                  {<p className={styleshopping['text-blue']}> #{Item.code}</p>}
-                                </div>
-                                <div className={styleshopping['display-flex']}>
-                                  <p className={styleshopping['text']}>Mã vận chuyển: &nbsp; </p>
-                                  {
-                                    <p className={styleshopping['text-blue']}>
-                                      {' '}
-                                      #
-                                      {Item.shipping_info.tracking_number ||
-                                        'Đơn hàng mua trực tiếp'}
-                                    </p>
-                                  }
-                                </div>
-                              </div>
-                              <div>
-                                <List>
-                                  {Item.order_details.map((Item, index) => {
-                                    return (
-                                      <div className={styleshopping['container-product']}>
-                                        <div>
-                                          <List.Item.Meta
-                                            avatar={
-                                              <Avatar
-                                                style={{
-                                                  width: '47px',
-                                                  height: '50px',
-                                                  borderRadius: '6px ',
-                                                }}
-                                                shape="square"
-                                                size="large"
-                                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                              />
-                                            }
-                                            title={
-                                              <p className={styleshopping['text-sku']}>
-                                                #{Item.sku}
-                                              </p>
-                                            }
-                                            description={
-                                              <p className={styleshopping['text-name-product']}>
-                                                {Item.name}
-                                              </p>
-                                            }
-                                          />
-                                          <div className={styleshopping['container-center']}>
-                                            <h3 className={styleshopping['text-blue']}>
-                                              {' '}
-                                              {Item.price ? formatCash(+Item.price || 0) : 0}Đ
-                                            </h3>
-                                          </div>
-                                          <Rate
-                                            className={styleshopping['rate']}
-                                            allowHalf
-                                            defaultValue={2.5}
-                                          />
-                                          <div className={styleshopping['margin-center']}>
-                                            <AssessOders key="index">
-                                              <Button className={styleshopping['button-cta']}>
-                                                Đánh giá
-                                              </Button>
-                                            </AssessOders>
-                                          </div>
-                                        </div>
-                                        <div
-                                          className={
-                                            styleshopping[
-                                              'dashboard_manager_bottom_row_col_parent_top'
-                                            ]
-                                          }
-                                        ></div>
-                                      </div>
-                                    )
-                                  })}
-                                </List>
-                                <div>
-                                  <div className={styleshopping['container-add-cmt']}>
-                                    <div className={styleshopping['container-avt']}>
-                                      <Avatar size={50} src="https://joeschmoe.io/api/v1/random" />
-                                    </div>
-                                    <div className={styleshopping['container-input-add-cmt']}>
-                                      <div
-                                        className={
-                                          styleshopping[
-                                            'dashboard_manager_bottom_row_col_parent_top'
-                                          ]
-                                        }
-                                      ></div>
-                                      <div className={styleshopping['container-input']}>
-                                        <Input
-                                          className={styleshopping['input-add-cmt']}
-                                          placeholder="Thêm bình luận..."
-                                          suffix={
-                                            <Tooltip>
-                                              <SmileOutlined className={styleshopping['icon-cmt']} />
-                                              <CameraOutlined className={styleshopping['icon-cmt']} />
-                                              <FileGifOutlined className={styleshopping['icon-cmt']} />
-                                              <FileImageOutlined className={styleshopping['icon-cmt']} />
-                                            </Tooltip>
-                                          }
-                                        />
-                                        <div>
-                                          <Button>Đăng</Button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <List className={styleshopping['container-cmt']}>
-                                    <List.Item className={styleshopping['container-cmt']}>
-                                      <List.Item.Meta
-                                        avatar={
-                                          <Avatar
-                                            style={{
-                                              color: '#FFF',
-                                              backgroundColor: '#FDAA3E',
-                                              marginRight: 4,
-                                            }}
-                                            size={50}
-                                            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                          />
-                                        }
-                                        title={
-                                          <a
-                                            className={styleshopping['name-cmt']}
-                                            href="https://ant.design"
-                                          >
-                                            @hadudu
-                                          </a>
-                                        }
-                                        description={
-                                          <p className={styleshopping['text-cmt']}>
-                                            {' '}
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                            sed do eiusmod, Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing elit, sed do eiusmod Lorem ipsum dolor sit
-                                            amet, consectetur adipiscing elit, sed do eiusmod
-                                          </p>
-                                        }
-                                      />
-                                    </List.Item>
-                                    <div className={styleshopping['container-cmt-tool']}>
-                                      <div>
-                                        <a className={styleshopping['item-tool']}>Thích</a>
-                                      </div>
-                                      <div>
-                                        <a className={styleshopping['item-tool']}>Bình luận</a>
-                                      </div>
-                                      <div>
-                                        <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
-                                      </div>
-                                    </div>
-                                  </List>
-                                  <List className={styleshopping['container-cmt']}>
-                                    <List.Item className={styleshopping['container-cmt']}>
-                                      <List.Item.Meta
-                                        avatar={
-                                          <Avatar
-                                            style={{
-                                              color: '#FFF',
-                                              backgroundColor: '#FDAA3E',
-                                              marginRight: 4,
-                                            }}
-                                            size={50}
-                                            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                          />
-                                        }
-                                        title={
-                                          <a
-                                            className={styleshopping['name-cmt']}
-                                            href="https://ant.design"
-                                          >
-                                            @hadudu
-                                          </a>
-                                        }
-                                        description={
-                                          <p className={styleshopping['text-cmt']}>
-                                            {' '}
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                            sed do eiusmod
-                                          </p>
-                                        }
-                                      />
-                                    </List.Item>
-                                    <div className={styleshopping['container-cmt-tool']}>
-                                      <div>
-                                        <a className={styleshopping['item-tool']}>Thích</a>
-                                      </div>
-                                      <div>
-                                        <a className={styleshopping['item-tool']}>Bình luận</a>
-                                      </div>
-                                      <div>
-                                        <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
-                                      </div>
-                                    </div>
-                                    <div className={styleshopping['container-rep-cmt']}>
-                                      <List.Item className={styleshopping['container-cmt']}>
-                                        <List.Item.Meta
-                                          avatar={
-                                            <Avatar
-                                              style={{
-                                                color: '#FFF',
-                                                backgroundColor: '#FDAA3E',
-                                                marginRight: 4,
-                                              }}
-                                              size={50}
-                                              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                            />
-                                          }
-                                          title={
-                                            <a
-                                              className={styleshopping['name-cmt']}
-                                              href="https://ant.design"
-                                            >
-                                              @hadudu
-                                            </a>
-                                          }
-                                          description={
-                                            <p className={styleshopping['text-cmt']}>
-                                              {' '}
-                                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                                              elit, sed do eiusmod
-                                            </p>
-                                          }
-                                        />
-                                      </List.Item>
-                                      <div className={styleshopping['container-cmt-tool']}>
-                                        <div>
-                                          <a className={styleshopping['item-tool']}>Thích</a>
-                                        </div>
-                                        <div>
-                                          <a className={styleshopping['item-tool']}>Bình luận</a>
-                                        </div>
-                                        <div>
-                                          <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className={styleshopping['container-rep-cmt']}>
-                                      <List.Item className={styleshopping['container-cmt']}>
-                                        <List.Item.Meta
-                                          avatar={
-                                            <Avatar
-                                              style={{
-                                                color: '#FFF',
-                                                backgroundColor: '#FDAA3E',
-                                                marginRight: 4,
-                                              }}
-                                              size={50}
-                                              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                            />
-                                          }
-                                          title={
-                                            <a
-                                              className={styles['name-cmt']}
-                                              href="https://ant.design"
-                                            >
-                                              @hadudu
-                                            </a>
-                                          }
-                                          description={<p className={styleshopping['text-cmt']}> Ok !</p>}
-                                        />
-                                      </List.Item>
-                                      <div className={styleshopping['container-cmt-tool']}>
-                                        <div>
-                                          <a className={styleshopping['item-tool']}>Thích</a>
-                                        </div>
-                                        <div>
-                                          <a className={styleshopping['item-tool']}>Bình luận</a>
-                                        </div>
-                                        <div>
-                                          <a className={styleshopping['item-tool']}>Phản hồi riêng</a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </List>
-                                </div>
-                                <div className={styleshopping['container-text-see-cmts']}>
-                                  <a className={styleshopping['text-see-cmts']}>Xem tất cả 7 bình luận</a>
-                                </div>
-                              </div>
-                            </div>
-                            </div>
-                          )
-                        })}
-                    </div>
+                    <ShoppingHistory userPhone={dataUser.data.phone}/>
                   </Tabs.TabPane>
                 </Tabs>
               </div>
