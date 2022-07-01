@@ -1,0 +1,73 @@
+// cmt
+.container-avt {
+  margin-right: 18px;
+}
+.container-add-cmt {
+  display: flex;
+}
+.container-input-add-cmt {
+  width: 100%;
+}
+.input-add-cmt {
+  border: none !important;
+}
+.container-input {
+  display: flex;
+}
+.icon-cmt {
+  color: #91919f !important;
+  margin-right: 12px;
+  font-size: 20px;
+}
+.container-input > div > Button {
+  border: none !important;
+  box-shadow: none !important;
+  border-color: #ffff !important;
+  font-weight: 600;
+  font-size: 15.8173px;
+  line-height: 22px;
+  color: #1e4db7;
+}
+.container-cmt {
+  border-bottom: none !important;
+  padding: 0 !important;
+  margin-top: 13px !important;
+}
+.name-cmt {
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  line-height: 22px !important;
+  color: #6c757d !important;
+}
+.text-cmt {
+  font-weight: 400 !important;
+  font-size: 13px !important;
+  line-height: 16px !important;
+  color: #6c757d !important;
+  margin-bottom: 0 !important;
+}
+.container-cmt-tool {
+  display: flex;
+  margin-left: 70px;
+  margin-top: 2px;
+}
+.item-tool {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  color: #4f4f4f !important;
+  margin-right: 16px;
+}
+.container-rep-cmt{
+  margin-left: 66px;
+}
+.container-text-see-cmts{
+  margin-top: 42px;
+  text-align: center;
+}
+.text-see-cmts{
+  font-weight: 400 !important;
+  font-size: 13px !important;
+  line-height: 16px !important;
+  color: #1E4DB7 !important;
+}
