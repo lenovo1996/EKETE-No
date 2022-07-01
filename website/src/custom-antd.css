@@ -335,3 +335,7 @@ ul#scrollTopMenu {
   height: 4px!important;
   border-radius: 2px;
 }
+
+.ant-tabs-tab:hover {
+  color: #1e4db7!important;
+}
