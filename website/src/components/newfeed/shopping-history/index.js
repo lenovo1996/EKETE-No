@@ -6,11 +6,11 @@ import {getshopping} from "../../../apis/shopping-dairy";
 import styles from "./shopping-history.module.scss";
 import AssessOders from './assess'
 import Comment from 'components/newfeed/comment'
+import avatarRound from 'assets/img/avatar-round.png'
+
 const {Meta} = Card
 
-function ShoppingHistory() {
-
-  const [shoppingHistory, setShoppingHistory] = useState(false)
+function ShoppingHistory({userPhone = false}) {
 
   const _getShoppingDari = async (params) => {
     try {
@@ -20,9 +20,16 @@ function ShoppingHistory() {
       console.log(e)
     }
   }
+  const [shoppingHistory, setShoppingHistory] = useState(false)
 
   useEffect(() => {
-    _getShoppingDari()
+    let params = {};
+    if (userPhone) {
+      params = {
+        phone: userPhone
+      }
+    }
+    _getShoppingDari(params)
   }, [])
 
   return (
@@ -32,12 +39,12 @@ function ShoppingHistory() {
         return (
           <div style={{width: '100%'}}>
             <div className={styles['container']}>
-              <Row>
+              <Row className={styles['header-info']}>
                 <Col style={{width: '70%'}}>
                   <Meta
                     className={styles['content']}
                     avatar={
-                      <Avatar size={50} src="https://joeschmoe.io/api/v1/random"/>
+                      <Avatar size={50} src={avatarRound}/>
                     }
                     title={
                       <p className={styles['text-name']}>
@@ -51,7 +58,6 @@ function ShoppingHistory() {
                 </Col>
                 <Col className={styles['button']}>
                   <Button className={styles['text-button']}>
-                    {' '}
                     + Theo dõi
                   </Button>
                 </Col>
@@ -61,16 +67,16 @@ function ShoppingHistory() {
                   <p className={styles['text']}>Đơn hàng: &nbsp; </p>
                   {<p className={styles['text-blue']}> #{Item.code}</p>}
                 </div>
-                <div className={styles['display-flex']}>
-                  <p className={styles['text']}>Mã vận chuyển: &nbsp; </p>
-                  {
-                    <p className={styles['text-blue']}>
-                      {' '}
+                <div className={styles['display-flex']} style={{justifyContent: 'space-between'}}>
+                  <div>
+                    <span className={styles['text']}>Mã vận chuyển: &nbsp; </span>
+                    <span className={styles['text-blue']}>
                       #
                       {Item.shipping_info.tracking_number ||
                       'Đơn hàng mua trực tiếp'}
-                    </p>
-                  }
+                    </span>
+                  </div>
+
                   <p className={styles['status-order']}>
                     Trạng thái đơn hàng
                   </p>
@@ -126,12 +132,12 @@ function ShoppingHistory() {
                             </AssessOders>
                           </div>
                         </div>
-                        <div className={styles['dashboard_manager_bottom_row_col_parent_top']}></div>
+                        <div className={styles['borber-bottom']}></div>
                       </div>
                     )
                   })}
                 </List>
-                <Comment />
+                <Comment/>
               </div>
             </div>
           </div>

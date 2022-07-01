@@ -8,13 +8,15 @@ import {
 } from "@ant-design/icons";
 import styles from "./comment.module.scss";
 import Feedback from './feedback'
+import avatarRound from 'assets/img/avatar-round.png'
+
 
 function Comment() {
   return (
     <div>
       <div className={styles['container-add-cmt']}>
         <div className={styles['container-avt']}>
-          <Avatar size={50} src="https://joeschmoe.io/api/v1/random"/>
+          <Avatar size={40} src={avatarRound}/>
         </div>
         <div className={styles['container-input-add-cmt']}>
           <div className={styles['dashboard_manager_bottom_row_col_parent_top']}></div>

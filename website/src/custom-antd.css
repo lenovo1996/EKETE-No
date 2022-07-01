@@ -233,15 +233,21 @@
 /* Thiet lap thong tin ca nhan */
 .ant-form-item-label > label{
   font-weight: 600;
-font-size: 14px;
-line-height: 17px;
+  font-size: 14px;
+  line-height: 17px;
+}
+/* .ant-input-group.ant-input-group-compact .ant-input {
+  height: 40px;
 }
 
+/* .ant-form-item-control-input-content{
+
+}  */
 
 /* upload */
 .ant-upload.ant-upload-drag{
   background: #CDCDCD !important;
-border-radius: 18px !important;
+  border-radius: 18px !important;
 }
 
 /* Custom sidebar menu */
@@ -273,7 +279,7 @@ li.ant-menu-item{
 }
 
 .ant-menu.ant-menu-sub {
-    background: none!important;
+  background: none!important;
 }
 
 li.ant-menu-item a {
@@ -317,7 +323,7 @@ ul#scrollTopMenu {
 }
 
 .ant-menu-item::after {
-    border: none!important;
+  border: none!important;
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
@@ -328,4 +334,12 @@ ul#scrollTopMenu {
   background: #1e4db7!important;
   height: 4px!important;
   border-radius: 2px;
+}
+
+.ant-tabs-tab:hover {
+  color: #1e4db7!important;
+}
+
+.ant-input-affix-wrapper-focused {
+  box-shadow: none!important;
 }
