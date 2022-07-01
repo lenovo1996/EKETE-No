@@ -209,7 +209,9 @@ const BaseLayout = (props) => {
       <div>
         <div style={{ color: '#565656', paddingLeft: 10 }}>
           <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
-          <Link to={ROUTES_USER.INFOR}> Tài khoản của tôi</Link>
+          <Link 
+          to={ROUTES_USER.INFOR}
+          > Tài khoản của tôi</Link>
         </div>
       </div>
       {/* </ModalUpdateUser> */}

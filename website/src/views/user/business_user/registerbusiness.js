@@ -399,8 +399,8 @@ function Form_business() {
                 className={styles['ant-upload-select']}
                 showUploadList={false}
                 action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                data={_upload2}
-                beforeUpload={beforeUpload}
+                // data={_upload2}
+                // beforeUpload={beforeUpload}
               >
                 {image1 ? (
                   <img
