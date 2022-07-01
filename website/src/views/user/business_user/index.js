@@ -10,16 +10,16 @@ import jwt_decode from 'jwt-decode'
 
 // antd
 
-import { Card, Avatar } from 'antd'
+import { Card, Avatar,notification } from 'antd'
 // api
 import { getBusinesses} from 'apis/business'
-
+import { checkBusiness } from 'apis/auth'
 
 // html react parser
 
 export default function Business() {
   const location = useLocation()
-
+  const dispatch = useDispatch()
   const [business, setBusiness] = useState([])
   const { Meta } = Card
 
@@ -57,7 +57,7 @@ export default function Business() {
     _getBusinesses({ user_phone: dataUser.data.phone })
   }, [dataUser.data.phone])
 
- 
+
 
   return (
     <div className={styles['body_brand']}>

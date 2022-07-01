@@ -1,5 +1,5 @@
 .body {
-  margin: 70px 200px 0px 150px;
+  margin: 69px 260px 0px 305px;
   display: flex;
   height: auto;
 }
@@ -9,14 +9,14 @@
   box-shadow: 0 12px 23px 0 #5c37990a;
   // border-radius: 10px;
   // border: 1px solid black;
-  overflow: hidden;
+  // overflow: hidden;
   background-color: hwb(0 100% 0%);
   display: flex;
   flex-direction: column;
   height: 675px;
-  width: 27%;
+  width: 29%;
   margin: 10px;
-  border-radius: 16px;
+  border-radius: 14px;
   align-items: center;
   // position: fixed;
 }
@@ -24,7 +24,7 @@
 .card {
   position: relative;
   width: 100%;
-  height: 218px;
+  height: 168px;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   // display: flex;
@@ -49,8 +49,8 @@
   width: 32px;
   height: 32px;
   border-radius: 7px;
-  margin-top: 14px;
-  margin-left: 310px;
+  margin-top: 9px;
+  margin-left: 279px;
   display: inline-grid;
   align-content: center;
 }
@@ -73,27 +73,24 @@
 .container {
   margin: 10px;
   // background-color: hwb(0 100% 0%);
-  width: 70%;
+  width: 62%;
 }
 
 .list_product {
   border: 0 solid transparent;
-  overflow: hidden;
-  // background-color: hwb(0 100% 0%);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  // display: block;
-  width: 87%;
+  width: 100%;
   align-items: center;
   margin-left: 13px;
 }
 
 .Card_item{
-  width: 240px;
-  height: 370px;
+  width: 210px;
+  height: 348px;
   margin: 7px!important;
-  border-radius: 10px!important;
+  border-radius: 6px!important;
   .body{
     padding: 10px;
   }
@@ -142,9 +139,7 @@
 }
 
 .name_product{
-  overflow: hidden;
-  text-overflow: ellipsis; 
-  white-space: nowrap;
+
   font-size: 16px;
   word-wrap: break-word;
   white-space: normal;
@@ -155,6 +150,7 @@
   -webkit-line-clamp: 2;
   line-height: 1.2;
   margin-bottom: 5px;
+  height: 39px;
  
 }
 .price{

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import styles from './detail_business.module.scss'
 import stylefeed from './feed.module.scss'
+import { compare, formatCash } from 'utils'
 
 import { Card, Avatar, Tabs, List, Modal, Rate, Row, Col, Button } from 'antd'
 import jwt_decode from 'jwt-decode'
@@ -88,32 +89,32 @@ export default function Detail_business() {
           ) : null}
 
           <Avatar
-            size={119}
+            size={117}
             style={{
               position: 'absolute',
               border: '3px solid #0bb2fb',
-              marginTop: 149,
-              marginLeft: 123,
-              background: 'black',
+              marginTop: 103,
+              marginLeft: 104,
+              background: 'white',
             }}
           />
           <Avatar
-            size={107}
-            style={{ position: 'relative', marginTop: 155, marginLeft: 129 }}
+            size={103}
+            style={{ position: 'relative', marginTop: 110, marginLeft: 111 }}
             src={business.logo}
           />
         </div>
-        <h1 style={{ marginTop: 65, marginBottom: 5, fontSize: 26, fontWeight: 'bold' }}>
+        <h1 style={{ marginTop: 54, marginBottom: 5, fontSize: 23, fontWeight: 'bold' }}>
           {business.business_name}
         </h1>
-        <h3 style={{ color: '#6c757d', fontWeight: 'inherit' }}>{business.business_desiption}</h3>
+        <p style={{ color: '#6c757d', fontWeight: 'inherit' }}>{business.business_desiption}</p>
         <div className={styles['follow']}>
-          <div style={{ marginRight: 107 }}>
-            <p style={{ marginBottom: 0, fontWeight: 'bold', fontSize: 20 }}>110K</p>
+          <div style={{ marginRight: 70 }}>
+            <p style={{ marginBottom: 0, fontWeight: 'bold', fontSize: 18 }}>110K</p>
             <p style={{ color: '#6c757d', fontWeight: 'inherit' }}>lượt theo dõi</p>
           </div>
           <div>
-            <p style={{ marginBottom: 0, fontWeight: 'bold', fontSize: 20 }}>19</p>
+            <p style={{ marginBottom: 0, fontWeight: 'bold', fontSize: 18 }}>19</p>
             <p style={{ color: '#6c757d', fontWeight: 'inherit' }}>đang theo dõi</p>
           </div>
         </div>
@@ -168,20 +169,20 @@ export default function Detail_business() {
         <Tabs
           id="tab_detail"
           defaultActiveKey="1"
-          style={{ alignItems: 'center', padding: 20, width: '100%' }}
-          tabPosition={mode}
+          style={{ alignItems: 'center', width: '100%' }}
+          // tabPosition={mode}
         >
           <TabPane
             tab={
-              <span style={{ fontSize: 20, marginLeft: 166, paddingRight: 75 }}>
+              <span style={{ fontSize: 17 , marginLeft: 166, marginRight: 57}}>
                 <LayoutOutlined style={{ fontSize: 20 }} />
                 Feed
               </span>
             }
             key="1"
           >
-            <div style={{width: '100%', height: 700, overflowY: 'scroll'}}>
-            <div style={{ width: '87%', background: '#fff', borderRadius: 14 }}>
+            <div style={{width: '100%'}}>
+            <div style={{ width: '100%', background: '#fff', borderRadius: 14 }}>
               <div className={stylefeed['container']}>
                 <Row>
                   <Col style={{ width: '70%' }}>
@@ -262,7 +263,7 @@ export default function Detail_business() {
                 <div className={stylefeed['dashboard_manager_bottom_row_col_parent_top']}></div>
               </div>
             </div>
-            <div style={{ width: '87%', background: '#fff', borderRadius: 14 }}>
+            <div style={{ width: '100%', background: '#fff', borderRadius: 14 }}>
               <div className={stylefeed['container']}>
                 <Row>
                   <Col style={{ width: '70%' }}>
@@ -281,7 +282,7 @@ export default function Detail_business() {
                 <img
                   className={stylefeed['image']}
                   alt="example"
-                  src="https://chupanhvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2020/10/25090359/chup-san-pham2.jpg"
+                  src="https://top10tphcm.com/wp-content/uploads/2020/06/Shop-quan-ao-nu-quan-4.jpg"
                 />
               </div>
               <div className={stylefeed['container-item']}>
@@ -347,8 +348,8 @@ export default function Detail_business() {
           </TabPane>
           <TabPane
             tab={
-              <span style={{ fontSize: 20, marginLeft: 165, marginRight: 185 }}>
-                <DropboxOutlined tyle={{ fontSize: 20 }} />
+              <span style={{ fontSize: 17, marginLeft: 104, marginRight: 155}}>
+                <DropboxOutlined tyle={{ fontSize: 17 }} />
                 Sản phẩm
               </span>
             }
@@ -363,12 +364,12 @@ export default function Detail_business() {
                   cover={
                     <img
                       alt="example"
-                      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                      src={item.images[0]}
                       style={{
-                        width: 240,
-                        height: 235,
-                        borderTopLeftRadius: 10,
-                        borderTopRightRadius: 10,
+                        width: 210,
+                        height: 214,
+                        borderTopLeftRadius: 6,
+                        borderTopRightRadius: 6,
                       }}
                     />
                   }
@@ -387,7 +388,7 @@ export default function Detail_business() {
                         lineHeight: 1.2,
                       }}
                     >
-                      {item.price}
+                      {formatCash(item.price)}
                     </span>
                     <span style={{ color: '#1e4db7' }}>₫ </span>
                   </div>

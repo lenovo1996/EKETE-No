@@ -148,21 +148,19 @@ module.exports._create = async (req, res, next) => {
         if (/^((viesoftware)|(admin))$/gi.test(req.body.prefix)) {
             throw new Error(`400: Tên doanh nghiệp đã được sử dụng!`);
         }
-        let [business, user] = await Promise.all([
+        let [business, company_phone] = await Promise.all([
             client.db(SDB).collection('Business').findOne({ prefix: req.body.prefix }),
             client
                 .db(SDB)
-                .collection('Users')
-                .findOne({
-                    $or: [{ phone: req.body.phone }],
-                }),
+                .collection('Business')
+                .findOne({ company_phone: req.body.company_phone })
         ]);
         if (business) {
             throw new Error(`400: Tên doanh nghiệp đã được đăng ký!`);
         }
-        // if (user) {
-        //     throw new Error(`400: Tên đăng nhập đã được sử dụng!`);
-        // }
+        if (company_phone) {
+            throw new Error(`400: Số điện thoại đã được sử dụng!`);
+        }
         const DB = `${req.body.prefix}DB`;
         let [business_id, system_user_id] = await Promise.all([
             client
