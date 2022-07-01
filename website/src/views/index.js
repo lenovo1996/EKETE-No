@@ -644,13 +644,13 @@ const DEFINE_ROUTER_ADMIN = [
     permissions: 'admin',
     exact: true,
   },
-  // {
-  //   path: ROUTES_ADMIN.USER_EKT,
-  //   Component: () => <UserEKT />,
-  //   title: 'Quản lý user ekt',
-  //   permissions: 'admin',
-  //   exact: true,
-  // },
+  {
+    path: ROUTES_ADMIN.USER_EKT,
+    Component: () => <UserEKT />,
+    title: 'Quản lý user ekt',
+    permissions: 'admin',
+    exact: true,
+  },
 ]
 
 const AUTH_ROUTER = [

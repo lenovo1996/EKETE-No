@@ -7,5 +7,8 @@ import setting from './setting.js'
 import menuAdmin from './menu-admin'
 import menuUser from './menu-user'
 import business from './business'
-const rootReducers = combineReducers({ login, store, branch, invoice, setting, menuAdmin, menuUser, business})
+import provinces from './provinces'
+import districts from './districts'
+
+const rootReducers = combineReducers({ login, store, branch, invoice, setting, menuAdmin, menuUser, business, provinces, districts})
 export default rootReducers

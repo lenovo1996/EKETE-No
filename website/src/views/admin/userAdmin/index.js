@@ -134,7 +134,7 @@ export default function Employee() {
         className={styles['table']}
         id='useradmin'
         loading={loading}
-        scroll={{ y: 670 }}
+        scroll={{ y: 620 }}
         rowKey="userAdmin_id"
         size="small"
         pagination={{

@@ -242,8 +242,7 @@ code {
   padding: 8px 0!important;
 }
 #tab_detail .ant-tabs-ink-bar {
-  width: 52%!important;
-
+  width: 50%!important;
 }
 /* CSS update business */
 #update .ant-list{
