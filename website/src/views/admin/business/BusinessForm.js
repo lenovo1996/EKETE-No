@@ -32,7 +32,6 @@ export default function MenuForm({
   reloadData,
   record,
 
-  // status = ['new', 'tetting', 'ready to public','public','waiting for review','pending']
 }) {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
@@ -41,13 +40,15 @@ export default function MenuForm({
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
   const toggle = () => setVisible(!visible)
-  const [business, setBusiness] = useState([])
   const [paramsFilter, setParamsFilter] = useState({ page: 1, page_size: 20 })
   const [image, setImage] = useState('')
-  const [provinces, setProvinces] = useState([])
+
+  const provinces = useSelector((state) => state.provinces)
+  const districts = useSelector((state) => state.districts)
+
+
   const [districtMain, setDistrictMain] = useState([])
   const [districtsDefault, setDistrictsDefault] = useState([])
-  
 
   const _uploadImage = async (file) => {
     try {
@@ -74,17 +75,22 @@ export default function MenuForm({
         company_district: dataForm.company_district || '',
         company_province: dataForm.company_province || '',
         company_phone: dataForm.company_phone ||'',
-        logo: dataForm.logo || '',
         career_id: dataForm.career_id,
       }
-      console.log(body)
-
-      let res = await updateBusiness(body, record.menu_id)
+      if (image) {
+        body['logo'] = image
+      }
+      let res
+      if (record) res = await updateBusiness(body, record.business_id)
      
       if (res.status === 200) {
         if (res.data.success) {
           toggle()
-          reloadData()
+          dispatch({ type: 'UPDATE_BUSINESS', data: {
+            business_id: record.business_id, 
+            ...body
+          } })
+
           notification.success({
             message: `Cập nhật chức năng thành công`,
           })
@@ -109,20 +115,21 @@ export default function MenuForm({
 
   const _getProvinces = async () => {
     try {
+      dispatch({ type: ACTION.LOADING, data: true })
       const res = await getProvinces()
-      if (res.status === 200) setProvinces(res.data.data)
-
       dispatch({ type: ACTION.LOADING, data: false })
+      if (res.status === 200) {
+        dispatch({ type: 'SET_PROVINCES', provinces_data: res.data.data })
+      }
     } catch (error) {
       dispatch({ type: ACTION.LOADING, data: false })
     }
   }
-
   const _getDistricts = async () => {
     try {
       const res = await getDistricts()
       if (res.status === 200) {
-        setDistrictMain(res.data.data)
+        dispatch({ type: 'SET_DISTRICTS', districts_data: res.data.data })
         setDistrictsDefault(res.data.data)
       }
     } catch (error) {
@@ -148,25 +155,6 @@ export default function MenuForm({
       }
     }
   }, [visible])
-
-
-  const _getBusinesses = async () => {
-    try {
-      setLoading(true)
-      const res = await getBusinesses({ ...paramsFilter })
-      console.log(res)
-      if (res.status === 200) {
-        setBusiness(res.data.data)
-      }
-      setLoading(false)
-    } catch (e) {
-      setLoading(false)
-      console.log(e)
-    }
-  }
-  useEffect(() => {
-    _getBusinesses()
-  }, [])
 
   return (
     <>
@@ -227,6 +215,15 @@ export default function MenuForm({
                 rules={[{ required: true, message: 'Vui lòng nhập website' }]}
               >
                 <Input placeholder="Nhập website" size="large" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={11} lg={11} xl={11}>
+              <Form.Item
+                name="business_registration_number"
+                label={<div style={{ color: 'black', fontWeight: '600' }}>Đăng ký kinh doanh</div>}
+                rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+              >
+                <Input placeholder="Nhập đăng ký kinh doanh" size="large" />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>

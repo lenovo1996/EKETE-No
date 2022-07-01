@@ -50,6 +50,15 @@
 
 .edit-submenu-arrow:hover {
   a {
-    color: #5f73e2 !important;
+    color: #ffffff !important;
   }
+}
+.avatar {
+  // background-repeat: no-repeat;
+  background-position: center ;
+  background-size: cover;
+  border: 0.18em solid #898e9b;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
 }

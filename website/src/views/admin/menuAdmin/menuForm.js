@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 //antd
 import {
   Form,
@@ -9,26 +8,22 @@ import {
   Button,
   Input,
   notification,
-  DatePicker,
   Select,
-  Radio,
-  Space,
   InputNumber,
 } from 'antd'
 
 //apis
-import { getMenu,updateMenu, addMenu } from 'apis/menu-admin'
+import { getMenu, updateMenu, addMenu } from 'apis/menu-admin'
 
 export default function MenuForm({
   children,
   reloadData,
   record,
 
-  // status = ['new', 'tetting', 'ready to public','public','waiting for review','pending']
 }) {
   const [form] = Form.useForm()
-  
-  const { Option } = Select;
+
+  const { Option } = Select
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
   const toggle = () => setVisible(!visible)
@@ -49,7 +44,7 @@ export default function MenuForm({
         url: dataForm.url || '',
         view_position: dataForm.view_position || '',
         status: dataForm.status || '',
-        icon: dataForm.icon || ''
+        icon: dataForm.icon || '',
       }
       console.log(body)
 
@@ -90,29 +85,28 @@ export default function MenuForm({
         form.resetFields()
       } else {
         form.setFieldsValue({
-          ...record
+          ...record,
         })
       }
     }
   }, [visible])
 
-  const _getMenu = async () => {
-    try {
-      setLoading(true)
-      const res = await getMenu({ ...paramsFilter })
-      console.log(res)
-      if (res.status === 200) {
-        setMenu(res.data.data)
-      }
-      setLoading(false)
-    } catch (e) {
-      setLoading(false)
-      console.log(e)
-    }
-  }
-  useEffect(() => {
-    _getMenu()
-  }, [])
+  // const _getMenu = async () => {
+  //   try {
+  //     setLoading(true)
+  //     const res = await getMenu({ ...paramsFilter })
+  //     if (res.status === 200) {
+  //       setMenu(res.data.data)
+  //     }
+  //     setLoading(false)
+  //   } catch (e) {
+  //     setLoading(false)
+  //     console.log(e)
+  //   }
+  // }
+  // useEffect(() => {
+  //   _getMenu()
+  // }, [])
 
   return (
     <>
@@ -127,7 +121,6 @@ export default function MenuForm({
               size="large"
               type="primary"
               style={{ width: 120 }}
-              
             >
               {record ? 'Cập nhật' : 'Thêm'}
             </Button>
@@ -153,12 +146,12 @@ export default function MenuForm({
             </Col>
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>
               <Form.Item
-              initialValue={'/'}
+                initialValue={'/'}
                 label="URL"
                 name="url"
-                rules={[{ required:  true, message: 'Vui lòng nhập đường dẫn!' }]}
+                rules={[{ required: true, message: 'Vui lòng nhập đường dẫn!' }]}
               >
-                <Input  placeholder='Nhập đường dẫn' />
+                <Input placeholder="Nhập đường dẫn" />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>
@@ -168,16 +161,8 @@ export default function MenuForm({
             </Col>
 
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>
-              <Form.Item
-                name="parent_menu_id"
-                label="Menu cấp trên"
-                
-              >
-                <Select
-                  showSearch
-                  optionFilterProp="children"
-                  placeholder="Chọn menu cấp trên"
-                >
+              <Form.Item name="parent_menu_id" label="Menu cấp trên">
+                <Select showSearch optionFilterProp="children" placeholder="Chọn menu cấp trên">
                   {menu.map((menu, index) => (
                     <Select.Option value={menu.menu_id} key={index}>
                       {menu.name}
@@ -188,13 +173,17 @@ export default function MenuForm({
             </Col>
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>
               <Form.Item label="Vị trí hiển thị" name="view_position">
-                <InputNumber placeholder="Nhập vị trí hiển thị"  style={{ width: '100%' }}/>
+                <InputNumber placeholder="Nhập vị trí hiển thị" style={{ width: '100%' }} />
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>
               <Form.Item label="Icon" name="icon">
-                <Input placeholder="Nhập Icon" />
+                <Select showSearch optionFilterProp="children" placeholder="chọn icon">
+                  <Select.Option>
+                   
+                  </Select.Option>
+                </Select>
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>
@@ -203,13 +192,13 @@ export default function MenuForm({
                 label="Trạng thái"
                 rules={[{ required: true, message: 'Vui lòng chọn trạng thái' }]}
               >
-                <Select  style={{ width: 300 }}>
-                  <Option value="new">new</Option>
-                  <Option value="testing">testing</Option>
-                  <Option value="ready to public" >ready to public</Option>
-                  <Option value="public ">public</Option>
-                  <Option value="waiting for review">waiting for review</Option>
-                  <Option value="pending">pending</Option>
+                <Select style={{ width: 300 }}>
+                <Option value={1}>new</Option>
+                    <Option value={2}>testing</Option>
+                    <Option value={3}>ready to public</Option>
+                    <Option value={4}>public</Option>
+                    <Option value={5}>pending</Option>
+                    <Option value={6}>waiting for review</Option>
                 </Select>
               </Form.Item>
             </Col>

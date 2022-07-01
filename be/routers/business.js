@@ -10,12 +10,13 @@ router.route(`/update/:business_id`).patch(auth, business._update);
 router.route(`/`).get( business._get);
 router.route(`/delete`).patch(auth, business._delete);
 router.route('/setstatus').patch(auth, business._setstatus);
+router.route('/setprofilestatus').patch(auth, business._set_profile_status);
 
 router.route('/getone/:business_id').get(auth,business._getOne);
 router.route('/product_list/:business_id').get(auth,business._getProductList);
-router.route('/validate/:business_id').post(auth,business._Validate)
+router.route('/validate').patch(auth,business._Validate)
 
-router.route(`/getotp`).post(business._getOTP)
+router.route(`/getotp`).patch(business._getOTP)
 router.route(`/verifyotp`).post(business._verifyOTP)
 
 module.exports = router;

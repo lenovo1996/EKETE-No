@@ -13,7 +13,7 @@ import { UploadOutlined, LoadingOutlined, ExclamationCircleOutlined } from '@ant
 import { useStepsForm } from 'sunflower-antd'
 //apis
 
-import { addBusiness, verify, getOtp } from 'apis/business'
+import { addBusiness, verifyOtp, getOtp, validate } from 'apis/business'
 
 function Form_business() {
   const dispatch = useDispatch()
@@ -21,13 +21,12 @@ function Form_business() {
   let location = useLocation()
   const [loading, setLoading] = useState(false)
   const [loading2, setLoading2] = useState(false)
-  const [loading3, setLoading3] = useState(false)
   const [avatar, setAvatar] = useState('')
   const [image1, setImage1] = useState('')
-  const [image2, setImage2] = useState('')
   const [valuesdata, setValuesdata] = useState('')
-  const [business_registration_number, setBusiness_registration_number] = useState('')
-  const [tax_code, setTax_code] = useState('')
+
+  const [hidden, setHidden] = useState(false)
+
   const layout = {
     labelCol: { span: 50 },
     wrapperCol: { span: 50 },
@@ -75,32 +74,18 @@ function Form_business() {
       setLoading2(false)
     }
   }
-  const _upload3 = async (file) => {
-    try {
-      setLoading3(true)
-      const url = await uploadFile(file)
-      console.log(url)
-      setImage2(url || '')
-      setLoading3(false)
-    } catch (error) {
-      setLoading3(false)
-    }
-  }
 
-  const _verifyAccount = async () => {
+  const _verifyOtp = async () => {
     try {
-      await form.validateFields()
-      dispatch({ type: ACTION.LOADING, data: true })
+      // dispatch({ type: ACTION.LOADING, data: true })
       const dataForm = form.getFieldsValue()
       var body = { company_phone: valuesdata.company_phone, otp_code: dataForm.otp }
-      const res = await verify(body)
+      const res = await verifyOtp(body)
       dispatch({ type: ACTION.LOADING, data: false })
-      console.log(res)
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Xác thực otp thành công' })
-          gotoStep(current + 1)
-          dispatch({ type: ACTION.LOGIN, data: res.data.data })
+          setHidden(false)
         } else
           notification.warning({
             message:
@@ -112,20 +97,52 @@ function Form_business() {
           message:
             res.data.message || `Xác thực OTP thất bại, vui lòng bấm vào 'Gửi lại OTP' để thử lại`,
         })
+      dispatch({ type: ACTION.LOADING, data: false })
     } catch (error) {
       console.log(error)
       dispatch({ type: ACTION.LOADING, data: false })
     }
   }
-  const _resendOtp = async () => {
+  const _sendOtp = async () => {
     try {
-      dispatch({ type: ACTION.LOADING, data: true })
+      // dispatch({ type: ACTION.LOADING, data: true })
       const res = await getOtp(valuesdata.company_phone)
       if (res.status === 200) {
-        if (res.data.success)
+        if (res.data.success) {
           notification.success({ message: 'Gửi lại otp thành công, vui lòng kiểm tra lại' })
-        else notification.error({ message: 'Gửi lại otp thất bại, vui lòng thử lại' })
+          setHidden(true)
+        } else notification.error({ message: 'Gửi lại otp thất bại, vui lòng thử lại' })
       } else notification.error({ message: 'Gửi lại otp thất bại, vui lòng thử lại' })
+      dispatch({ type: ACTION.LOADING, data: false })
+    } catch (error) {
+      console.log(error)
+      dispatch({ type: ACTION.LOADING, data: false })
+    }
+  }
+  const _validateBusinessRegister = async () => {
+    try {
+      await form.validateFields()
+      // dispatch({ type: ACTION.LOADING, data: true })
+      const dataForm = form.getFieldsValue()
+      var body = {
+        company_phone: valuesdata.company_phone,
+        business_registration_image: image1,
+        tax_code: dataForm.tax_code,
+      }
+      const res = await validate(body)
+      dispatch({ type: ACTION.LOADING, data: false })
+      if (res.status === 200) {
+        if (res.data.success) {
+          notification.success({ message: 'Cập nhật cửa hàng thành công' })
+          gotoStep(current + 1)
+        } else
+          notification.warning({
+            message: res.data.message || `Cập nhật cửa hàng thất bại`,
+          })
+      } else
+        notification.warning({
+          message: res.data.message || `Cập nhật cửa hàng thất bại`,
+        })
       dispatch({ type: ACTION.LOADING, data: false })
     } catch (error) {
       console.log(error)
@@ -156,20 +173,20 @@ function Form_business() {
         business_registration_image: image1,
         business_registration_number: valuesdata.business_registration_number,
         tax_code: valuesdata.tax_code,
-        tax_code_image: image2,
       }
-      // console.log('vao data');
-      dispatch({ type: ACTION.LOADING, data: true })
+
+      // dispatch({ type: ACTION.LOADING, data: true })
       const res = await addBusiness(body)
       if (res.status === 200) {
         if (res.data.success) {
-          notification.info({ message: 'Mã otp đã được gửi về số điện thoại của bạn' })
+          notification.info({ message: 'Bạn đã đăng ký cửa hàng, hãy xác thông tin' })
           gotoStep(current + 1)
         }
-      } else
+      } else {
         notification.error({
           message: res.data.message || 'Đăng kí không thành công, vui lòng thử lại',
         })
+      }
       dispatch({ type: ACTION.LOADING, data: false })
     } catch (error) {
       console.log(error)
@@ -182,48 +199,23 @@ function Form_business() {
     setIsModalVisible(true)
   }
   const handleOk = () => {
-    _addBusiness();
-  };
+    _addBusiness()
+    setIsModalVisible(false)
+  }
+
   const handleCancel = () => {
     setIsModalVisible(false)
   }
 
-  const formList = [
-    <div
-      id="HDSD"
-      style={{ marginLeft: 2, height: 700, marginBottom: 15, width: '100%', fontSize: '13px' }}
-      className={styles['card-overview']}
-    >
-      <h1 style={{ marginTop: 32 }}>Để tạo cửa hàng thành công vui lòng hoàn thành 2 bước sau: </h1>
-      <h2>1. Thông tin cửa hàng</h2>
-      <h2>2. Xác thực thông tin </h2>
-      <br></br>
-      <h2>- Ứng với mỗi tài khoản Ekata chỉ có thể tạo được 1 cửa hàng</h2>
-      <h2>
-        - Từ cửa hàng thứ 2 trở đi, bạn vui lòng đăng ký thêm số điện thoại(khác số điện thoại đăng
-        nhập, chưa được đăng ký tài khoản Ekata) để thực hện mở của hàng
-      </h2>
-      <h2>
-        Dữ liệu của cửa hàng nếu chưa được hoàn thành xác thực thông tin thì chỉ có thể tồn tại tối
-        đa 60 ngày(kể từ ngày ghi nhận giao dịch cuối cùng của cửa hàng đó)
-      </h2>
-      <Form.Item style={{ marginTop: 40, textAlign: 'center' }}>
-        <Button type="primary" onClick={() => gotoStep(current + 1)}>
-          Tiếp tục
-        </Button>
-      </Form.Item>
-    </div>,
+  const removeAvatar = () => {
+    setAvatar('')
+  }
 
+  const formList = [
     <Row>
       <div
         id="TTCH"
-        style={{
-          marginLeft: 'auto',
-          height: 700,
-          marginBottom: 15,
-          width: '100%',
-          marginRight: 'auto',
-        }}
+        
         className={styles['card-overview']}
       >
         <Form form={form}>
@@ -285,15 +277,11 @@ function Form_business() {
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item label="Logo" name="logo" {...item1}>
+            <Form.Item label="Logo" name="logo" {...item1} style={{ display: 'flex' }}>
               <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
                 action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                 data={_upload}
-                beforeUpload={beforeUpload}
+                onRemove={removeAvatar}
               >
                 {avatar ? (
                   <img
@@ -302,34 +290,59 @@ function Form_business() {
                     style={{ width: 130, height: 100, objectFit: 'cover' }}
                   />
                 ) : (
-                  <div>
-                    {loading ? <LoadingOutlined /> : <UploadOutlined />}
-                    <div style={{ marginTop: 8 }}>Tải ảnh logo lên</div>
-                  </div>
+                  <Button icon={<UploadOutlined />}>Upload</Button>
                 )}
               </Upload>
             </Form.Item>
           </Col>
-          <Col></Col>
+          <Col>
+            <Form.Item label="Mã số đăng ký" name="business_registration_number" {...item1}>
+              <Input />
+            </Form.Item>
+          </Col>
 
           <Form.Item style={{ marginTop: 40, textAlign: 'center' }}>
-            <Button style={{ marginRight: 10 }} onClick={() => gotoStep(current - 1)}>
-              Quay lại
+            <Button
+              style={{
+                marginRight: 10,
+                width: 150,
+                height: 50,
+                background: '#d1d1e0',
+                fontWeight: 'bold',
+              }}
+              onClick={() => gotoStep(current - 1)}
+            >
+              Hủy bỏ
             </Button>
             <Button
-              // style={{ marginRight: 10 }}
+              style={{
+                marginRight: 10,
+                width: 150,
+                height: 50,
+                background: '#1e4db7',
+                fontWeight: 'bold',
+                border: 'none',
+              }}
               type="primary"
               loading={formLoading}
               onClick={() => {
                 submit().then((result) => {
                   if (result === 'ok') {
-                    gotoStep(current + 1)
+                    showModal()
                   }
                 })
               }}
             >
-              Tiếp tục
+              Lưu thông tin
             </Button>
+            <Modal
+              title="Basic Modal"
+              visible={isModalVisible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <h1>Đăng ký cửa hàng !!!</h1>
+            </Modal>
           </Form.Item>
         </Form>
       </div>
@@ -337,25 +350,74 @@ function Form_business() {
     <Row>
       <div
         id="TTKD"
-        style={{ marginTop: 5, marginLeft: 2, height: 700, marginBottom: 15, width: '100%' }}
+        
         className={styles['card-overview']}
       >
         <Form form={form}>
           <Col>
+            <Form.Item label="Xác nhận SĐT" {...item1}>
+              <h2 style={{ marginLeft: 10 }}>{valuesdata.company_phone}</h2>
+            </Form.Item>
+          </Col>
+          <Col style={{ display: 'flex', marginLeft: 345 }}>
             <Form.Item
-              label="Đăng ký kinh doanh"
-              name="business_registration_number"
+              label="Mã OTP"
+              name="otp"
               {...item1}
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng nhập đăng ký kinh doanh!',
+                  message: 'Thiếu OTP!',
                 },
               ]}
             >
-              <Input />
+              <Input
+                style={{ width: 160 }}
+                size="middle"
+                onPressEnter={_verifyOtp}
+                maxLength="6"
+                placeholder="Mã OTP"
+              />
+            </Form.Item>
+            {!hidden ? (
+              <Button className={styles['otp-button']} onClick={_sendOtp}>
+                Gửi OTP
+              </Button>
+            ) : (
+              <Button className={styles['otp-button']} onClick={_verifyOtp}>
+                Xác thực OTP
+              </Button>
+            )}
+          </Col>
+        </Form>
+        <Form form={form}>
+          <Col>
+            <Form.Item label="Đăng ký kinh doanh" name="business_registration_image" {...item1}>
+              <Upload
+                name="image1"
+                listType="picture-card"
+                className={styles['ant-upload-select']}
+                showUploadList={false}
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                // data={_upload2}
+                // beforeUpload={beforeUpload}
+              >
+                {image1 ? (
+                  <img
+                    src={image1}
+                    alt="image1"
+                    style={{ width: 356, height: 178, objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div>
+                    {loading2 ? <LoadingOutlined /> : <UploadOutlined />}
+                    <div style={{ marginTop: 8 }}>Tải ảnh giấy đăng ký kinh doanh lên</div>
+                  </div>
+                )}
+              </Upload>
             </Form.Item>
           </Col>
+
           <Col>
             <Form.Item
               label="Mã số thuế"
@@ -374,202 +436,115 @@ function Form_business() {
           <div
             className={styles['containerItemUpload']}
             style={{ marginLeft: 'auto', marginRight: 'auto' }}
-          >
-            <div className={styles['iTemupload']}></div>
-            <div>
-              <Col>
-                <Form.Item
-                  name="image1"
-                  {...item1}
-                  rules={[
-                    {
-                      required: true,
-                      message: '!!!!!',
-                    },
-                  ]}
-                >
-                  <Col>
-                    <Upload
-                      name="image1"
-                      listType="picture-card"
-                      className="avatar-uploader"
-                      showUploadList={false}
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                      data={_upload2}
-                      beforeUpload={beforeUpload}
-                    >
-                      {image1 ? (
-                        <img
-                          src={image1}
-                          alt="image1"
-                          style={{ width: 130, height: 100, objectFit: 'cover' }}
-                        />
-                      ) : (
-                        <div>
-                          {loading2 ? <LoadingOutlined /> : <UploadOutlined />}
-                          <div style={{ marginTop: 8 }}>Tải ảnh giấy đăng ký kinh doanh lên</div>
-                        </div>
-                      )}
-                    </Upload>
-                  </Col>
-                </Form.Item>
-              </Col>
-            </div>
-            <div style={{ marginRight: 570 }}>
-              <Col>
-                <Form.Item name="image2" {...item1}>
-                  <Col>
-                    <Upload
-                      name="image2"
-                      listType="picture-card"
-                      className="avatar-uploader"
-                      showUploadList={false}
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                      data={_upload3}
-                      beforeUpload={beforeUpload}
-                    >
-                      {image2 ? (
-                        <img
-                          src={image2}
-                          alt="image2"
-                          style={{ width: 130, height: 100, objectFit: 'cover' }}
-                        />
-                      ) : (
-                        <div>
-                          {loading3 ? <LoadingOutlined /> : <UploadOutlined />}
-                          <div style={{ marginTop: 8 }}>Tải ảnh mã số thuế lên</div>
-                        </div>
-                      )}
-                    </Upload>
-                  </Col>
-                </Form.Item>
-              </Col>
-            </div>
-          </div>
-          <Form.Item {...tailLayout} style={{ marginTop: 40, textAlign: 'center' }}>
-            <Button style={{ marginRight: 10 }} onClick={() => gotoStep(current - 1)}>
-              Quay lại
+          ></div>
+          <Form.Item style={{ marginTop: 40, textAlign: 'center' }}>
+            <Button
+              style={{
+                marginRight: 10,
+                width: 150,
+                height: 50,
+                background: '#d1d1e0',
+                fontWeight: 'bold',
+              }}
+              onClick={() => gotoStep(current - 1)}
+            >
+              Hủy bỏ
             </Button>
             <Button
+              style={{
+                marginRight: 10,
+                width: 150,
+                height: 50,
+                background: '#1e4db7',
+                fontWeight: 'bold',
+              }}
               type="primary"
               loading={formLoading}
-              // onClick={_addBusiness}
-              onClick={() => {
-                submit().then((result) => {
-                  if (result === 'ok') {
-                    showModal()
-                    // _addBusiness()
-                  }
-                })
+              onClick={_validateBusinessRegister}
+            >
+              Lưu thông tin
+            </Button>
+            <Button
+              style={{
+                marginRight: 10,
+                width: 150,
+                height: 50,
+                background: '#00ff99',
+                fontWeight: 'bold',
               }}
             >
-              Tiếp tục
+              Vào cửa hàng
             </Button>
-            <Modal
-              title="Basic Modal"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-            >
-              <h1>Đăng ký cửa hàng !!!</h1>
-            </Modal>
           </Form.Item>
         </Form>
       </div>
     </Row>,
-
-    <Form>
-      <div
-        id="XTOTP"
-        style={{ marginTop: 5, marginLeft: 2, height: 700, marginBottom: 15, width: '100%' }}
-        className={styles['card-overview']}
-      >
-        <Form
-          form={form}
-          style={{
-            marginTop: 15,
-            width: '40%',
-            textAlign: 'center',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        >
-          <Col style={{ 'text-align': 'center' }}>
-            <Form.Item name="otp" rules={[{ required: true, message: 'Bạn chưa nhập mã OTP' }]}>
-              <Input
-                size="large"
-                onPressEnter={_verifyAccount}
-                className={styles['input']}
-                maxLength="6"
-                placeholder="Nhập mã xác thực OTP"
-              />
-            </Form.Item>
-          </Col>
-        </Form>
-        <Form.Item style={{ marginTop: 16, textAlign: 'center' }}>
-          <Row wrap={false} align="end" style={{ color: 'black' }}>
-            <div>Bạn chưa nhận được mã?</div>
-            <p onClick={_resendOtp} className={styles['otp-content-resent']}>
-              Gửi lại OTP
-            </p>
-          </Row>
-          <Row style={{ display: 'inline-flex' }}>
-            <Col style={{ padding: '10px' }}>
-              <Button onClick={() => gotoStep(current - 1)}>Quay lại</Button>
-            </Col>
-            {/* <Col  style={{'padding': '10px'}}>
-              <Button onClick={_resendOtp}>
-                Gửi lại OTP
-              </Button>
-            </Col> */}
-            <Col style={{ padding: '10px' }}>
-              <Button
-                type="primary"
-                className={styles['otp-button']}
-                onClick={(_verifyAccount) => window.location.reload(false)}
-              >
-                Xác thực
-              </Button>
-            </Col>
-          </Row>
-        </Form.Item>
-      </div>
-    </Form>,
   ]
 
   return (
-    <div>
-      <Steps {...stepsProps} style={{ marginTop: 10 }}>
-        <Step title="Hướng dẫn sử dụng" />
+    <div className={styles['container']}>
+      <h2 style={{ fontSize: 30, height: 50 }}>Tạo cửa hàng</h2>
+      <div className={styles['title']}>
+        <div className={styles['title1']}>
+          <h1 style={{ marginTop: 20 }}>
+            Để tạo cửa hàng thành công vui lòng hoàn thành 2 bước sau:
+          </h1>
+          <p style={{ marginLeft: 20 }}>1. Thông tin cửa hàng</p>
+          <p style={{ marginLeft: 20 }}>2. Xác thực thông tin </p>
+        </div>
+
+        <div className={styles['title2']}>
+          <p>- Ứng với mỗi tài khoản Ekata chỉ có thể tạo được 1 cửa hàng</p>
+          <p>
+            - Từ cửa hàng thứ 2 trở đi, bạn vui lòng đăng ký thêm số điện thoại (khác số điện thoại
+            đăng nhập, chưa được đăng ký tài khoản Ekata) để thực hện mở của hàng
+          </p>
+          <p>
+            Dữ liệu của cửa hàng nếu chưa được hoàn thành xác thực thông tin thì chỉ có thể tồn tại
+            tối đa 60 ngày (kể từ ngày ghi nhận giao dịch cuối cùng của cửa hàng đó)
+          </p>
+        </div>
+      </div>
+
+      <Steps type="navigation" {...stepsProps}>
         <Step title="Thông tin cửa hàng" />
-        <Step title="Thông tin kinh doanh" />
-        <Step title="Xác thực số điện thoại" />
-        <Step title="Hoàn thành" />
+        <Step title="Xác thực thông tin " />
+        <Step title="Trạng thái xác thực" />
       </Steps>
-      <div style={{ marginTop: 32 }}>
+      <div>
         <Form {...layout} {...formProps}>
           {formList[current]}
         </Form>
 
-        {current === 4 && (
-          <Result
-            status="success"
-            title="Submit is succeed!"
-            extra={
-              <>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    form.resetFields()
-                    gotoStep(0)
-                  }}
-                >
-                  Xong
-                </Button>
-                <Button>Vào cửa hàng</Button>
-              </>
-            }
-          />
+        {current === 2 && (
+          <div className={styles['result']}>
+            <img className={styles['image-result']} src="https://www.33finance.com/wp-content/uploads/2022/01/physical-store-300x255.png"></img>
+            <div>
+            <Button
+              style={{
+                marginRight: 10,
+                width: 150,
+                height: 50,
+                background: '#d1d1e0',
+                fontWeight: 'bold',
+              }}
+            >
+              Hủy bỏ
+            </Button>
+            <Button
+              style={{
+                marginRight: 10,
+                width: 150,
+                height: 50,
+                background: '#1e4db7',
+                fontWeight: 'bold',
+                border: 'none',
+              }}
+            >
+              Lưu thông tin
+            </Button>
+            </div>
+          </div>
         )}
       </div>
     </div>

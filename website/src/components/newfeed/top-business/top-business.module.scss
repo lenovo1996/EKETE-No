@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&family=Inter:wght@400;600&display=swap');
+
+.top-business-container {
+  background: #FFFFFF;
+  /* Shadow-block */
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.04);
+  width: 35%;
+  padding: 20px;
+  margin-left: 15px;
+  margin-top: 90px;
+
+  border-radius: 14px;
+
+  .header {
+    height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 1px;
+    color: #C7C7C7;
+  }
+
+  .business-list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+
+    .business-item {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      min-height: 70px;
+      margin-bottom: 10px;
+
+      .business-avatar {
+        width: 20%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin-right: 10px;
+
+        .avatar-circle {
+          width: 50px;
+          height: 50px;
+          background: lightgray;
+          border-radius: 50%;
+        }
+
+        .avatar-status {
+          width: 16px;
+          height: 16px;
+          background: #b1b1b1;
+          border-radius: 50%;
+          position: absolute;
+          bottom: 0;
+          right: 6px;
+          border: 2px solid white;
+        }
+      }
+
+      .business-meta {
+        width: 55%;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+
+        span.business-title {
+          font-family: 'Inter', sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 19px;
+          color: #202020;
+          cursor: pointer;
+        }
+
+        span.business-title:hover {
+          color: #0BB2FB;
+        }
+
+        span.business-description {
+          font-family: 'Inter';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 17px;
+          color: #202020;
+        }
+
+      }
+
+      .business-action {
+        width: 25%;
+
+        button.business-action-follow {
+          background: transparent;
+          width: 100%;
+          font-family: 'Inter';
+          font-style: normal;
+          font-weight: 600;
+          font-size: 13px;
+          line-height: 18px;
+          color: #0BB2FB;
+          flex: none;
+          order: 1;
+          flex-grow: 0;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

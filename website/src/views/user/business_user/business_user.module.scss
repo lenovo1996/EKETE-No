@@ -9,57 +9,82 @@
   margin-right: auto;
   text-align: center;
 }
+
+.container {
+  margin: 70px auto;
+  width: 70%;
+}
+
+.title {
+  display: flex;
+}
+
+.title2 {
+  border: 1.25px dashed #39CB7F;
+  margin-left: 100px;
+  padding: 10px;
+  width: 50em;
+}
+
 .body_brand_header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 15px;
 }
+
 .body_brand_header_title {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 .body_brand_header_list_text {
   font-size: 1.2rem;
   font-weight: 600;
   padding-right: 10px;
 }
+
 .button_create_brand {
   background-color: #007bff;
   color: white;
 }
+
 .body_brand_filter {
   padding: 15px 0;
 }
+
 .body_brand_delete_filter {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding-bottom: 20px;
 }
-.step2{
+
+.step2 {
   margin-top: 40px;
   text-align: center
 }
 
-.button{
+.button {
   text-align: center;
 }
-.containerItem{
+
+.containerItem {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 24px;
   margin: 10px;
 
 }
-.iTem{
+
+.iTem {
   margin-left: auto;
   margin-right: auto;
 }
 
 //upload image
-.containerItemUpload{
+.containerItemUpload {
   margin-left: auto;
   margin-right: auto;
   // width: 40%;
@@ -69,16 +94,19 @@
   margin: 10px;
 
 }
-.iTemupload{
+
+.iTemupload {
   margin-left: auto;
   margin-right: auto;
 }
+
 //
-.dashboard_manager_bottom_row_col_parent_top > div {
+.dashboard_manager_bottom_row_col_parent_top>div {
   font-size: 1rem;
   font-weight: 600;
   color: black;
 }
+
 .dashboard_manager_bottom_row_col_parent_top {
   display: flex;
   justify-content: space-between;
@@ -94,6 +122,7 @@
   margin: 12px;
   max-height: 100%;
 }
+
 .dashboard_manager_balance {
   display: flex;
   justify-content: flex-start;
@@ -103,6 +132,7 @@
   background-color: white;
   padding: 12px;
 }
+
 .card {
   box-shadow: 0 12px 23px 0 #5c37990a;
   border-radius: 10px;
@@ -119,7 +149,8 @@
   align-items: center;
   padding-bottom: 1rem;
 }
-.dashboard_manager_balance_title > div {
+
+.dashboard_manager_balance_title>div {
   margin-right: 1rem;
   font-size: 1rem;
   font-weight: 600;
@@ -134,11 +165,13 @@
   padding-bottom: 1rem;
   border-bottom: 1px solid rgb(206, 192, 192);
 }
-.dashboard_manager_revenue_title > div {
+
+.dashboard_manager_revenue_title>div {
   color: black;
   font-size: 1rem;
   font-weight: 600;
 }
+
 .dashboard_manager_bottom {
   margin-top: 1rem;
   display: flex;
@@ -146,11 +179,13 @@
   align-items: center;
   width: 100%;
 }
-.dashboard_manager_bottom_row_col_parent_top > div {
+
+.dashboard_manager_bottom_row_col_parent_top>div {
   font-size: 1rem;
   font-weight: 600;
   color: black;
 }
+
 .dashboard_manager_bottom_row_col_parent_top {
   display: flex;
   justify-content: space-between;
@@ -163,18 +198,24 @@
 .card-overview {
   box-shadow: 0 12px 23px 0 #5c37990a;
   border-radius: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   border: 0 solid transparent;
   overflow: hidden;
   background-color: white;
-  margin: 12px;
-  padding: 12px;
+  padding: 50px;
   display: flex;
   flex-direction: column;
+  margin-left: auto;
+  height: auto;
+  margin-bottom: 15px;
+  width: 1171px;
+  margin-right: auto;
 }
 
 .steps-content {
   min-height: 200px;
-  margin-top: 16px;
+  // margin-top: 16px;
   padding-top: 80px;
   text-align: center;
   background-color: #dc3636;
@@ -187,34 +228,127 @@
 }
 
 //opt
-.otp-container {
-  position: relative;
-  color: #fff;
 
-  .otp-content {
-    position: absolute;
-    padding: 0px 80px 0px 0px;
-    width: 50%;
+.otp-button {
 
-    &-resent {
-      margin-bottom: 0;
-      cursor: pointer;
-      font-weight: 700;
-      margin-left: 3px;
-      transition: all 0.5s;
+  background: #00ccff !important;
+  border: 0;
+  font-size: 16px;
+  color: #fff !important;
+  width: 120px;
+  height: 32px;
+  font-weight: bold;
+}
 
-      &:hover {
-        color: rgb(146, 207, 243);
-      }
-    }
+// .otp-button:active {
+//   display: none;
+//   background: #DDDDDD;
+//   color: #222222;
+//   border-bottom: 0;
+//   box-shadow: 0 3px #555555;
+//   margin-top: 2px;
+//   }
 
-    .otp-button {
-      margin-top: 15px;
-      background: #000 !important;
-      border-color: #000 !important;
-      font-size: 16px;
-      color: #fff !important;
-      width: 80%;
-    }
+
+.resend {
+  // margin-bottom: 0;
+  cursor: pointer;
+  font-weight: 700;
+  margin-left: 3px;
+  transition: all 0.5s;
+
+  &:hover {
+    color: rgb(146, 207, 243);
   }
+}
+
+
+
+.ekata__step-item.ant-steps-item-active {
+  background: rgb(36, 209, 252) !important;
+  margin-right: 8px;
+  height: 40px;
+}
+
+.ekata__step-item:first-child::after {
+  border-left: none !important;
+}
+
+.ekata__step-item:first-child {
+  border-top-left-radius: 10px !important;
+}
+
+.ekata__step-item:last-child {
+  margin-right: 0 !important;
+}
+
+.ekata__step-item:last-child {
+  border-top-right-radius: 8px !important;
+}
+
+.ekata__step-item::before {
+  content: "" !important;
+  position: absolute !important;
+  right: -20px !important;
+  left: auto !important;
+  bottom: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  background-color: transparent !important;
+  border-left: 20px solid rgb(36, 209, 252) !important;
+  border-top: 20px solid transparent !important;
+  border-bottom: 20px solid transparent !important;
+  z-index: 1 !important;
+
+}
+
+.ekata__step-item::after,
+.ekata__step-item:last-child::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: auto !important;
+  bottom: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  transform: none !important;
+  border: none !important;
+  border-left: 20px solid #f0f2f5 !important;
+  border-top: 20px solid transparent !important;
+  border-bottom: 20px solid transparent !important;
+  z-index: 0 !important;
+}
+
+.ekata__step-item .ant-steps-item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.ekata__step-navigation {
+  margin-top: 40px !important;
+}
+
+.ant-upload-select {
+  width: 100% !important;
+  height: 176px !important;
+}
+
+.result {
+  width: 100%;
+  height: 600px;
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 81px
+}
+
+.image-result {
+  width: 368px;
+  height: 307px;
+  display: flex;
+  float: left;
+  // margin: 64px 393px;
 }

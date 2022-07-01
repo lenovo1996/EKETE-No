@@ -38,26 +38,26 @@ module.exports._get = async (req, res, next) => {
     }
 };
 
-module.exports._getOne = async(req,res,next) =>{
+module.exports._getOne = async (req, res, next) => {
     try {
         await businessService._getOne(req, res, next);
     } catch (err) {
         next(err);
     }
-}
+};
 
-module.exports._getProductList = async(req,res,next) =>{
+module.exports._getProductList = async (req, res, next) => {
     try {
         await businessService._getProductList(req, res, next);
     } catch (err) {
         next(err);
     }
-}
+};
 
 module.exports._getgoBusiness = async (req, res, next) => {
     try {
         let shop = req.headers[`shop`];
-        
+
         // let [prefix, username] = req.body.username.split("_");
         var username = req.body.username;
         let business = await client.db(SDB).collection('Business').findOne({ prefix: shop.toLowerCase() });
@@ -144,27 +144,23 @@ module.exports._create = async (req, res, next) => {
         //     .trim()
         //     .toLowerCase();
         // req.body.password = bcrypt.hash(req.body.password);
-        
+
         if (/^((viesoftware)|(admin))$/gi.test(req.body.prefix)) {
             throw new Error(`400: Tên doanh nghiệp đã được sử dụng!`);
         }
-        let [business, user] = await Promise.all([
+        let [business, company_phone] = await Promise.all([
             client.db(SDB).collection('Business').findOne({ prefix: req.body.prefix }),
             client
                 .db(SDB)
-                .collection('Users')
-                .findOne({
-                    $or: [
-                        { phone: req.body.phone },
-                    ],
-                }),
+                .collection('Business')
+                .findOne({ company_phone: req.body.company_phone })
         ]);
         if (business) {
             throw new Error(`400: Tên doanh nghiệp đã được đăng ký!`);
         }
-        // if (user) {
-        //     throw new Error(`400: Tên đăng nhập đã được sử dụng!`);
-        // }
+        if (company_phone) {
+            throw new Error(`400: Số điện thoại đã được sử dụng!`);
+        }
         const DB = `${req.body.prefix}DB`;
         let [business_id, system_user_id] = await Promise.all([
             client
@@ -194,25 +190,25 @@ module.exports._create = async (req, res, next) => {
         ]).catch((err) => {
             throw new Error('Kiểm tra thông tin doanh nghiệp không thành công!');
         });
-        let otpCode = String(Math.random()).substr(2, 6);
+        // let otpCode = String(Math.random()).substr(2, 6);
         if (req.body.company_phone) {
-            let verifyId = crypto.randomBytes(10).toString(`hex`);
-            let verifyLink = `https://quantribanhang.viesoftware.vn/verifyaccount?uid=${verifyId}`;
-            let _verifyLink = {
-                company_phone: req.body.company_phone,
-                UID: String(verifyId),
-                verify_link: verifyLink,
-                verify_timelife: moment().tz(TIMEZONE).add(5, `minutes`).format(),
-            };
+            // let verifyId = crypto.randomBytes(10).toString(`hex`);
+        //     let verifyLink = `https://quantribanhang.viesoftware.vn/verifyaccount?uid=${verifyId}`;
+        //     let _verifyLink = {
+        //         company_phone: req.body.company_phone,
+        //         UID: String(verifyId),
+        //         verify_link: verifyLink,
+        //         verify_timelife: moment().tz(TIMEZONE).add(5, `minutes`).format(),
+        //     };
             // await Promise.all([
             //     mail.sendMail(req.body.email, `Yêu cầu xác thực`, verifyMail(otpCode, verifyLink)),
             //     client.db(SDB).collection('VerifyLinks').insertOne(_verifyLink),
             // ]);
         }
-        if (req.body.company_phone) {
-            let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
-            sendSMS([req.body.company_phone], verifyMessage, 2, 'VIESOFTWARE');
-        }
+        // if (req.body.company_phone) {
+        //     let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
+        //     sendSMS([req.body.company_phone], verifyMessage, 2, 'VIESOFTWARE');
+        // }
         business_id++;
         system_user_id++;
         let user_id = 1;
@@ -226,18 +222,17 @@ module.exports._create = async (req, res, next) => {
             user_name: req.user.fullname,
             business_id: business_id,
             system_user_id: system_user_id,
-            logo:req.body.logo,
+            logo: req.body.logo,
             prefix: req.body.prefix,
             business_name: req.body.business_name,
             database_name: DB,
             company_email: req.user.email || '',
-            company_phone: req.body.company_phone ,
-            company_website: req.body.company_website ,
-            company_address: req.body.company_address ,
+            company_phone: req.body.company_phone,
+            company_website: req.body.company_website,
+            company_address: req.body.company_address,
             company_district: req.body.company_district,
             company_province: req.body.company_province,
             tax_code: req.body.tax_code || '',
-            tax_code_image: req.body.tax_code_image ||'',
             career_id: req.body.career_id,
             price_recipe: req.body.price_recipe || 'FIFO',
             verify_with: (() => {
@@ -252,12 +247,12 @@ module.exports._create = async (req, res, next) => {
                 }
                 return 'PHONE';
             })(),
-            otp_code: otpCode,
+            otp_code: '',
             otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
             business_registration_number: req.body.business_registration_number || '',
             business_registration_image: req.body.business_registration_image || '',
             profile_status: 1,
-            status: 1  ,
+            status: 1,
             is_delete: false,
             create_date: moment().tz(TIMEZONE).format(),
             creator_id: user_id,
@@ -265,8 +260,12 @@ module.exports._create = async (req, res, next) => {
             updater_id: user_id,
             slug_name: removeUnicode(String(req.body.business_name), true).toLowerCase(),
             active: false,
+            business_desiption: '',
+            business_cover_image: '',
+            list_image: [],
+            is_delete: false,
         };
-        
+
         let _user = {
             system_user_id: system_user_id,
             user_id: user_id,
@@ -284,7 +283,7 @@ module.exports._create = async (req, res, next) => {
             birth_day: req.body.birth_day || '',
             address: req.body.address || '',
             district: req.body.district || '',
-            province: req.body.province || '',  
+            province: req.body.province || '',
             branch_id: branch_id,
             store_id: store_id,
             // otp_code: otpCode,
@@ -403,16 +402,15 @@ module.exports._create = async (req, res, next) => {
          * date: 10/5/2022
          * des: tạo bảng user khi tạo cửa hàng
          */
-        let _work ={
+        let _work = {
             // work_id: work_id,
             user_phone: req.user.phone,
             business_name: req.body.business_name,
-            role_name: "ADMIN",
+            role_name: 'ADMIN',
             logo: req.body.logo,
             create_date: moment().tz(TIMEZONE).format(),
-            business_id: business_id
-
-        }
+            business_id: business_id,
+        };
         await Promise.all([
             client.db(SDB).collection('Business').insertOne(_business),
             // client.db(SDB).collection('Users').insertOne(_user),
@@ -423,7 +421,7 @@ module.exports._create = async (req, res, next) => {
             client.db(DB).collection('Stores').insertOne(_store),
             client.db(DB).collection('Waranties').insertOne(_warranty),
 
-            client.db(SDB).collection('Works').insertOne(_work)
+            client.db(SDB).collection('Works').insertOne(_work),
         ]).catch((err) => {
             throw new Error('Tạo tài khoản không thành công!');
         });
@@ -447,11 +445,7 @@ module.exports._create = async (req, res, next) => {
             client
                 .db(DB)
                 .collection('AppSetting')
-                .updateOne(
-                    { name: 'PaymentMethods' },
-                    { $set: { name: 'PaymentMethods', value: role_id } },
-                    { upsert: true }
-                ),
+                .updateOne({ name: 'PaymentMethods' }, { $set: { name: 'PaymentMethods', value: role_id } }, { upsert: true }),
             client
                 .db(DB)
                 .collection('AppSetting')
@@ -474,6 +468,7 @@ module.exports._create = async (req, res, next) => {
 module.exports._update = async (req, res, next) => {
     try {
         req.params.business_id = Number(req.params.business_id);
+        req.body.prefix = removeUnicode(req.body.business_name, true).toLowerCase();
         let business = await client.db(SDB).collection('Business').findOne(req.params);
         if (!business) {
             throw new Error(`400: Doanh nghiệp không tồn tại!`);
@@ -481,16 +476,15 @@ module.exports._update = async (req, res, next) => {
         delete req.body._id;
         delete req.body.business_id;
         delete req.body.system_user_id;
-        delete req.body.database_name;
         delete req.body.create_date;
         delete req.body.creator_id;
         let _business = { ...business, ...req.body };
         _business = {
             business_id: _business.business_id,
             system_user_id: _business.system_user_id,
-            prefix: _business.prefix,
+            prefix: req.body.prefix,
             business_name: _business.business_name,
-            database_name: _business.database_name,
+            database_name: `${req.body.prefix}DB`,
             company_name: _business.company_name,
             company_email: _business.company_email,
             company_phone: _business.company_phone,
@@ -509,23 +503,15 @@ module.exports._update = async (req, res, next) => {
             last_update: moment().tz(TIMEZONE).format(),
             updater_id: 1,
             active: true,
-            status: _business.status  ,
+            status: _business.status,
             business_registration_number: _business.business_registration_number || '',
             business_registration_image: _business.business_registration_image || '',
-            profile_status: (()=> {
-                if(_business.active === false && _business.business_registration_image === "") {
-                    return '2'
-                }
-                if(_business.active === true && _business.business_registration_image === "") {
-                    return '3'
-                }
-                if(_business.active === true && _business.business_registration_image != "") {
-                    return '4'
-                }  
-                return 5
-
-            })(),
-
+            profile_status: _business.profile_status || '',
+            business_desiption: _business.business_desiption || '',
+            business_cover_image: _business.business_cover_image || '',
+            list_image: _business.list_image || '',
+            logo: _business.logo || '',
+            slug_name: removeUnicode(String(req.body.business_name), true).toLowerCase(),
         };
         req['body'] = _business;
         await businessService._update(req, res, next);
@@ -536,32 +522,20 @@ module.exports._update = async (req, res, next) => {
 
 module.exports._delete = async (req, res, next) => {
     try {
-        // let business = await client
-        //     .db(SDB)
-        //     .collection('Business')
-        //     .find({ business_id:  req.body.business_id  })
-        //     .toArray();
-        // const DBs = business.map((eBusiness) => {
-        //     return eBusiness.database_name;
-        // });
+        
         await client
             .db(SDB)
             .collection('Business')
             // .deleteMany({ business_id: { $in: req.body.business_id } });
             .updateOne(
-                {business_id: Number(req.body.business_id) },
+                { business_id: Number(req.body.business_id) },
                 {
                     $set: {
-                        is_delete: true
+                        is_delete: true,
                         // status: 4
-                    }
+                    },
                 }
-            )
-        // await Promise.all(
-        //     DBs.map((DB) => {
-        //         return client.db(DB).dropDatabase();
-        //     })
-        // );
+            );
         res.send({
             success: true,
             message: 'Xóa doanh nghiệp thành công!',
@@ -571,32 +545,32 @@ module.exports._delete = async (req, res, next) => {
     }
 };
 
-
-
-module.exports._Validate = async(req,res,next)=>{
+module.exports._Validate = async (req, res, next) => {
     try {
-        req.params.business_id = Number(req.params.business_id);
-        let business = await client.db(SDB).collection('Business').findOne(req.params);
+        let business = await client.db(SDB).collection('Business').findOne({ company_phone: req.body.company_phone });
         if (!business) {
-            throw new Error(`400: Doanh nghiệp không tồn tại!`);
+            throw new Error(`400: Cửa hàng không tồn tại!`);
         }
-        delete req.body._id;
-        delete req.body.business_id;
-        delete req.body.system_user_id;
-        delete req.body.database_name;
-        delete req.body.create_date;
-        delete req.body.creator_id;
-        let _business = { ...business, ...req.body };
-        _business = {
-            tax_code: _business.tax_code,
-            Business_Registration: req.body.Business_Registration,
-        };
-        req['body'] = _business;
-        await businessService._update(req, res, next);
+        await client
+            .db(SDB)
+            .collection(`Business`)
+            .updateOne(
+                { company_phone: req.body.company_phone },
+                { $set: {
+                    business_registration_image: req.body.business_registration_image,
+                      tax_code: req.body.tax_code ,
+                      profile_status: 3
+                    } }
+            );
+
+        res.send({
+            success: true,
+            message: 'Cập nhật cửa hàng thành công!',
+        });
     } catch (err) {
         next(err);
     }
-}
+};
 module.exports._getOTP = async (req, res, next) => {
     try {
         ['company_phone'].map((e) => {
@@ -622,21 +596,20 @@ module.exports._getOTP = async (req, res, next) => {
                     },
                 }
             );
-        res.send({ success: true, data: `Gửi OTP đến số điện thoại thành công!` });
+        res.send({ success: true, data: `Gửi OTP đến số điện thoại thành công!` });  
     } catch (err) {
         next(err);
     }
 };
 
-
 module.exports._verifyOTP = async (req, res, next) => {
     try {
-        ['company_phone','otp_code'].map((e) => {
+        ['company_phone', 'otp_code'].map((e) => {
             if (!req.body[e]) {
                 throw new Error(`400: Thiếu thuộc tính ${e}!`);
             }
         });
-        
+
         let business = await client.db(SDB).collection('Business').findOne({ company_phone: req.body.company_phone });
         if (!business) {
             throw new Error('400: Cửa hàng không tồn tại!');
@@ -653,6 +626,7 @@ module.exports._verifyOTP = async (req, res, next) => {
                     {
                         $set: {
                             active: true,
+                            profile_status: 2,
                         },
                     }
                 );
@@ -679,7 +653,23 @@ module.exports._setstatus = async (req, res, next) => {
         await client
             .db(SDB)
             .collection(`Business`)
-            .updateOne({business_id: Number(req.body.business_id)},{ $set: {status: req.body.status} });
+            .updateOne({ business_id: Number(req.body.business_id) }, { $set: { status: req.body.status } });
+        //Resend
+        res.send({
+            success: true,
+            message: 'Cập nhật trạng thái cửa hàng thành công!',
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports._set_profile_status = async (req, res, next) => {
+    try {
+        await client
+            .db(SDB)
+            .collection(`Business`)
+            .updateOne({ business_id: Number(req.body.business_id) }, { $set: { profile_status: req.body.profile_status } });
         //Resend
         res.send({
             success: true,

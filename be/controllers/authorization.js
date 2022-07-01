@@ -21,9 +21,9 @@ module.exports._checkBusiness = async (req, res, next) => {
         if (req.body.username == undefined) throw new Error('400: Vui lòng truyền username');
 
         var business = await client.db(SDB).collection('Business').findOne({
-            username: req.body.username,
+            company_phone: req.body.company_phone,
         });
-        return res.send({ success: true, data: business });
+        return res.send({ success: true, data:  business });
     } catch (err) {
         next(err);
     }

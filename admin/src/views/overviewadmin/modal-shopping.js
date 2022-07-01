@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 
 //antd
@@ -15,16 +14,17 @@ import SettingColumns from 'components/setting-columns'
 
 import {
     ROUTES,
+    
     PAGE_SIZE,
     PAGE_SIZE_OPTIONS,
   } from 'consts'
 //apis
 
 export default function ModalShopping({ detailshopping, children, reload, record }) {
-  // const [form] = Form.useForm()
+  const [form] = Form.useForm()
 
   const [loading, setLoading] = useState(false)
-  // const [avatar, setAvatar] = useState('')
+  const [avatar, setAvatar] = useState('')
   const [visible, setVisible] = useState(false)
   const toggle = () => setVisible(!visible)
   const [columns, setColumns] = useState([])
@@ -88,7 +88,7 @@ export default function ModalShopping({ detailshopping, children, reload, record
         />
       <div onClick={toggle}>{children}</div>
       <Modal
-        width="80%"
+        width="60%"
         title="Chi tiết đơn hàng"
         centered
         footer={null}

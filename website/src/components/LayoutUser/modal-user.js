@@ -17,9 +17,7 @@ export default function ModalUpdateUser({ user, children, reload }) {
   const [visible, setVisible] = useState(false)
   const toggle = () => setVisible(!visible)
 
-
-
-
+  // console.log("usser nef", user);
   const _updateUser = async () => {
     try {
       await form.validateFields()
@@ -37,7 +35,6 @@ export default function ModalUpdateUser({ user, children, reload }) {
           reload()
           notification.success({ message: 'Cập nhật thông tin cá nhân thành công' })
           reload({ user_id: res.data.data.user_id })
-     
         } else
           notification.error({
             message: res.data.message || 'Cập nhật thông tin cá nhân thành công',
@@ -51,15 +48,15 @@ export default function ModalUpdateUser({ user, children, reload }) {
   }
 
   const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
     if (!isJpgOrPng) {
-      notification.warning({ message: 'Bạn chỉ có thể tải lên tệp JPG / PNG / JPEG!' });
+      notification.warning({ message: 'Bạn chỉ có thể tải lên tệp JPG / PNG / JPEG!' })
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
+    const isLt2M = file.size / 1024 / 1024 < 2
     if (!isLt2M) {
-      notification.warning({ message: 'Hình ảnh phải có kích thước nhỏ hơn 2MB!' });
+      notification.warning({ message: 'Hình ảnh phải có kích thước nhỏ hơn 2MB!' })
     }
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng && isLt2M
   }
 
   const _upload = async (file) => {
@@ -100,6 +97,7 @@ export default function ModalUpdateUser({ user, children, reload }) {
         <Form layout="vertical" form={form}>
           <Row gutter={[16, 16]} align="middle">
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              {/* <h1></h1> */}
               <Upload
                 name="avatar"
                 listType="picture-card"
@@ -120,11 +118,11 @@ export default function ModalUpdateUser({ user, children, reload }) {
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
-              <Form.Item 
-                label="Nhập tên " 
+              <Form.Item
+                label="Nhập tên "
                 name="fullname"
                 rules={[{ message: 'Vui lòng nhập tên', required: true }]}
-                >
+              >
                 <Input placeholder="Nhập tên của bạn... " />
               </Form.Item>
             </Col>
@@ -139,16 +137,14 @@ export default function ModalUpdateUser({ user, children, reload }) {
             </Col>
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Form.Item name="email" label="Email">
-                <Input placeholder="Nhập email"  />
+                <Input placeholder="Nhập email" />
                 {/* <Input placeholder="" disabled /> */}
-                
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Form.Item name="phone" label="Số điện thoại">
                 {/* <Input placeholder="Nhập email"  /> */}
                 <Input placeholder="" disabled />
-
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
@@ -159,7 +155,7 @@ export default function ModalUpdateUser({ user, children, reload }) {
           </Row>
           <Row justify="end">
             <Form.Item>
-              <Button loading={loading} type="primary" onClick={_updateUser} >
+              <Button loading={loading} type="primary" onClick={_updateUser}>
                 Cập nhật
               </Button>
             </Form.Item>

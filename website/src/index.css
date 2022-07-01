@@ -1,6 +1,7 @@
 @import '../node_modules/@syncfusion/ej2-base/styles/material.css';
 @import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
 @import '../node_modules/@syncfusion/ej2-react-calendars/styles/material.css';
+
 * {
   margin: 0;
   padding: 0;
@@ -58,3 +59,209 @@ code {
 ::-webkit-scrollbar-button {
   display: none;
 }
+
+/* CSS registerBusiness */
+.ant-steps-item-container {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  padding-bottom: unset !important;
+  margin-left: auto !important;
+}
+
+.ant-steps-item:first-child::after {
+  border-left: none !important;
+}
+
+.ant-steps-item:first-child {
+  border-top-left-radius: 10px !important;
+}
+
+.ant-steps-item:last-child {
+  margin-right: 0 !important;
+}
+
+.ant-steps-item:last-child {
+  border-top-right-radius: 8px !important;
+}
+
+.ant-steps-item::before {
+  content: "" !important;
+  position: absolute !important;
+  right: -20px !important;
+  left: auto !important;
+  bottom: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  background-color: transparent !important;
+  border-left: 20px solid #e3e5e5 !important;
+  border-top: 20px solid transparent !important;
+  border-bottom: 20px solid transparent !important;
+  z-index: 1 !important;
+
+}
+
+.ant-steps-item::after,
+.ant-steps-item:last-child::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: auto !important;
+  bottom: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  transform: none !important;
+  border: none !important;
+  border-left: 20px solid #f0f2f5 !important;
+  border-top: 20px solid transparent !important;
+  border-bottom: 20px solid transparent !important;
+  z-index: 0 !important;
+}
+
+.ant-steps-item .ant-steps-item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+
+.ant-steps-item {
+  background: #e3e5e5 !important;
+  margin-right: 8px;
+  height: 40px;
+}
+
+.ant-steps-item-title {
+  font-weight: bold;
+  color: #91919f !important;
+}
+
+.ant-steps-item-active,
+.ant-steps-item-finish {
+  background: #0bb2fb !important;
+  margin-right: 8px;
+  height: 40px;
+}
+
+.ant-steps-item-active::before,
+.ant-steps-item-finish::before {
+  border-left: 20px solid #0bb2fb!important;
+}
+
+.ant-steps-navigation {
+  margin-top: 40px !important;
+}
+
+.ant-steps-item-active .ant-steps-item-title,
+.ant-steps-item-finish .ant-steps-item-title {
+  color: white !important;
+}
+
+.ant-steps-item-active .ant-steps-item-icon,
+.ant-steps-item-finish .ant-steps-item-icon {
+  background-color: white !important;
+}
+
+.ant-steps-item-icon {
+  width: 26px !important;
+  height: 26px !important;
+  line-height: 23px !important;
+  border: 0 !important;
+  background-color: #91919f !important;
+}
+
+.ant-steps-item-active .ant-steps-icon,
+.ant-steps-item-finish .ant-steps-iicon {
+  color: #1e4db7 !important;
+}
+
+.ant-steps-icon {
+  color: #dedfe0 !important;
+  font-weight: bold;
+}
+
+#TTKD .ant-upload {
+  border-radius: 10px !important;
+  background-color: #cdcdcd;
+  border: 0;
+}
+
+#TTCH .ant-form-item-control-input-content .ant-input {
+  border-radius: 0 !important;
+  width: 350px;
+  height: 40px;
+}
+#TTKD .ant-form-item-control-input-content .ant-input {
+  border-radius: 0 !important;
+}
+
+.ant-form-item-label {
+  flex-grow: 0;
+  font-weight: bold;
+}
+
+#TTKD .ant-upload-select {
+  width: 100% !important;
+  height: 176px !important;
+}
+
+#TTKD .ant-row-no-wrap {
+  background-color: white !important;
+  height: 80px !important;
+}
+
+/* .ant-layout-sider{
+  width: 5  00px!important;
+} */
+
+/* CSS detailBusiness */
+.ant-tabs-nav-operations{
+  display: none!important;
+}
+.ant-tabs-nav{
+  width: 100%!important;
+  /* display: flex!important; */
+  /* flex-wrap: wrap!important; */
+}
+.ant-tabs{
+    align-items: inherit!important;
+}
+.ant-card-body{
+  padding: 10px!important;
+}
+
+.ant-list-item-meta-title{
+  font-size: 12px!important;
+}
+.ant-list-item-meta-avatar {
+  margin-right: 6px!important;
+}
+.ant-list-item{
+  padding: 8px 0!important;
+}
+#tab_detail .ant-tabs-ink-bar {
+  width: 50%!important;
+}
+/* CSS update business */
+#update .ant-list{
+  width: 87%;
+    margin-left: 50px!important;
+    font-weight: bold;
+}
+#update .ant-list-items{
+  padding-left: 24px;
+  padding-right: 24px;
+}
+/* .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background-color: #1e4db7!important;
+} */
+
+
+/* sao */
+.ant-rate-star-full{
+  margin-right: 3px!important;
+}
+
+  

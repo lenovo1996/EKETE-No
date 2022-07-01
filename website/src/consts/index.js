@@ -37,10 +37,47 @@ export const SHIP_STATUS_ORDER = {
   CANCEL: 'CANCEL',
 }
 
+export const ROUTES_USER = {
+  CHECK_SUBDOMAIN: '/business-login',
+  INFOR: '/infor',
+  SETTINGINFOR: '/setting-infor',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  OTP: '/otp',
+  VERIFY_ACCOUNT: '/verify-account',
+  PASSWORD_NEW: '/password-new',
+  FORGET_PASSWORD: '/forget-password',
+  OVERVIEW: '/overview',
+  BUSINESS: '/business',
+  NEWFEED: '/newfeed',
+  DETAILBUSINESS:`/detail-business/:id`,
+  REGISTERBUSINESS:'/register-business'
+}
+
+export const ROUTES_ADMIN = {
+  OVERVIEWADMIN: '/overviewadmin',
+  OTPADMIN: '/otpadmin',
+  VERIFY_ACCOUNTADMIN: '/verify-accountadmin',
+  PASSWORD_NEWADMIN: '/password-newadmin',
+  FORGET_PASSWORDADMIN: '/forget-passwordadmin',
+  CHECK_SUBDOMAINADMIN: '/business-loginadmin',
+  LOGINADMIN: '/loginadmin',
+  REGISTERADMIN: '/registeradmin',
+  BUSINESSADMIN: '/businessadmin',
+  MENU_USER: '/menu-user',
+  MENU_ADMIN: '/menu-admin',
+  MENU_BUSINESS: '/menu-business',
+  USER_EKT: '/user-ekt',
+  USER_ADMIN: '/user-admin',
+}
+
+export const PERMISSIONS_ADMIN = {
+  tong_quan_admin: 'tong_quan_admin',
+}
 export const ROUTES = {
   CHECK_SUBDOMAIN: '/business-login',
   LOGIN: '/login',
-  REGISTER: '/register',
+  // REGISTER: '/register',
   IMPORT_REPORT_FILE: '/import-report-file',
   PRODUCT_CHECK: '/product-check',
   ORDER_LIST: '/order-list',
@@ -66,12 +103,11 @@ export const ROUTES = {
   VERIFY_ACCOUNT: '/verify-account',
   PASSWORD_NEW: '/password-new',
   FORGET_PASSWORD: '/forget-password',
-  OVERVIEW: '/overview',
+  OVERVIEW: '/overview-business',
   SELL: '/sell',
+  REFUND: '/refund',
   STORE: '/store',
   RECEIPTS_PAYMENT: '/receipts-payment',
-  PAYMENT_TYPE: '/payment-type',
-  RECEIPTS_TYPE: '/receipts-type',
   ACTIVITY_DIARY: '/activity-diary',
   SHIPPING_PRODUCT_ADD: '/shipping-product-add',
   ORDER_CREATE: '/order-create',
@@ -82,8 +118,6 @@ export const ROUTES = {
   EMPLOYEE: '/employee',
   SHIPPING: '/shipping',
   SHIPPING_CREATE: '/shipping/create',
-  SHIPPING_CREATE_GHTK: '/shipping/create/ghtk',
-  SHIPPING_CREATE_GHN: '/shipping/create/ghn',
   CUSTOMER: '/customer',
   SUPPLIER: '/supplier',
   PROMOTION: '/promotion',
@@ -99,61 +133,18 @@ export const ROUTES = {
   OFFER_LIST_CREATE: '/offer-list/create',
   BLOG: '/blog',
   BLOG_CREATE: '/blog/create',
-  BUSINESS: '/business',
+  BRAND: '/brand',
   BRAND_CREATE: '/brand/create',
   CHANNEL: '/channel',
   // CHANNEL_CREATE:'/channel/create',
   CONTACT: '/contact',
   IMPORT_INVENTORIES: '/import-inventories',
   IMPORT_INVENTORY: '/import-inventory',
-  
-
-  //admin
-  // OVERVIEWADMIN: '/overviewadmin',
-  // OTPADMIN: '/otpadmin',
-  // VERIFY_ACCOUNTADMIN: '/verify-accountadmin',
-  // PASSWORD_NEWADMIN: '/password-newadmin',
-  // FORGET_PASSWORDADMIN: '/forget-passwordadmin',
-  // CHECK_SUBDOMAINADMIN: '/business-loginadmin',
-  // LOGINADMIN: '/loginadmin',
-  // REGISTERADMIN: '/registeradmin',
-  // EMPLOYEEADMIN: '/employeedmin'
+  PRICE_ADJUSTMENTS: '/price-adjustments',
+  PRICE_ADJUSTMENTS_CREATE: '/price-adjustments/create',
+  PRICE_ADJUSTMENTS_UPDATE: '/price-adjustments/update',
 }
 
-export const ROUTES_USER = {
-  CHECK_SUBDOMAIN: '/business-login',
-  LOGIN: '/login',
-  REGISTER: '/register',
-  OTP: '/otp',
-  VERIFY_ACCOUNT: '/verify-account',
-  PASSWORD_NEW: '/password-new',
-  FORGET_PASSWORD: '/forget-password',
-  OVERVIEW: '/overview',
-  BUSINESS: '/business',
-  DETAIL_BUSINESS: `/detail-business/:id`,
-  UPDATE_BUSINESS: `/update-business/:id`,
-  MESSIAGE1: '/message1'
-}
-
-export const ROUTES_ADMIN = {
-  OVERVIEWADMIN: '/overviewadmin',
-  OTPADMIN: '/otpadmin',
-  VERIFY_ACCOUNTADMIN: '/verify-accountadmin',
-  PASSWORD_NEWADMIN: '/password-newadmin',
-  FORGET_PASSWORDADMIN: '/forget-passwordadmin',
-  CHECK_SUBDOMAINADMIN: '/business-loginadmin',
-  LOGINADMIN: '/loginadmin',
-  REGISTERADMIN: '/registeradmin',
-  BUSINESSADMIN: '/businessadmin',
-  MENU_USER: '/menu-user',
-  MENU_BUSINESS: '/menu-business',
-  MENU_ADMIN: '/menu-admin',
-  MESSAGE: '/message'
-}
-
-export const PERMISSIONS_ADMIN = {
-  tong_quan_admin: 'tong_quan_admin',
-}
 export const PERMISSIONS = {
   //Permission menu
   tong_quan: 'tong_quan',
@@ -244,7 +235,7 @@ export const LOGO_DEFAULT =
 
 export const FILTER_SIZE = ''
 export const FILTER_COL_HEIGHT = ''
-export const PAGE_SIZE = 20
+export const PAGE_SIZE = ``
 export const PAGE_SIZE_OPTIONS = [20, 40, 50, 60, 80, 100]
 export const POSITION_TABLE = ['bottomLeft']
 
