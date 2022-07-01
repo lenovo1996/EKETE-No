@@ -3,8 +3,6 @@ import styles from './business.module.scss'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { ACTION, ROUTES_ADMIN } from 'consts'
-import { useHistory } from 'react-router-dom'
-import jwt_decode from 'jwt-decode'
 
 //antd
 import { Popconfirm, Select, Table, Button, notification, Input } from 'antd'
@@ -15,7 +13,6 @@ import { SearchOutlined,DeleteOutlined } from '@ant-design/icons'
 import { getBusinesses, setstatus, setprofilestatus, deleteBusinesses } from 'apis/business'
 
 //components
-import SettingColumns from 'components/setting-columns'
 import columnsBusiness from './columns'
 import BusinessForm from './BusinessForm'
 
@@ -23,7 +20,6 @@ import BusinessForm from './BusinessForm'
 export default function Employee() {
   const dispatch = useDispatch()
   const typingTimeoutRef = useRef(null)
-  const [columns, setColumns] = useState([])
   const [loading, setLoading] = useState(false)
   const [paramsFilter, setParamsFilter] = useState({ page: 1, page_size: 20 })
   const [valueSearch, setValueSearch] = useState('')
@@ -164,18 +160,12 @@ const _deleteBusiness = async (business_id) => {
         </div>
       </div>
 
-      <SettingColumns
-        columns={columns}
-        setColumns={setColumns}
-        columnsDefault={columnsBusiness}
-        nameColumn="columnsBusiness"
-      />
-
       <Table
         className={styles['table']}
         loading={loading}
         rowKey="business_id"
         size="small"
+        scroll={{ y: 670 }}
         pagination={{
           position: ['bottomLeft'],
           current: paramsFilter.page,
@@ -186,7 +176,7 @@ const _deleteBusiness = async (business_id) => {
             setParamsFilter({ ...paramsFilter, page: page, page_size: pageSize }),
           // total: countUser,
         }}
-        columns={columns.map((column) => {
+        columns={columnsBusiness.map((column) => {
           if (column.key === 'stt') return { ...column, render: (text, record, index) => index + 1 }
           if (column.key === 'business_name')
             return {
@@ -251,7 +241,7 @@ const _deleteBusiness = async (business_id) => {
                   okText="Đồng ý"
                   cancelText="Từ chối"
                    onConfirm={() => _deleteBusiness(record.business_id)}
-                >
+                > 
                   <Button icon={<DeleteOutlined />} type="primary" danger />
                 </Popconfirm>
               ),

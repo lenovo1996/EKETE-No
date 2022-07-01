@@ -1,6 +1,8 @@
 /be/.idea/*
 /website/.idea/*
 
+.idea
+
 /be/yarn.lock
 /website/yarn.lock
 /website/package-lock.json

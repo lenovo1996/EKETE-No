@@ -121,7 +121,6 @@ import Infor from '../components/LayoutUser/infor'
 import SettingInfor from '../components/LayoutUser/setting-infor'
 
 import DetailBusiness from './user/business_user/detail_business'
-import UpdateBusiness from './user/business_user/Update_business'
 import Message1 from './user/message1'
 import RegisterBusiness from './user/business_user/registerbusiness'
 
@@ -584,13 +583,7 @@ const DEFINE_ROUTER_USER = [
     permissions: [],
     exact: true,
   },
-  {
-    path: ROUTES_USER.UPDATEBUSINESS,
-    Component: () => <UpdateBusiness />,
-    title: 'Thiết lập thông tin cửa hàng',
-    permissions: [],
-    exact: true,
-  },
+  
   {
     path: ROUTES_USER.REGISTERBUSINESS,
     Component: () => <RegisterBusiness />,
@@ -651,13 +644,13 @@ const DEFINE_ROUTER_ADMIN = [
     permissions: 'admin',
     exact: true,
   },
-  // {
-  //   path: ROUTES_ADMIN.USER_EKT,
-  //   Component: () => <UserEKT />,
-  //   title: 'Quản lý user ekt',
-  //   permissions: 'admin',
-  //   exact: true,
-  // },
+  {
+    path: ROUTES_ADMIN.USER_EKT,
+    Component: () => <UserEKT />,
+    title: 'Quản lý user ekt',
+    permissions: 'admin',
+    exact: true,
+  },
 ]
 
 const AUTH_ROUTER = [

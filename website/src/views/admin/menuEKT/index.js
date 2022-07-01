@@ -146,12 +146,7 @@ export default function Menu() {
         </div>
       
         <Space>
-          <SettingColumns
-            columns={columns}
-            setColumns={setColumns}
-            columnsDefault={columnsM}
-            nameColumn="columsM"
-          />
+          
           <MenuForm reloadData={_getMenu}>
             <Button type="primary" size="large">
               Tạo chức năng
@@ -165,6 +160,7 @@ export default function Menu() {
         loading={loading}
         rowKey="menu_id"
         size="small"
+        scroll={{ y: 670 }}
         pagination={{
           position: ['bottomLeft'],
           current: paramsFilter.page,
@@ -174,7 +170,7 @@ export default function Menu() {
           onChange: (page, pageSize) =>
             setParamsFilter({ ...paramsFilter, page: page, page_size: pageSize }),
         }}
-        columns={columns.map((column) => {
+        columns={columnsM.map((column) => {
           if (column.key === 'stt') return { ...column, render: (text, record, index) => index + 1 }
           if (column.key === 'nameMenu')
             return {

@@ -237,6 +237,7 @@ font-size: 14px;
 line-height: 17px;
 }
 
+
 /* upload */
 .ant-upload.ant-upload-drag{
   background: #CDCDCD !important;
@@ -319,3 +320,12 @@ ul#scrollTopMenu {
     border: none!important;
 }
 
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #1e4db7!important;
+}
+
+.ant-tabs-ink-bar {
+  background: #1e4db7!important;
+  height: 4px!important;
+  border-radius: 2px;
+}

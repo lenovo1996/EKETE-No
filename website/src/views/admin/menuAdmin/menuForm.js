@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import * as IconList from '@ant-design/icons'
 //antd
 import {
   Form,
@@ -9,10 +8,7 @@ import {
   Button,
   Input,
   notification,
-  DatePicker,
   Select,
-  Radio,
-  Space,
   InputNumber,
 } from 'antd'
 
@@ -24,7 +20,6 @@ export default function MenuForm({
   reloadData,
   record,
 
-  // status = ['new', 'tetting', 'ready to public','public','waiting for review','pending']
 }) {
   const [form] = Form.useForm()
 
@@ -96,22 +91,22 @@ export default function MenuForm({
     }
   }, [visible])
 
-  const _getMenu = async () => {
-    try {
-      setLoading(true)
-      const res = await getMenu({ ...paramsFilter })
-      if (res.status === 200) {
-        setMenu(res.data.data)
-      }
-      setLoading(false)
-    } catch (e) {
-      setLoading(false)
-      console.log(e)
-    }
-  }
-  useEffect(() => {
-    _getMenu()
-  }, [])
+  // const _getMenu = async () => {
+  //   try {
+  //     setLoading(true)
+  //     const res = await getMenu({ ...paramsFilter })
+  //     if (res.status === 200) {
+  //       setMenu(res.data.data)
+  //     }
+  //     setLoading(false)
+  //   } catch (e) {
+  //     setLoading(false)
+  //     console.log(e)
+  //   }
+  // }
+  // useEffect(() => {
+  //   _getMenu()
+  // }, [])
 
   return (
     <>

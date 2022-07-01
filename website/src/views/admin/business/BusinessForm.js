@@ -40,10 +40,13 @@ export default function MenuForm({
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
   const toggle = () => setVisible(!visible)
-  const [business, setBusiness] = useState([])
   const [paramsFilter, setParamsFilter] = useState({ page: 1, page_size: 20 })
   const [image, setImage] = useState('')
-  const [provinces, setProvinces] = useState([])
+
+  const provinces = useSelector((state) => state.provinces)
+  const districts = useSelector((state) => state.districts)
+
+
   const [districtMain, setDistrictMain] = useState([])
   const [districtsDefault, setDistrictsDefault] = useState([])
 
@@ -83,8 +86,6 @@ export default function MenuForm({
       if (res.status === 200) {
         if (res.data.success) {
           toggle()
-
-          
           dispatch({ type: 'UPDATE_BUSINESS', data: {
             business_id: record.business_id, 
             ...body
@@ -117,18 +118,18 @@ export default function MenuForm({
       dispatch({ type: ACTION.LOADING, data: true })
       const res = await getProvinces()
       dispatch({ type: ACTION.LOADING, data: false })
-      if (res.status === 200) setProvinces(res.data.data)
-
+      if (res.status === 200) {
+        dispatch({ type: 'SET_PROVINCES', provinces_data: res.data.data })
+      }
     } catch (error) {
       dispatch({ type: ACTION.LOADING, data: false })
     }
   }
-
   const _getDistricts = async () => {
     try {
       const res = await getDistricts()
       if (res.status === 200) {
-        setDistrictMain(res.data.data)
+        dispatch({ type: 'SET_DISTRICTS', districts_data: res.data.data })
         setDistrictsDefault(res.data.data)
       }
     } catch (error) {
@@ -154,25 +155,6 @@ export default function MenuForm({
       }
     }
   }, [visible])
-
-
-  const _getBusinesses = async () => {
-    try {
-      setLoading(true)
-      const res = await getBusinesses({ ...paramsFilter })
-      setLoading(false)
-      console.log(res)
-      if (res.status === 200) {
-        setBusiness(res.data.data)
-      }
-    } catch (e) {
-      setLoading(false)
-      console.log(e)
-    }
-  }
-  useEffect(() => {
-    _getBusinesses()
-  }, [])
 
   return (
     <>
@@ -233,6 +215,15 @@ export default function MenuForm({
                 rules={[{ required: true, message: 'Vui lòng nhập website' }]}
               >
                 <Input placeholder="Nhập website" size="large" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={11} lg={11} xl={11}>
+              <Form.Item
+                name="business_registration_number"
+                label={<div style={{ color: 'black', fontWeight: '600' }}>Đăng ký kinh doanh</div>}
+                rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+              >
+                <Input placeholder="Nhập đăng ký kinh doanh" size="large" />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={11} lg={11} xl={11}>

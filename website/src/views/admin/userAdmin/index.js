@@ -132,7 +132,9 @@ export default function Employee() {
 
       <Table
         className={styles['table']}
+        id='useradmin'
         loading={loading}
+        scroll={{ y: 620 }}
         rowKey="userAdmin_id"
         size="small"
         pagination={{
@@ -151,12 +153,12 @@ export default function Employee() {
             return {
               ...column,
               render: (text, record) => (
-                <UserAdminForm
-                  record={record}
-                  reloadData={_getUserAdmin}
-                >
+                // <UserAdminForm
+                //   record={record}
+                //   reloadData={_getUserAdmin}
+                // >
                   <a>{record.fullname}</a>
-                </UserAdminForm>
+                // </UserAdminForm>
               ),
             }
           if (column.key === 'phone') return { ...column, render: (text, record) => record.phone }
